@@ -4,7 +4,7 @@ from post.models import Postdata
 # Create your models here.
 
 class userdata(models.Model):
-    uid=models.IntegerField(max_length=10,primary_key=True)
+    uid=models.IntegerField(primary_key=True)
     username=models.CharField(max_length=25)
     password = models.CharField(max_length=15)
     firstname=models.CharField(max_length=30)
@@ -21,11 +21,11 @@ class userdata(models.Model):
     
 class SavedDB(models.Model):
     uid=models.ForeignKey(to=userdata,on_delete=models.CASCADE)
-    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE)    
+    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)    
     
 class CollabDB(models.Model):
-    col_id=models.IntegerField(max_length=10,primary_key=True)
+    col_id=models.IntegerField(primary_key=True)
     uid=models.ForeignKey(to=userdata,on_delete=models.CASCADE)
-    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE)     
+    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)     
 
 

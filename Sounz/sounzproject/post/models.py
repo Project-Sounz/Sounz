@@ -6,7 +6,7 @@ from django.db import models
 
 
 class Postdata(models.Model):
-    pid = models.IntegerField(max_length=10, primary_key=True)
+    pid = models.IntegerField(primary_key=True, default=0)
     #uid = models.ForeignKey(to=usermod.userdata, on_delete=models.CASCADE)
     media_address = models.CharField(max_length=256)
     likes_count = models.IntegerField(default=0)
