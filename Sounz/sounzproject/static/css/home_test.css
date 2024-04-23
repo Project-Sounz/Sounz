@@ -1,0 +1,15 @@
+
+.parent-container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.child-container{
+    border: 1px solid rebeccapurple;
+    padding: 0 15px;
+    margin: 10px 20px;
+}
+span{
+    color: orangered;
+}
