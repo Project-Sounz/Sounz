@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,7 +18,7 @@
         <div class="navbar">
             
             <div class="logo">
-                <a href="index.html"><img src="images/Media.png" alt="logo" width="125px"></a>
+                <a href="index.html"><img src="{% static 'images/Media.png' %}" alt="logo" width="125px"></a>
             </div>
             <div id="cmname">Sounz</div>
             <nav>
@@ -27,7 +28,7 @@
                 </ul>
             </nav>
             
-            <img src="images/menu.png" class="menu-icon" onclick="menutoggle()">
+            <img src="{% static 'images/menu.png' %}" class="menu-icon" onclick="menutoggle()">
         </div>
     </div>
 
@@ -36,7 +37,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-2">
-                    <img src="images/musc.png" width="100%">
+                    <img src="{% static 'images/musc.png' %}" width="100%">
                 </div>
                 <div class="col-2">
                     <div class="form-containereg">
