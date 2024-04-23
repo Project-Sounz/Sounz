@@ -136,8 +136,8 @@
         form .btn:focus{
             outline: none;
         }
-        #LoginForm{
-            left: -300px;
+        #LogForm{
+            left: 0;
         }
         #RegForm{
             left: 0;

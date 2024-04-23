@@ -43,22 +43,16 @@
                     <div class="form-container">
                         <div class="form-btn">
                             <span onclick="login()">Login</span>
-                            <span onclick="register()">Register</span>
-                            <hr id="Indicator">
                         </div>
-                        <form id="LoginForm">
-                            <input type="text" placeholder="Username">
-                            <input type="password" placeholder="Password">
+                        <form id="LogForm" method="post">
+                            {% csrf_token %}
+                            <input type="text" placeholder="Username" id="username">
+                            <input type="password" placeholder="Password" id="password">
                             <button type="submit" class="btn">Login</button>
                             <a href="">Forgot Password</a>
-                        </form>
-
-                        <form id="RegForm">
-                            <input type="text" placeholder="Username">
-                            <input type="email" placeholder="Email">
-                            <input type="password" placeholder="Password">
-                            <input type="password" placeholder="Confirm Password">
-                            <a href="reg2.html"><button type="button" style="color: red;" class="btn">Continue</button></a>
+                            <br>
+                            <a href="{% url 'reg2' %}" style="color: rgb(240, 112, 15);">Signup</a>
+                            
                             
                         </form>
                     </div>
@@ -90,35 +84,44 @@
 
     <!-- javascript -->
 
+
+
+    
+    
+
+    <!---Validate Form-->
     <script>
-        var MenuItems = document.getElementById("MenuItems");
-        MenuItems.style.maxHeight = "0px";
-        function menutoggle() {
-            if (MenuItems.style.maxHeight == "0px") {
-                MenuItems.style.maxHeight = "200px"
+        function validateForm() {
+            var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (username == "") {
+                alert("Username cannot be empty");
+                return false;
             }
-            else {
-                MenuItems.style.maxHeight = "0px"
+
+            if (password == "") {
+                alert("Password cannot be empty");
+                return false;
             }
-        }
-    </script>
+            if (email == "") {
+                alert("email cannot be empty");
+                return false;
+            }
 
-    <!-- Toggle Form -->
-    <script>
-        var LoginForm = document.getElementById("LoginForm");
-        var RegForm = document.getElementById("RegForm");
-        var Indicator = document.getElementById("Indicator");
-        function register() {
-            RegForm.style.transform = "translatex(0px)";
-            LoginForm.style.transform = "translatex(0px)";
-            Indicator.style.transform = "translateX(100px)";
+            if (confirmPassword == "") {
+                alert("Confirm Password cannot be empty");
+                return false;
+            }
 
-        }
-        function login() {
-            RegForm.style.transform = "translatex(300px)";
-            LoginForm.style.transform = "translatex(300px)";
-            Indicator.style.transform = "translate(0px)";
+            if (password!= confirmPassword) {
+                alert("Passwords do not match");
+                return false;
+            }
 
+            return true;
         }
     </script>
 
