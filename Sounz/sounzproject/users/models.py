@@ -1,8 +1,9 @@
 from django.db import models
+from post.models import Postdata
 
 # Create your models here.
 
-class UserDB(models.Model):
+class userdata(models.Model):
     uid=models.IntegerField(max_length=10,primary_key=True)
     username=models.CharField(max_length=25)
     password = models.CharField(max_length=15)
@@ -19,12 +20,12 @@ class UserDB(models.Model):
         return self.uid
     
 class SavedDB(models.Model):
-    uid=models.ForeignKey('UserDB',on_delete=models.CASCADE)
-    pid=models.ForeignKey('PostDB',on_delete=models.CASCADE)    
+    uid=models.ForeignKey(to=userdata,on_delete=models.CASCADE)
+    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE)    
     
 class CollabDB(models.Model):
     col_id=models.IntegerField(max_length=10,primary_key=True)
-    uid=models.ForeignKey('UserDB',on_delete=models.CASCADE)
-    pid=models.ForeignKey('PostDB',on_delete=models.CASCADE)     
+    uid=models.ForeignKey(to=userdata,on_delete=models.CASCADE)
+    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE)     
 
 
