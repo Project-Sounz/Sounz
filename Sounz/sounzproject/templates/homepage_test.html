@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/home_test.css' %}">
+</head>
+<body>
+    <center><h1>Data test</h1></center>
+
+    <div class="parent-container">
+        {% for user in allusers %}
+        <div class="child-container">
+            <p>Username: <span>{{user.username}}</span></p>
+            <p>Password: <span>{{user.password}}</span></p>
+            
+            <p>Name: <span>{{user.firstname}} {{user.lastname}}</span></p>
+            <p>Mail: <span>{{user.email}}</span></p>
+            <p>Phone: <span>{{user.phone}}</span></p>
+            <p>Specialised:<span>{{user.specialised}}</span></p>
+        </div>    
+        {% empty %}
+            <p>No data available</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
