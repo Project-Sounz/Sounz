@@ -1,13 +1,14 @@
 from django.db import models
-#from users import models as usermod
+from django.contrib.auth.models import User
+import uuid
 
 
 # Create your models here.
 
 
 class Postdata(models.Model):
-    pid = models.IntegerField(primary_key=True, default=0)
-    #uid = models.ForeignKey(to=usermod.userdata, on_delete=models.CASCADE)
+    pid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username=models.OneToOneField(User,on_delete=models.CASCADE,default=0)
     media_address = models.CharField(max_length=256)
     likes_count = models.IntegerField(default=0)
     tags = models.CharField(max_length=32, null=True)
