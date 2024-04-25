@@ -13,7 +13,7 @@ class userdata(models.Model):
     firstname=models.CharField(max_length=30)
     lastname=models.CharField(max_length=30)
     email = models.EmailField()
-    profile_picture = models.ImageField(upload_to='images/profile_pictures/', blank=True, null=True, default='media/default_profile_picture.jpg')
+    profile_picture = models.ImageField(upload_to='Media/Proifles/', blank=True, null=True, default='media/default_profile_picture.jpg')
     user_bio=models.TextField()
     phone=models.IntegerField()
     specialised=models.CharField(max_length=40,default=0)
