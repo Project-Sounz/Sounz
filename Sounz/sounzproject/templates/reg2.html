@@ -48,28 +48,33 @@
                         
 
                         <form id="RegForm">
-                            <input type="text" placeholder="Username" id="username">
-                            <input type="email" placeholder="Email" id="email">
-                            <input type="password" placeholder="Password" id="password">
-                            <input type="password" placeholder="Confirm Password"  id="confirmPassword">
-                            <input type="text" placeholder="Firstname">
-                            <input type="text" placeholder="Lastname">
-                            <button class="btn">Add Profile Picture</button>
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            
+                            <input type="text" placeholder="Username" id="username" name="username">
+                            <input type="email" placeholder="Email" id="email" name="email">
+                            <input type="password" placeholder="Password" id="password" name="password">
+                            <input type="password" placeholder="Confirm Password"  id="confirmPassword" name="confirmPassword">
+                            <input type="text" placeholder="Firstname" name="Firstname">
+                            <input type="text" placeholder="Lastname" name="Lastname">
+                            <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
+                            <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Add Profile Picture</button>
+                            
                             <p>Speciality:
-                            <select id="mySelect" style="background-color: #ff523b; color: white; padding: 8px 30px; border-radius: 30px;">
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                                <option value="option4">Option 4</option>
-                                <option value="option5">Option 5</option>
+                            <select name="Speciality" id="mySelect" style="background-color: #ff523b; color: white; padding: 8px 30px; border-radius: 30px;">
+                                <option value="option1">Guitarist</option>
+                                <option value="option2">Vocalist</option>
+                                <option value="option3">Pianist/Keyboardist</option>
+                                <option value="option4">Violinist</option>
+                                <option value="option5">Drummer</option>
                                 <option value="other">Other</option>
                               </select>
 
                               
-                            <input type="text" id="otherInput" style="display: none; background-color:#e7e7e7; color: rgb(202, 202, 202); padding: 8px 30px; border-radius: 30px; margin-top: 10px;" placeholder="Enter your own option">
+                            <input name="Speciality" type="text" id="otherInput" style="display: none; background-color:#e7e7e7; color: rgb(202, 202, 202); padding: 8px 30px; border-radius: 30px; margin-top: 10px;" placeholder="Enter your own option">
                              </p> 
-                            <input type="number" placeholder="Phonenumber">
-                            <textarea rows="5" cols="30" name="text" placeholder="User bio"></textarea>
+                            <input name="Phonenumber" type="number" placeholder="Phonenumber">
+                            <textarea name="bio" rows="5" cols="30" name="text" placeholder="User bio"></textarea>
                             
                             <button type="submit" class="btn">Register</button>
                         </form>
