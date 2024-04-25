@@ -32,3 +32,6 @@ def reg2(request):
 def homeCheck(request):
     users = userdata.objects.all()
     return render(request, 'homepage_test.html', {'allusers': users})
+
+def Profile(request):
+    return render(request, 'profile-posts.html')

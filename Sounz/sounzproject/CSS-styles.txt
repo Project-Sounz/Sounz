@@ -1,0 +1,30 @@
+Gardient: linear-gradient(90deg,rgba(248,73,27,1) 0%, rgba(241,47,63,1) 50%,rgba(220,24,96,1) 100%);
+
+primary black: #000
+
+secondary black: #5f6368
+
+primary white: #fff
+
+
+html
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+
+CSS
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 900
+
+.classname {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+}
+
