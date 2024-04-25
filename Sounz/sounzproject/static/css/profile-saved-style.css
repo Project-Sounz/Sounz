@@ -1,0 +1,138 @@
+body {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+    font-variation-settings:
+    "slnt" 0;
+}
+
+.imgcenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+}
+
+.header{
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    height: 160px;
+    width: 100%;
+}
+
+p{
+    margin: 0px;
+    font-size: small;
+}
+
+h5{
+    margin: 0px;
+    margin-top: 5px;
+}
+
+.socials{
+    float: right;
+    padding-top: 10px;
+    margin-right: 10px;
+}
+
+
+.body{
+    position: relative;
+    text-align: center;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 5px;
+}
+
+.mailbio{
+    padding-top: 5px;
+}
+
+#savedbutton{
+    margin-right: 25px;
+    padding: 5px 24px;
+    background-image: linear-gradient(90deg,rgba(248,73,27,1) 0%, rgba(241,47,63,1) 50%,rgba(220,24,96,1) 100%);
+    border: none;
+    color: white;
+    border-radius: 4px;
+}
+
+#postbutton{
+    margin-right: 25px;
+    padding: 5px 24px;
+    background-color: #fff;
+    border-color: rgba(226, 28, 102, 1);
+    color: rgba(248, 73, 27, 1);
+    border-radius: 4px;
+}
+
+.post1{
+    background-image: url(images.png);
+    width: 120px;
+    height: 250px;
+    padding-left: 50px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+.post2{
+    background-image: url(images.png);
+    width: 120px;
+    height: 250px;
+    padding-left: 50px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+.post3{
+    background-image: url(images.png);
+    width: 120px;
+    height: 250px;
+    padding-left: 50px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+.post4{
+    background-image: url(images.png);
+    width: 120px;
+    height: 250px;
+    padding-left: 50px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+.post5{
+    background-image: url(images.png);
+    width: 120px;
+    height: 250px;
+    padding-left: 50px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+.post6{
+    background-image: url(images.png);
+    width: 120px;
+    height: 250px;
+    padding-left: 50px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.posts{ 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    color: #fff;
+    padding-top: 15px;
+}
+
+.posts h4{
+    color: #fff;
+}
+
+.posts h3{
+    color: rgba(248, 73, 27, 1);
+    
+}
+
