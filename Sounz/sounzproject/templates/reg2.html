@@ -47,7 +47,7 @@
                         </div>
                         
 
-                        <form id="RegForm">
+                        <form id="RegForm" method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
                             
@@ -55,25 +55,14 @@
                             <input type="email" placeholder="Email" id="email" name="email">
                             <input type="password" placeholder="Password" id="password" name="password">
                             <input type="password" placeholder="Confirm Password"  id="confirmPassword" name="confirmPassword">
-                            <input type="text" placeholder="Firstname" name="Firstname">
-                            <input type="text" placeholder="Lastname" name="Lastname">
+                            <input type="text" placeholder="Firstname" name="first_name">
+                            <input type="text" placeholder="Lastname" name="last_name">
                             <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
                             <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Add Profile Picture</button>
-                            
-                            <p>Speciality:
-                            <select name="Speciality" id="mySelect" style="background-color: #ff523b; color: white; padding: 8px 30px; border-radius: 30px;">
-                                <option value="option1">Guitarist</option>
-                                <option value="option2">Vocalist</option>
-                                <option value="option3">Pianist/Keyboardist</option>
-                                <option value="option4">Violinist</option>
-                                <option value="option5">Drummer</option>
-                                <option value="other">Other</option>
-                              </select>
-
                               
-                            <input name="Speciality" type="text" id="otherInput" style="display: none; background-color:#e7e7e7; color: rgb(202, 202, 202); padding: 8px 30px; border-radius: 30px; margin-top: 10px;" placeholder="Enter your own option">
-                             </p> 
-                            <input name="Phonenumber" type="number" placeholder="Phonenumber">
+                            <input name="specialised" type="text" id="speciality" style=" background-color:#e7e7e7; color: rgb(16, 15, 15); padding: 8px 30px; border-radius: 30px; margin-top: 10px;" placeholder="Enter your speciality">
+    
+                            <input name="phonenumber" type="number" placeholder="Phonenumber">
                             <textarea name="bio" rows="5" cols="30" name="text" placeholder="User bio"></textarea>
                             
                             <button type="submit" class="btn">Register</button>
@@ -119,18 +108,7 @@
             }
         }
     </script>
-    <script>
-        const selectField = document.getElementById("mySelect");
-        const otherInput = document.getElementById("otherInput");
-      
-        selectField.addEventListener("change", function() {
-          if (this.value === "other") {
-            otherInput.style.display = "block";
-          } else {
-            otherInput.style.display = "none";
-          }
-        });
-      </script>
+   
    
 
 </body>

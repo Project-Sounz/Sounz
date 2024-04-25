@@ -6,6 +6,7 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
+    path('admin/',admin.site.urls),
     path('', views.log),
     path('reg2',views.reg2,name='reg2'),
     path('homeCheck', views.homeCheck, name = 'homeCheck')
