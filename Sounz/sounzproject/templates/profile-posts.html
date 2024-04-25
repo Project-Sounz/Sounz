@@ -1,10 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile : Posts</title>
-    <link rel="stylesheet" href="profile-posts-style.css">
+    <title>Profile | Posts</title>
+    <link rel="stylesheet" href="{% static 'css/profile-posts-style.css' %}">
 </head>
 <body>
     <div class="header">
@@ -91,7 +93,7 @@
                 </p>
                 <div class="postfooter">
                     <h3>Violin</h3>
-                    <a href=""><a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a></a>
+                    <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
                 </div>
             </div>
         </div>
