@@ -6,14 +6,14 @@ import uuid
 
 # Create your models here.
 
-class userdata(models.Model):
+class Profile(models.Model):
     uid=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    username=models.CharField(max_length=20,unique=True)
+    username=models.OneToOneField(User,on_delete=models.CASCADE)
     password = models.CharField(max_length=15)
     firstname=models.CharField(max_length=30)
     lastname=models.CharField(max_length=30)
     email = models.EmailField()
-    profile_picture = models.ImageField(upload_to='Media/Proifles/', blank=True, null=True, default='media/default_profile_picture.jpg')
+    profile_picture = models.ImageField(upload_to='Media/Profiles/', blank=True, null=True, default='media/default_profile_picture.jpg')
     user_bio=models.TextField()
     phone=models.IntegerField()
     specialised=models.CharField(max_length=40,default=0)
@@ -21,14 +21,16 @@ class userdata(models.Model):
     
     def __str__(self) -> int:
         return self.uid
+
+
     
 class SavedDB(models.Model):
-    uid=models.ForeignKey(to=userdata,on_delete=models.CASCADE)
+    uid=models.ForeignKey(to=Profile,on_delete=models.CASCADE)
     pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)    
     
 class CollabDB(models.Model):
     col_id=models.IntegerField(primary_key=True)
-    uid=models.ForeignKey(to=userdata,on_delete=models.CASCADE)
+    uid=models.ForeignKey(to=Profile,on_delete=models.CASCADE)
     pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)     
 
 
