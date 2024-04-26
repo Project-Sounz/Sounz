@@ -47,7 +47,7 @@
                         </div>
                         
 
-                        <form id="RegForm" method="post">
+                        <form id="RegForm" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
                             
