@@ -1,0 +1,45 @@
+html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+.main-docker{
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.nav-section{
+    width: fit-content;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    height: 100%;
+}
+nav{
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px 0 60px 0;
+}
+img.navbar-control-icons{
+    width: 35px;
+    padding: 0 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    /* stroke-width: 5; */
+}
+img#navbar-main-logo{
+    width: 45px;
+}
+img#navbar-user-profile-pic{
+    width: 45px;
+    border-radius: 50%;
+}
+#nav-separator{
+    width: 80%;
+    margin: 20px 0;
+    height: 1px;
+    border-radius: 10px;
+    background-color: #F8491B;
+}

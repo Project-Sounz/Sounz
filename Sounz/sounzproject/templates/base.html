@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sounz{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base-file.css' %}">
+    {% block additional_css %}{% endblock %}
+</head>
+<body>
+    <div class="main-docker">
+        <div class="nav-section">
+            <nav class="navigation-controlling-deck">
+                <a href="#"><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"></a>
+                <div id="nav-separator"></div>
+                <a href="#"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{% static 'images/profile-picture-specimen.png' %}" alt=""></a>
+                <a href="#"><img class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a>
+                <a href="#"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"></a>
+                <a href="#"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
+            </nav>
+        </div>
+        <div class="export-htmls">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,92 +1,74 @@
-body{
+body {
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
-    font-weight: normal;
+    font-weight: 100;
     font-style: normal;
     font-variation-settings:
-      "slnt" 0;
-    padding: 0;
-    margin: 0;
+    "slnt" 0;
 }
+
 .imgcenter {
+    display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 125px;
-    border-radius: 50%;
+    padding-top: 10px;
 }
 
 .header{
     background-color: #000;
     color: #fff;
     text-align: center;
-    height: 300px;
+    height: 160px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
-p#profile-name{
+p{
     margin: 0px;
-    font-size: 35px;
-    padding: 10px;
+    font-size: small;
 }
-p#user-name-id{
-    margin: 0;
-    color: #969696;
+
+h5{
+    margin: 0px;
+    margin-top: 5px;
 }
 
 .socials{
-    margin-left: auto;
-    padding: 10px;
-}
-.socials > *{
-    padding: 5px;
-    
-    img{
-        width: 13%;
-        aspect-ratio: 3 / 2;
-        object-fit: contain;
-    }
+    float: right;
+    padding-top: 10px;
+    margin-right: 10px;
 }
 
+
 .body{
+    position: relative;
     text-align: center;
-    padding: 5px 10%;
-}
-p#desc{
-    color: #707070;
-    font-size: 15px;
-    font-style: italic;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 5px;
 }
 
 .mailbio{
-    padding: 15px;
-    font-size: 15px;
-    color: black;
-
+    padding-top: 5px;
 }
 
-.profile-content-buttons{
-    padding: 10px 24px;
-    margin: 0 20px;
-    background-image: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
-    -webkit-background-clip: text; /* Clip the background to the text */
-    background-clip: text;
-    color: transparent; 
-    border: 1px solid rgba(226, 28, 102, 1);
-    border-radius: 10px;
-    font-size: 20px;
-    width: 15%;
-    min-width: fit-content;
-    cursor: pointer;
-}
-.profile-content-buttons:focus{
-    background: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
+#savedbutton{
+    margin-right: 25px;
+    padding: 5px 24px;
+    background-image: linear-gradient(90deg,rgba(248,73,27,1) 0%, rgba(241,47,63,1) 50%,rgba(220,24,96,1) 100%);
+    border: none;
     color: white;
+    border-radius: 4px;
 }
+
+#postbutton{
+    margin-right: 25px;
+    padding: 5px 24px;
+    background-color: #fff;
+    border-color: rgba(226, 28, 102, 1);
+    color: rgba(248, 73, 27, 1);
+    border-radius: 4px;
+}
+
 .post1{
     background-image: url(images.png);
     width: 120px;
