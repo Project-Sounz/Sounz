@@ -35,12 +35,12 @@ class userprofile(models.Model):
     
     
 class SavedDB(models.Model):
-    username=models.ForeignKey(to=Profile,on_delete=models.CASCADE,default=0)
+    username=models.ForeignKey('users.profiledatadb',on_delete=models.CASCADE,default=0)
     pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)    
     
 class CollabDB(models.Model):
     col_id=models.IntegerField(primary_key=True)
-    username=models.ForeignKey(to=Profile,on_delete=models.CASCADE,default=0)
+    username=models.ForeignKey('users.profiledatadb',on_delete=models.CASCADE,default=0)
     pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)     
 
 class profiledatadb(models.Model):
@@ -49,10 +49,10 @@ class profiledatadb(models.Model):
     firstname=models.CharField(max_length=30)
     lastname=models.CharField(max_length=30)
     email = models.EmailField()
-    profile_picture = models.ImageField(upload_to='Media/Profiles/', blank=True, null=True, default='media/default_profile_picture.jpg')
+    profile_picture = models.ImageField(upload_to='Media/', blank=True, null=True, default='media/default_profile_picture.jpg')
     user_bio=models.TextField()
     phone=models.IntegerField(null=True)
-    timestamp=models.DateTimeField(auto_now_add=True)
+    timestamp=models.DateTimeField(auto_now_add=True,null=True)
     
     
         

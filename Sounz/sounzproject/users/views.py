@@ -27,11 +27,15 @@ def reg2(request):
             password = request.POST.get('password')
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
-            profile_picture = request.POST.get('profile_picture')
-
             phone_number = request.POST.get('phonenumber')
             bio = request.POST.get('bio')
             print(uname,email,password,first_name,last_name,bio)
+            form = RegistrationForm(request.POST, request.FILES)
+            if form.is_valid(): 
+                user = form.save(commit=False)
+                user.save()
+                profile_picture = request.FILES.get('profile_picture')
+            
             newins=profiledatadb(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
             newins.save()
             new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
