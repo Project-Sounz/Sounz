@@ -59,5 +59,8 @@ def homeCheck(request):
     users = Profile.objects.all()
     return render(request, 'homepage_test.html', {'allusers': users})
 
-def Profile(request):
-    return render(request, 'profile-posts.html')
+def profile(request):
+    return render(request, 'profile-fpv.html')
+
+def saved(request):
+    return render(request, 'profile-saved.html')
