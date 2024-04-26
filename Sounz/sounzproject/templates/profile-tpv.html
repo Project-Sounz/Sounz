@@ -33,14 +33,11 @@
 </p>
 <a href="" class="mailbio">www.katewilliams.com</a>
 <hr style="margin: 30px;">
-<div class="buttons">
-    <input onclick="displayposts()" type="button" class="profile-content-buttons" value="Posts" id="postbutton">
-    <input onclick="displaysaved()" type="button" class="profile-content-buttons" value="Saved" id="savedbutton">
-</div>
+<div class="text-with-lines">POSTS</div>
 
 <div id="profile-content-controller-nomedia" style="display: block;">{% include 'content-404.html'  %}</div>
 <div id="profile-content-controller-posts" style="display: none;">{% include 'posts.html'  %}</div>
-<div id="profile-content-controller-saved" style="display: none;">{% include 'saved.html'  %}</div>
+
 </div>
 {% endblock %}
 

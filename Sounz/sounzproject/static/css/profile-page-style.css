@@ -1,13 +1,4 @@
-body{
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: normal;
-    font-style: normal;
-    font-variation-settings:
-      "slnt" 0;
-    padding: 0;
-    margin: 0;
-}
+
 .imgcenter {
     margin-left: auto;
     margin-right: auto;
@@ -87,6 +78,7 @@ p#desc{
     background: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
     color: white;
 }
+
 .post1{
     background-image: url(images.png);
     width: 120px;

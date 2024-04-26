@@ -55,8 +55,11 @@ def homeCheck(request):
     users = Profile.objects.all()
     return render(request, 'homepage_test.html', {'allusers': users})
 
-def profile(request):
+def profile_fpv(request):
     return render(request, 'profile-fpv.html')
 
-def saved(request):
-    return render(request, 'profile-saved.html')
+def profile_tpv(request):
+    return render(request, 'profile-tpv.html')
+
+def homepage(request):
+    return render(request, 'home.html')
