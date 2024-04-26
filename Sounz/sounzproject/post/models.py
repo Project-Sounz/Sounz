@@ -9,7 +9,7 @@ from django.apps import AppConfig,apps
 
 class Postdata(models.Model):
     pid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username=models.OneToOneField('users.userprofile',on_delete=models.CASCADE,default=0)
+    username=models.OneToOneField('users.profiledatadb',on_delete=models.CASCADE,default=0)
     media_address = models.CharField(max_length=256)
     likes_count = models.IntegerField(default=0)
     tags = models.CharField(max_length=32, null=True)

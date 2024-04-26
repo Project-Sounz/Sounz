@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import * 
 from .forms import RegistrationForm
-from users.models import userprofile
+from users.models import Profile,profiledatadb
 from django.contrib.auth import authenticate,login,logout
 # Create your views here.
 def log(request):
@@ -32,7 +32,7 @@ def reg2(request):
             phone_number = request.POST.get('phonenumber')
             bio = request.POST.get('bio')
             print(uname,email,password,first_name,last_name,bio)
-            newins=userprofile.objects.create(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
+            newins=profiledatadb(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
             newins.save()
             new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
             new_user.save()

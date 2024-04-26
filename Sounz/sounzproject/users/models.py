@@ -32,16 +32,29 @@ class userprofile(models.Model):
     phone=models.IntegerField()
     timestamp=models.DateTimeField(auto_now_add=True)
     
-    def __str__(self) -> int:
-        return self.uid
+    
     
 class SavedDB(models.Model):
-    uid=models.ForeignKey(to=Profile,on_delete=models.CASCADE)
+    username=models.ForeignKey(to=Profile,on_delete=models.CASCADE,default=0)
     pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)    
     
 class CollabDB(models.Model):
     col_id=models.IntegerField(primary_key=True)
-    uid=models.ForeignKey(to=Profile,on_delete=models.CASCADE)
+    username=models.ForeignKey(to=Profile,on_delete=models.CASCADE,default=0)
     pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)     
+
+class profiledatadb(models.Model):
+    username=models.CharField(primary_key=True,max_length=15,unique=True)
+    password = models.CharField(max_length=15)
+    firstname=models.CharField(max_length=30)
+    lastname=models.CharField(max_length=30)
+    email = models.EmailField()
+    profile_picture = models.ImageField(upload_to='Media/Profiles/', blank=True, null=True, default='media/default_profile_picture.jpg')
+    user_bio=models.TextField()
+    phone=models.IntegerField(null=True)
+    timestamp=models.DateTimeField(auto_now_add=True)
+    
+    
+        
 
 
