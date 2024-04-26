@@ -8,7 +8,7 @@ import uuid
 
 class Profile(models.Model):
     uid=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    username=models.OneToOneField(User,on_delete=models.CASCADE)
+    username=models.CharField(max_length=15,default=0)
     password = models.CharField(max_length=15)
     firstname=models.CharField(max_length=30)
     lastname=models.CharField(max_length=30)
@@ -16,7 +16,6 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to='Media/Profiles/', blank=True, null=True, default='media/default_profile_picture.jpg')
     user_bio=models.TextField()
     phone=models.IntegerField()
-    specialised=models.CharField(max_length=40,default=0)
     timestamp=models.DateTimeField(auto_now_add=True)
     
     def __str__(self) -> int:
