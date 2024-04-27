@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sounz{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="header-for-home">{% include 'header_base.html' %}</div>
+{% endblock %}
