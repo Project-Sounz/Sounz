@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import * 
 from .forms import RegistrationForm
-from users.models import Profile,profiledatadb
+from users.models import profiledatadb
 from django.contrib.auth import authenticate,login,logout
 # Create your views here.
 def log(request):
@@ -56,7 +56,7 @@ def reg2(request):
         return render(request,"reg2.html")
 
 def homeCheck(request):
-    users = Profile.objects.all()
+    users = profiledatadb.objects.all()
     return render(request, 'homepage_test.html', {'allusers': users})
 
 def profile(request):
