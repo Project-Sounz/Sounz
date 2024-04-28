@@ -81,3 +81,6 @@ def profile_tpv(request):
 
 def homepage(request):
     return render(request, 'home.html')
+
+def upload(request):
+    return render(request, 'upload_form.html')

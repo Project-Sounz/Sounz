@@ -13,5 +13,6 @@ urlpatterns = [
     path('homeCheck', views.homeCheck, name = 'homeCheck'),
     path('my-profile', views.profile_fpv, name = 'my-profile'),
     path('watch-profile', views.profile_tpv, name = 'watch-profile'),
+    path('upload', views.upload, name = 'upload'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
