@@ -3,6 +3,7 @@ from .models import *
 from .forms import RegistrationForm
 from users.models import profiledatadb
 from django.contrib.auth import authenticate,login,logout
+from django.contrib import messages
 # Create your views here.
 def log(request):
     if request.method == 'POST':
@@ -25,6 +26,7 @@ def reg2(request):
             uname = request.POST.get('username')
             email = request.POST.get('email')
             password = request.POST.get('password')
+            password1=request.POST.get('confirmPassword')
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             phone_number = request.POST.get('phonenumber')
@@ -35,14 +37,26 @@ def reg2(request):
                 user = form.save(commit=False)
                 user.save()
                 profile_picture = request.FILES.get('profile_picture')
+            if password == password1:
+                if User.objects.filter(email=email).exists():
+                     messages.info(request, 'Email Taken')
+                     return redirect('reg2')
+                elif User.objects.filter(username=uname).exists():
+                     messages.info(request, 'Username Taken')
+                     return redirect('reg2')
+                else:
+                    newins=profiledatadb(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
+                    newins.save()
+                    new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
+                    new_user.save()
+                    return HttpResponse("user has been created")    
+            else:
+                messages.info(request, 'Password Not Matching')
+                return redirect('reg2')
             
-            newins=profiledatadb(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
-            newins.save()
-            new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
-            new_user.save()
             
             
-            return HttpResponse("user has been created")
+            
             if new_user is not None:
                 login(request,new_user)
                 return redirect('/')
