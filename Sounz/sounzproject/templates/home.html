@@ -7,4 +7,21 @@
 
 {% block content %}
     <div class="header-for-home">{% include 'header_base.html' %}</div>
+    <div class="search-expl">
+        <center><h1 id="explr-or-comnty" class="explr-or-comnty">Explore our community</h1></center>
+        <center><div class="search-container" id="search-container">
+            <img id="search-logo" src="{% static 'images/search-icon.svg' %}" alt="">
+            <input type="text" name="search-input" class="search-input" placeholder="Search...">
+        </div>
+    </center>
+    </div>
+    
+    <div class="main-explore">
+        <div class="sub-explore">
+
+        </div>
+        <div class="suggestions">
+
+        </div>
+    </div>
 {% endblock %}
