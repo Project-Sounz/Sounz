@@ -14,5 +14,6 @@ urlpatterns = [
     path('my-profile', views.profile_fpv, name = 'my-profile'),
     path('watch-profile', views.profile_tpv, name = 'watch-profile'),
     path('upload', views.upload, name = 'upload'),
+    path('fpv_profile', views.profile_fpv, name='fpv-profile'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
