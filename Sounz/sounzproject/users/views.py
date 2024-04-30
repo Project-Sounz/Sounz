@@ -39,11 +39,11 @@ def reg2(request):
                 profile_picture = request.FILES.get('profile_picture')
             if password == password1:
                 if User.objects.filter(email=email).exists():
-                     messages.info(request, 'Email Taken')
-                     return redirect('reg2')
+                     prompt_message = "Email taken"
+                     return render(request,'reg2.html',{'prompt_message': prompt_message})
                 elif User.objects.filter(username=uname).exists():
-                     messages.info(request, 'Username Taken')
-                     return redirect('reg2')
+                     prompt_message = "Username taken"
+                     return render(request,'reg2.html',{'prompt_message': prompt_message})
                 else:
                     newins=profiledatadb(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
                     newins.save()
@@ -51,8 +51,8 @@ def reg2(request):
                     new_user.save()
                     return HttpResponse("user has been created")    
             else:
-                messages.info(request, 'Password Not Matching')
-                return redirect('reg2')
+                prompt_message = "Passwords do not match. Please try again."
+                return render(request,'reg2.html',{'prompt_message': prompt_message})
             
             
             
