@@ -12,9 +12,10 @@
 
 {% block content %}
 <div class="header">
+    {% if user %}
     <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" class="imgcenter" width="80px">
     <p id="profile-name">Kate William</p>
-    <p id="user-name-id"><span class="username">kate_wills</span> . <span class="user-id">#348412</span></p>
+    <p id="user-name-id"><span class="username">{{ user.username }}</span> . <span class="user-id">#348412</span></p>
 <div class="socials">
     <a href=""><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
     <a href=""><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
@@ -32,6 +33,7 @@
      consectetur blandit nisl.
 </p>
 <a href="" class="mailbio">www.katewilliams.com</a>
+{% endif %}
 <hr style="margin: 30px;">
 <div class="buttons">
     <input onclick="displayposts()" type="button" class="profile-content-buttons" value="Posts" id="postbutton">

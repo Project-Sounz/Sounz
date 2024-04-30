@@ -50,6 +50,9 @@
                         <form id="RegForm" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
+                            {% if prompt_message %}
+                            <div>{{ prompt_message }}</div>
+                            {% endif %}
                             
                             <input type="text" placeholder="Username" id="username" name="username">
                             <input type="email" placeholder="Email" id="email" name="email">

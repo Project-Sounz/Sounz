@@ -18,11 +18,11 @@ class profiledatadb(models.Model):
     def __str__(self):
         return str(self.username) 
 
+   
 
 
-class Postdata(models.Model):
-    pid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username=models.OneToOneField(to=profiledatadb,on_delete=models.CASCADE,default=0)
+class postdatabase(models.Model):
+    username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE,default=0)
     media_address = models.CharField(max_length=256)
     likes_count = models.IntegerField(default=0)
     tags = models.CharField(max_length=32, null=True)
@@ -33,18 +33,24 @@ class Postdata(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.pid)    
+        return str(self.pid)     
 
-    
-    
-class SavedDB(models.Model):
+
+class postdatadb(models.Model):
     username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE,default=0)
-    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)    
+    media_address = models.CharField(max_length=256)
+    likes_count = models.IntegerField(default=0)
+    tags = models.CharField(max_length=32, null=True)
+    media_type = models.CharField(max_length=20)
+    title = models.CharField(max_length=200)
+    descr = models.TextField()
+    lang = models.CharField(max_length=15)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.pid)      
     
-class CollabDB(models.Model):
-    col_id=models.IntegerField(primary_key=True)
-    username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE,default=0)
-    pid=models.ForeignKey(to=Postdata,on_delete=models.CASCADE, default=0)      
+      
         
 
 
