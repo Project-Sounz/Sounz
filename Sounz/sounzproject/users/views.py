@@ -49,7 +49,7 @@ def reg2(request):
                     newins.save()
                     new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
                     new_user.save()
-                    return HttpResponse("user has been created")    
+                    return redirect('profile',username=uname)    
             else:
                 prompt_message = "Passwords do not match. Please try again."
                 return render(request,'reg2.html',{'prompt_message': prompt_message})
@@ -84,3 +84,10 @@ def homepage(request):
 
 def upload(request):
     return render(request, 'upload_form.html')
+
+def profile(request,username):
+    try:
+        user = profiledatadb.objects.get(username=username)
+    except profiledatadb.DoesNotExist:
+        user = None
+    return render(request, 'profile-fpv.html', {'user': user})    
