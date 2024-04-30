@@ -1,23 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload form</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Upload{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/upload.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="header-for-home">{% include 'header_base.html' %}</div>
+<div class="form-main-container">
+    <h1 class="upload-head">Upload new post</h1>
     <form method="post" enctype="multipart/form-data" id="upload_form">
         <input type="file" name="post" id="post_input" accept="" style="display: none;">
-        <button type="button" onclick="document.getElementById('post_input').click();" class="btn">Upload Audio</button>
-        <input type="file" name="thumbnail" id="thumbnail_input" accept="" style="display: none;">
+        <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn"><span class="uploadLogo"><img src="{% static 'images/upload.svg' %}" alt="upload post"></span><span class="upload-postText">Upload you file</span><span class="upload-postSupport">Supported files: Video, Audio, Image</span></button>
+        
+        <!-- <input type="file" name="thumbnail" id="thumbnail_input" accept="" style="display: none;">
         <button type="button" onclick="document.getElementById('thumbnail').click();" class="btn">Upload Thumbnail</button>
-        <input type="text" id="title" name="title" placeholder="enter title">
-        <textarea id="post_description" name="post_description" placeholder="enter post description"></textarea>
-        <input type="text" id="tags" name="tags" placeholder="enter post tags">
-        <input type="text" id="language" name="language" placeholder="enter language">
-        <input type="text" name="location" id="location" placeholder="location">
-        <button type="submit" class="btn">Upload</button>
-
+         -->
+         <div class="upload-postDetails">
+            <input type="text" id="title" name="title" placeholder="Caption">
+            <input type="text" id="post_description" name="post_description" placeholder="Description"></input>
+            <input type="text" id="tags" name="tags" placeholder="#Tags">
+            <input type="text" id="language" name="language" placeholder="Language">
+            <input type="text" name="location" id="location" placeholder="Location">
+            <button type="submit" class="btn" id="upload-publishBtn">Publish</button>
+        </div>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

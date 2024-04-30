@@ -55,7 +55,7 @@ img#navbar-user-profile-pic{
     padding-left: 65px;
     width: 100%;
 }
-.nav-section-mobile,.menu-toggle{
+.menu-toggle{
     display: none;
 }
 .bar {
@@ -79,7 +79,7 @@ img#navbar-user-profile-pic{
 }
 .nav-section-mobile{
     
-    display: none;
+    display: flex;
     width: fit-content;
     background-color: black;
     top: 0;
@@ -89,8 +89,9 @@ img#navbar-user-profile-pic{
     z-index: 998;
     min-width: 200px;
     opacity: 0;
-     /* Move items 20px to the left */
-    
+    transform: translateX(-80px);
+    visibility: hidden;
+    transition: visibility 200ms, transform 200ms, opacity 200ms cubic-bezier(0.37, -0.01, 0.17, 0.99);
 }
 @keyframes fadeIn {
     from {
@@ -135,7 +136,7 @@ img#navbar-user-profile-pic{
     background-color: black;
     position: fixed;
     display: none;
-    animation: opacity-animate 80ms linear;
+    animation: opacity-animate 80ms ease-in-out;
 }
 .blinder.active{
     display: block;
@@ -143,10 +144,11 @@ img#navbar-user-profile-pic{
 }
 @media screen and (max-width: 768px){
     .nav-section-mobile.active{
-        display: block;
+        visibility: visible;
         opacity: 1;
         position: fixed;
-        animation: fadeIn 300ms cubic-bezier(0.42, 0, 0, 0.98);
+        transform: translateX(0px);
+        
     }
     .nav-section-web{
         display: none;
