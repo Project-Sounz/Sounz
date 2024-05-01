@@ -12,7 +12,7 @@ def log(request):
         userr=authenticate(request,username=username,password=password)
         if userr is not None:
             login(request,userr)
-            return HttpResponse("Logged in")
+            return redirect('profile',username=username)
         invalid="Invalid Credentials"
         return render(request,'accounttest.html')
 
