@@ -26,7 +26,7 @@
                 <a href="{% url 'fpv-profile' %}"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{% static 'images/profile-picture-specimen.png' %}" alt=""></a>
                 <a href="#"><img id="search-icon" class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a>
                 <a href="#"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"></a>
-                <a href="#"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
+                <a href="{% url 'nav-saved' %}"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
             </nav>
         </div>
         <div class="menu-toggle" onclick="toggleMenu()">

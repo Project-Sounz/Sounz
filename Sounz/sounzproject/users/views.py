@@ -91,3 +91,6 @@ def profile(request,username):
     except profiledatadb.DoesNotExist:
         user = None
     return render(request, 'profile-fpv.html', {'user': user})    
+
+def nav_saved(request):
+    return render(request, 'saved.html')
