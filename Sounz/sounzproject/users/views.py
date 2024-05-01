@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import * 
-from .forms import RegistrationForm
+from .forms import RegistrationForm,EditProfileForm
 from users.models import profiledatadb
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
@@ -90,4 +90,31 @@ def profile(request,username):
         user = profiledatadb.objects.get(username=username)
     except profiledatadb.DoesNotExist:
         user = None
-    return render(request, 'profile-fpv.html', {'user': user})    
+    return render(request, 'profile-fpv.html', {'user': user})   
+
+def editprofile(request):
+    
+        username=request.user.username
+        user = profiledatadb.objects.get(username=username)
+        userauth=User.objects.get(username=username)
+        
+
+
+
+        if request.method == 'POST':
+                user.firstname = request.POST.get('first_name')
+                userauth.first_name = request.POST.get('first_name')    
+                user.lastname = request.POST.get('last_name')
+                userauth.last_name = request.POST.get('last_name')
+                user.profile_picture = request.FILES.get('profile_picture')
+                user.email=request.POST.get('email')
+                user.user_bio = request.POST.get('bio')
+                user.save()
+                userauth.save()
+                return render(request, 'profile-fpv.html', {'user': user})
+                
+            
+
+        else:
+            form = EditProfileForm(instance=user)
+        return render(request,'editprofile.html',{'user':user})    

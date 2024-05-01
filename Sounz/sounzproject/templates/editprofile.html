@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products | Account</title>
+    <link rel="stylesheet" href="{% static 'css/logstyle.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            
+            <div class="logo">
+                <a href="index.html"><img src="{% static 'images/Media.png' %}" alt="logo" width="125px"></a>
+            </div>
+            <div id="cmname">Sounz</div>
+            <nav>
+                <ul id="MenuItems">
+                    <li>Start your music journey today</li>
+                    
+                </ul>
+            </nav>
+            
+            <img src="{% static 'images/menu.png' %}" class="menu-icon" onclick="menutoggle()">
+        </div>
+    </div>
+
+    <!-- Account Page -->
+    <div class="account-page">
+        <div class="container">
+            <div class="row">
+                {% if user %}
+                
+                <div class="col-2">
+                    <div class="form-containereg">
+                        <div class="form-btn">
+                            <span onclick="register()">Edit Profile</span>
+                            <hr id="Indicatoreg">
+                        </div>
+                        
+
+                        <form id="RegForm" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            {% if prompt_message %}
+                            <div>{{ prompt_message }}</div>
+                            {% endif %}
+                            
+            
+                            
+                            <input type="text" placeholder="{{ user.firstname }}" name="first_name">
+                            <input type="text" placeholder="{{ user.lastname }}" name="last_name">
+                            <input type="email" placeholder="{{ user.email }}" id="email" name="email">
+                            <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
+                            <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Change Profile Picture</button>
+                              
+                            
+    
+                            
+                            <textarea name="bio" rows="5" cols="30" name="text" placeholder="{{ user.user_bio }}"></textarea>
+                            
+                            <button type="submit" class="btn">Update Profile</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="container">
+           
+            <div class="footer-col-4">
+                <p>Create . Collaborate . Connect
+                </p>
+                <br>
+                <h3>Follow Us</h3>
+                <ul>
+                    <li>Facebook</li>
+                    <li>Twitter</li>
+                    <li>Instagram</li>
+                    <li>Youtube</li>
+                </ul>
+            </div>
+            <hr>
+        </div>
+    </div>
