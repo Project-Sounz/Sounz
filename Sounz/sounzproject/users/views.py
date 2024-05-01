@@ -102,13 +102,19 @@ def editprofile(request):
 
 
         if request.method == 'POST':
-                user.firstname = request.POST.get('first_name')
-                userauth.first_name = request.POST.get('first_name')    
-                user.lastname = request.POST.get('last_name')
-                userauth.last_name = request.POST.get('last_name')
-                user.profile_picture = request.FILES.get('profile_picture')
-                user.email=request.POST.get('email')
-                user.user_bio = request.POST.get('bio')
+                if request.POST.get('first_name'):
+                    user.firstname = request.POST.get('first_name')
+                    userauth.first_name = request.POST.get('first_name')
+                if request.POST.get('last_name'):       
+                    user.lastname = request.POST.get('last_name')
+                    userauth.last_name = request.POST.get('last_name')
+                if request.FILES.get('profile_picture'):    
+                   user.profile_picture = request.FILES.get('profile_picture')
+                if request.POST.get('email'):   
+                   user.email=request.POST.get('email')
+                   userauth.email=request.POST.get('email')
+                if request.POST.get('bio'):   
+                   user.user_bio = request.POST.get('bio')
                 user.save()
                 userauth.save()
                 return render(request, 'profile-fpv.html', {'user': user})
