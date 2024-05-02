@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import * 
-from .forms import RegistrationForm
+from .forms import RegistrationForm,EditProfileForm
 from users.models import profiledatadb
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
@@ -90,7 +90,44 @@ def profile(request,username):
         user = profiledatadb.objects.get(username=username)
     except profiledatadb.DoesNotExist:
         user = None
+<<<<<<< HEAD
     return render(request, 'profile-fpv.html', {'user': user})    
 
 def nav_saved(request):
     return render(request, 'profile-fpv-saved.html')
+=======
+    return render(request, 'profile-fpv.html', {'user': user})   
+
+def editprofile(request):
+    
+        username=request.user.username
+        user = profiledatadb.objects.get(username=username)
+        userauth=User.objects.get(username=username)
+        
+
+
+
+        if request.method == 'POST':
+                if request.POST.get('first_name'):
+                    user.firstname = request.POST.get('first_name')
+                    userauth.first_name = request.POST.get('first_name')
+                if request.POST.get('last_name'):       
+                    user.lastname = request.POST.get('last_name')
+                    userauth.last_name = request.POST.get('last_name')
+                if request.FILES.get('profile_picture'):    
+                   user.profile_picture = request.FILES.get('profile_picture')
+                if request.POST.get('email'):   
+                   user.email=request.POST.get('email')
+                   userauth.email=request.POST.get('email')
+                if request.POST.get('bio'):   
+                   user.user_bio = request.POST.get('bio')
+                user.save()
+                userauth.save()
+                return render(request, 'profile-fpv.html', {'user': user})
+                
+            
+
+        else:
+            form = EditProfileForm(instance=user)
+        return render(request,'editprofile.html',{'user':user})    
+>>>>>>> a779a28e04e8dd2615299d44ba82d2042c4fca18

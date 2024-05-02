@@ -30,6 +30,7 @@
 </p>
 <a href="" class="mailbio">{{ user.email }}</a>
 {% endif %}
+<a href="{% url 'editprofile' %}" style="color: rgb(240, 112, 15);">Edit Profile</a>
 <hr style="margin: 30px;">
 <div class="buttons">
     <input onclick="displayposts()" type="button" class="profile-content-buttons" value="Posts" id="postbutton">
