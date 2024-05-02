@@ -90,13 +90,10 @@ def profile(request,username):
         user = profiledatadb.objects.get(username=username)
     except profiledatadb.DoesNotExist:
         user = None
-<<<<<<< HEAD
     return render(request, 'profile-fpv.html', {'user': user})    
 
 def nav_saved(request):
-    return render(request, 'profile-fpv-saved.html')
-=======
-    return render(request, 'profile-fpv.html', {'user': user})   
+    return render(request, 'profile-fpv-saved.html')   
 
 def editprofile(request):
     
@@ -130,4 +127,3 @@ def editprofile(request):
         else:
             form = EditProfileForm(instance=user)
         return render(request,'editprofile.html',{'user':user})    
->>>>>>> a779a28e04e8dd2615299d44ba82d2042c4fca18

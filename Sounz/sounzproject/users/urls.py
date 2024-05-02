@@ -16,6 +16,6 @@ urlpatterns = [
     path('upload', views.upload, name = 'upload'),
     path('profile/<str:username>/', views.profile, name='profile'),
     path('editprofile',views.editprofile, name='editprofile'),
-    path('fpv_profile', views.profile_fpv, name='fpv-profile'),
+    path('my-profile-saved', views.nav_saved, name='nav-saved'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
