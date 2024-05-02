@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Name{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/profile-page-style.css' %}">
+{% endblock %}
+{% block additional_js %}
+<script src="{% static 'js/profilepage-content.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    {% if user %}
+    <img src= '{{user.profile_picture.url}}'alt="" class="imgcenter" width="90px" height="120px"/> 
+    <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
+    <p id="user-name-id"><span class="username">{{ user.username }}</span><span class="user-id"></span></p>
+<div class="socials">
+    <a href=""><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
+    <a href=""><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
+    <a href=""><img src="{% static 'images/youtube.svg' %}" alt="" height="20px" width="20px"></a>
+    <a href=""><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
+</div>
+</div>
+<div class="body">
+<p id="desc">
+    {{ user.user_bio }}
+    
+</p>
+<a href="" class="mailbio">{{ user.email }}</a>
+{% endif %}
+<hr style="margin: 30px;">
+<div class="buttons">
+    <input onclick="displayposts()" type="button" class="profile-content-buttons" value="Posts" id="postbutton">
+    <input onclick="displaysaved()" type="button" class="profile-content-buttons" value="Saved" id="savedbutton" autofocus>
+</div>
+
+<div id="profile-content-controller-nomedia" style="display: none;">{% include 'content-404.html'  %}</div>
+<div id="profile-content-controller-posts" style="display: none;">{% include 'posts.html'  %}</div>
+<div id="profile-content-controller-saved" style="display: block;">{% include 'saved.html'  %}</div>
+</div>
+{% endblock %}
+

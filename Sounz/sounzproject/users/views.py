@@ -93,4 +93,4 @@ def profile(request,username):
     return render(request, 'profile-fpv.html', {'user': user})    
 
 def nav_saved(request):
-    return render(request, 'saved.html')
+    return render(request, 'profile-fpv-saved.html')
