@@ -74,7 +74,7 @@ p#desc{
     min-width: fit-content;
     cursor: pointer;
 }
-.profile-content-buttons:focus{
+.profile-content-buttons:hover{
     background: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
     color: white;
 }

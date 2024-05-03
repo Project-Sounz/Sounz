@@ -106,7 +106,10 @@ def profile(request,username):
         user = profiledatadb.objects.get(username=username)
     except profiledatadb.DoesNotExist:
         user = None
-    return render(request, 'profile-fpv.html', {'user': user})   
+    return render(request, 'profile-fpv.html', {'user': user})    
+
+def nav_saved(request):
+    return render(request, 'profile-fpv-saved.html')   
 
 def editprofile(request):
     
