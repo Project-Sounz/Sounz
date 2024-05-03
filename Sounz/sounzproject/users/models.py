@@ -45,6 +45,7 @@ class postdb(models.Model):
     langu=models.CharField(max_length=15)
     mediatype=models.CharField(max_length=15)
     location=models.CharField(max_length=15)
+    likes=models.IntegerField(default=0)
 
     
       
