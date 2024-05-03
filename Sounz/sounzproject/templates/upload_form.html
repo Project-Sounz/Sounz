@@ -10,6 +10,11 @@
 <div class="form-main-container">
     <h1 class="upload-head">Upload new post</h1>
     <form method="post" enctype="multipart/form-data" id="upload_form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if prompt_message %}
+        <div>{{ prompt_message }}</div>
+        {% endif %}
         <input type="file" name="post" id="post_input" accept="" style="display: none;">
         <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn"><span class="uploadLogo"><img src="{% static 'images/upload.svg' %}" alt="upload post"></span><span class="upload-postText">Upload you file</span><span class="upload-postSupport">Supported files: Video, Audio, Image</span></button>
         
@@ -19,7 +24,7 @@
          <div class="upload-postDetails">
             <input type="text" id="title" name="title" placeholder="Caption">
             <input type="text" id="post_description" name="post_description" placeholder="Description"></input>
-            <input type="text" id="tags" name="tags" placeholder="#Tags">
+            <input type="text" id="tags" name="tags" placeholder="Media type (like 'vocals' 'guitar' 'piano' etc..)">
             <input type="text" id="language" name="language" placeholder="Language">
             <input type="text" name="location" id="location" placeholder="Location">
             <button type="submit" class="btn" id="upload-publishBtn">Publish</button>

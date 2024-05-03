@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import * 
-from .forms import RegistrationForm,EditProfileForm
-from users.models import profiledatadb
+from .forms import RegistrationForm,EditProfileForm,Uploadform
+from users.models import profiledatadb,postdb
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 # Create your views here.
@@ -83,6 +83,22 @@ def homepage(request):
     return render(request, 'home.html')
 
 def upload(request):
+    username=request.user.username
+    userobj=profiledatadb.objects.get(username=username)
+    if request.method=='POST':
+        caption=request.POST.get('title')
+        desc=request.POST.get('post_description')
+        typ=request.POST.get('tags')
+        lan=request.POST.get('language')
+        loc=request.POST.get('location')
+        form=Uploadform(request.POST,request.GET)
+        if form.is_valid(): 
+                file=request.FILES.get('post')
+        pos=postdb(username=userobj,caption=caption,descr=desc,langu=lan,mediatype=typ,location=loc,media=file)
+        pos.save()
+        prompt_message = "Post Uploaded"
+        return render(request,'upload_form.html',{'prompt_message': prompt_message})
+
     return render(request, 'upload_form.html')
 
 def profile(request,username):
@@ -123,4 +139,7 @@ def editprofile(request):
 
         else:
             form = EditProfileForm(instance=user)
-        return render(request,'editprofile.html',{'user':user})    
+        return render(request,'editprofile.html',{'user':user}) 
+
+
+

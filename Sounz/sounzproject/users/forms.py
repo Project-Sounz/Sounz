@@ -1,5 +1,5 @@
 from django import forms
-from .models import profiledatadb
+from .models import profiledatadb,postdb
 
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -14,3 +14,10 @@ class EditProfileForm(forms.ModelForm):
         model = profiledatadb
         fields = ['username', 'firstname', 'lastname','email','profile_picture', 'user_bio']
         exclude=['password','phone']
+
+class Uploadform(forms.ModelForm):
+    
+    class Meta:
+        model=postdb
+        fields=['media']
+        exclude=['pid','username','media','caption','descr','langu','mediatype','location']
