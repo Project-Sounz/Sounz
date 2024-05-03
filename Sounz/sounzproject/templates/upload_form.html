@@ -8,6 +8,7 @@
 {% block content %}
 <div class="header-for-home">{% include 'header_base.html' %}</div>
 <div class="form-main-container">
+    {% if user %}
     <h1 class="upload-head">Upload new post</h1>
     <form method="post" enctype="multipart/form-data" id="upload_form">
         {% csrf_token %}
@@ -30,5 +31,6 @@
             <button type="submit" class="btn" id="upload-publishBtn">Publish</button>
         </div>
     </form>
+    {% endif %}
 </div>
 {% endblock %}

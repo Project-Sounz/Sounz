@@ -12,7 +12,7 @@ def log(request):
         userr=authenticate(request,username=username,password=password)
         if userr is not None:
             login(request,userr)
-            return redirect('profile',username=username)
+            return redirect('profile')
         invalid="Invalid Credentials"
         return render(request,'accounttest.html')
 
@@ -49,7 +49,7 @@ def reg2(request):
                     newins.save()
                     new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
                     new_user.save()
-                    return redirect('profile',username=uname)    
+                    return redirect('profile')    
             else:
                 prompt_message = "Passwords do not match. Please try again."
                 return render(request,'reg2.html',{'prompt_message': prompt_message})
@@ -74,7 +74,8 @@ def homeCheck(request):
     return render(request, 'homepage_test.html', {'allusers': users})
 
 def profile_fpv(request):
-    return render(request, 'profile-fpv.html')
+    user=request.user.username
+    return render(request, 'profile-fpv.html',{'user':user})
 
 def profile_tpv(request):
     return render(request, 'profile-tpv.html')
@@ -99,11 +100,12 @@ def upload(request):
         prompt_message = "Post Uploaded"
         return render(request,'upload_form.html',{'prompt_message': prompt_message})
 
-    return render(request, 'upload_form.html')
+    return render(request, 'upload_form.html',{'user':username})
 
-def profile(request,username):
+def profile(request):
     try:
-        user = profiledatadb.objects.get(username=username)
+        user=request.user.username
+        user = profiledatadb.objects.get(username=user)
     except profiledatadb.DoesNotExist:
         user = None
     return render(request, 'profile-fpv.html', {'user': user})    

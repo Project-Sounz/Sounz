@@ -14,7 +14,7 @@ urlpatterns = [
     path('my-profile', views.profile_fpv, name = 'my-profile'),
     path('watch-profile', views.profile_tpv, name = 'watch-profile'),
     path('upload', views.upload, name = 'upload'),
-    path('profile/<str:username>/', views.profile, name='profile'),
+    path('profile', views.profile, name='profile'),
     path('editprofile',views.editprofile, name='editprofile'),
     path('my-profile-saved', views.nav_saved, name='nav-saved'),
 ]
