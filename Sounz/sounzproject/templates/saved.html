@@ -2,6 +2,7 @@
 <head>
     <link rel="stylesheet" href="{% static 'css/profile-posts-style.css' %}">
 </head>
+{% if user %}
 <div class="posts">
     <div class="post1">
         <h4>Lorem ipsum</h4>
@@ -64,3 +65,4 @@
         </div>
     </div>
 </div>
+{% endif %}

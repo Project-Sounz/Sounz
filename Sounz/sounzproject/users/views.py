@@ -100,7 +100,7 @@ def upload(request):
         prompt_message = "Post Uploaded"
         return render(request,'upload_form.html',{'prompt_message': prompt_message})
 
-    return render(request, 'upload_form.html',{'user':username})
+    return render(request, 'upload_form.html',{'user':userobj})
 
 def profile(request):
     try:
@@ -111,7 +111,9 @@ def profile(request):
     return render(request, 'profile-fpv.html', {'user': user})    
 
 def nav_saved(request):
-    return render(request, 'profile-fpv-saved.html')   
+    username=request.user.username
+    user = profiledatadb.objects.get(username=username)
+    return render(request, 'profile-fpv-saved.html',{'user':user})   
 
 def editprofile(request):
     

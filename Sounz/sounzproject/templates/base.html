@@ -18,17 +18,18 @@
     {% block additional_js %}{% endblock %}
 </head>
 <body>
+    {% if user %}
     <div class="main-docker">
         <div class="nav-section-web">
             <nav class="navigation-controlling-deck">
                 <a href="#"><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"></a>
                 <div id="nav-separator"></div>
-                {% if user %}
+                
                 <a href="{% url 'profile' %}"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"></a>
                 <a href="#"><img id="search-icon" class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a>
                 <a href="{% url 'upload' %}"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"></a>
                 <a href="{% url 'nav-saved' %}"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
-                {% endif %}
+                
             </nav>
         </div>
         <div class="menu-toggle" onclick="toggleMenu()">
@@ -56,5 +57,6 @@
             {% endblock %}
         </div>
     </div>
+    {% endif %}
 </body>
 </html>
