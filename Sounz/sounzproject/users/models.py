@@ -18,8 +18,16 @@ class profiledatadb(models.Model):
     def __str__(self):
         return str(self.username) 
 
-   
-
+class postdb(models.Model):
+    pid=models.UUIDField(primary_key=True,max_length=10,default=uuid.uuid4)
+    username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE)
+    media=models.FileField(upload_to='media/Posts')
+    caption=models.CharField(max_length=30)
+    descr=models.TextField()
+    langu=models.CharField(max_length=15)
+    mediatype=models.CharField(max_length=15)
+    location=models.CharField(max_length=15)
+    likes=models.IntegerField(default=0)
 
 class postdatabase(models.Model):
     username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE,default=0)
@@ -34,19 +42,6 @@ class postdatabase(models.Model):
 
     def __str__(self):
         return str(self.pid)     
-
-
-class postdb(models.Model):
-    pid=models.UUIDField(primary_key=True,max_length=10,default=uuid.uuid4)
-    username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE)
-    media=models.FileField(upload_to='media/Posts')
-    caption=models.CharField(max_length=30)
-    descr=models.TextField()
-    langu=models.CharField(max_length=15)
-    mediatype=models.CharField(max_length=15)
-    location=models.CharField(max_length=15)
-    likes=models.IntegerField(default=0)
-
     
       
         
