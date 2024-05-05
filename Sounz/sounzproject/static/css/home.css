@@ -83,23 +83,45 @@
 
 .mostviewed-feed{
     width: 80%;
+    height: 25%;
     font-size: small;
     border: solid 1px;
     border-radius: 8px;
     margin: auto;
+    padding: 3px;
+    margin-bottom: 6px;
 }
 
 .most-viewed{
-    width: 35%;
-    height: auto;
+    width: auto;
     border: solid 1px;
     border-radius: 8px;
-    float: right;
     margin-right: 80px;
     height: 500px;
+    margin-bottom: 20px;
 }
 
 .most-viewed-h4{
-    margin-left: 10px;
+    margin: 0;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: large;
+    padding: 15px;
 }
 
+.mv-post-thumbnail{
+    height: 30%;
+    width: 30%;
+}
+
+.artists > figure > a > img{
+    width: 50px;
+}
+
+.top-artists{
+    width: auto;
+}
+
+.main-explore{
+    display: flex;
+}
