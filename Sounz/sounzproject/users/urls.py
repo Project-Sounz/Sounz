@@ -17,5 +17,6 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('editprofile',views.editprofile, name='editprofile'),
     path('my-profile-saved', views.nav_saved, name='nav-saved'),
+    path('logout',views.logout,name='logout'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
