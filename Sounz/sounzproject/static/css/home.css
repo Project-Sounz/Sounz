@@ -88,6 +88,7 @@
     border: solid 1px;
     border-radius: 8px;
     margin-right: 80px;
+    margin-top: 50px;
 }
 
 .mv-post-header{
@@ -106,9 +107,11 @@
 }
 
 .mv-post{
+    margin: 20px;
+    font-size: small;
     border: solid 1px;
     border-radius: 8px;
-    margin: 10px;
+    padding: 8px;
 }
 
 .main-explore{
@@ -121,12 +124,16 @@
 
 .mv-h4{
     font-weight: 400;
-    padding-left: 4px;
+    padding-left: 15px;
     font-size: large;
 }
 
 .mv-post-header > a > img, .post-owner-username, .home-post-date{
     padding: 3px;
+}
+
+.mv-post > a{
+    text-decoration: none;
 }
 
 .mvpost-details{
@@ -136,4 +143,51 @@
 
 .mvpost-overview{
     display: flex;
+}
+
+.top-artists{
+    font-size: small;
+    border: solid 1px;
+    border-radius: 8px;
+    margin-right: 80px;
+    margin-top: 30px;
+}
+
+.artists{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.artists > a{
+    padding: 20px;
+    text-decoration: none;
+}
+
+.artists > a > figcaption{
+    padding-top: 3px;
+}
+
+.ta-h4{
+    font-weight: 400;
+    font-size: large;
+    padding-left: 15px;
+}
+
+.morebutton > button{
+    padding: 5px 24px;
+    background-color: #fff;
+    border-color: rgba(226, 28, 102, 1);
+    color: rgba(248, 73, 27, 1);
+    border-radius: 4px;
+    margin-right: 80px;
+}
+
+.morebutton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
 }
