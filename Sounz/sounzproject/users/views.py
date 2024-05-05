@@ -138,6 +138,12 @@ def editprofile(request):
                    userauth.email=request.POST.get('email')
                 if request.POST.get('bio'):   
                    user.user_bio = request.POST.get('bio')
+                if request.POST.get('insta'):   
+                   user.insta = request.POST.get('insta') 
+                if request.POST.get('yout'):   
+                   user.yout = request.POST.get('yout')
+                if request.POST.get('twit'):   
+                   user.twit = request.POST.get('twit')        
                 user.save()
                 userauth.save()
                 return render(request, 'profile-fpv.html', {'user': user})

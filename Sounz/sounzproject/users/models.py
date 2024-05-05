@@ -14,6 +14,9 @@ class profiledatadb(models.Model):
     user_bio=models.TextField()
     phone=models.IntegerField(null=True)
     timestamp=models.DateTimeField(auto_now_add=True,null=True)
+    insta=models.URLField(max_length=200,blank=True,null=True)
+    yout=models.URLField(max_length=200,blank=True,null=True)
+    twit=models.URLField(max_length=200, blank=True,null=True)
 
     def __str__(self):
         return str(self.username) 
