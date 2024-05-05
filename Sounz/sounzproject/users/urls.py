@@ -17,5 +17,7 @@ urlpatterns = [
     path('my-profile-saved', views.nav_saved, name='nav-saved'),
     path('logout',views.logout,name='logout'),
     path('signout',views.signout,name='signout'),
+    path('upload', views.upload, name='upload'),
+    path('watch-profile', views.profile_tpv, name='watch-profile')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
