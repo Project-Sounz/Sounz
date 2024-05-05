@@ -10,17 +10,16 @@
     <div class="media">
         <div class="media-header">
             <a href="">
-                <img src="{% static 'images/profile-picture-specimen.png' %}" alt="">
-                <p>@username_123</p>
+                <img src="{% static 'images/profile-picture-specimen.png' %}" class="media-owner-pp" alt="">
+                <p class="media-owner-un">@username_123</p>
             </a>
             <a href="" class="collab"><img src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
         </div>
         <div class="actual-media">
-            <img src="{% static 'images/media-thumbnail.png' %}" alt="">
+            <img src="{% static 'images/media-thumbnail.png' %}" alt="" class="media-thumbnail">
         </div>
         <div class="media-footer">
-            <h3 class="m-h3">Lorem ipsum dolor sit amet</h3>
-            <a href="" class="media-type">Vocals</a>
+            <h3 class="m-h3">Lorem ipsum dolor sit amet <a href="" class="media-type">Vocals</a> </h3>
             <div class="footer-btns">
                 <a href=""><img src="{% static 'images/save-black.svg' %}" alt=""></a>
                 <a href=""><img src="{% static 'images/share-black.svg' %}" alt=""></a>
@@ -44,7 +43,6 @@
                  ligula nisl. Vivamus viverra odio vel neque mollis, non dictum odio iaculis. Curabitur 
                  malesuada dapibus nulla, vehicula tincidunt lorem volutpat quis. Curabitur sed lacinia turpis.
             </p>
-            <br>
             <br>
             <p class="media-tags">
                 #rap #90s #guitar #singsong #english #ifyouare #seeinthis #idontknow #what
