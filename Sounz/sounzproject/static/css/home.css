@@ -58,8 +58,7 @@
 }
 
 .homefeed{
-    width: 50%;
-    margin-left: 80px;
+    margin: 50px;
     font-size: medium;
     border: solid 1px;
     border-radius: 8px;
@@ -81,47 +80,45 @@
     width: 35%;
 }
 
-.mostviewed-feed{
-    width: 80%;
-    height: 25%;
-    font-size: small;
-    border: solid 1px;
-    border-radius: 8px;
-    margin: auto;
-    padding: 3px;
-    margin-bottom: 6px;
+.homefeed > a{
+    text-decoration: none;
 }
 
-.most-viewed{
-    width: auto;
+.mostviewed{
     border: solid 1px;
     border-radius: 8px;
     margin-right: 80px;
-    height: 500px;
-    margin-bottom: 20px;
 }
 
-.most-viewed-h4{
+.mv-post-header{
+    display: flex;
+}
+
+.mv-post-header > a{
+    display: flex;
+    padding: 3px;
+}
+
+.mvpost-thumbnail{
     margin: 0;
-    text-decoration: none;
-    font-weight: 400;
-    font-size: large;
-    padding: 15px;
+    width: 35%;
 }
 
-.mv-post-thumbnail{
-    height: 30%;
-    width: 30%;
-}
-
-.artists > figure > a > img{
-    width: 50px;
-}
-
-.top-artists{
-    width: auto;
+.mv-post{
+    border: solid 1px;
+    border-radius: 8px;
+    margin: 5px;
 }
 
 .main-explore{
     display: flex;
+}
+
+.suggestions{
+    font-size: small;
+}
+
+.mv-h4{
+    font-weight: 400;
+    padding-left: 4px;
 }
