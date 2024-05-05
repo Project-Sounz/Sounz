@@ -102,12 +102,13 @@
 .mvpost-thumbnail{
     margin: 0;
     width: 35%;
+    height: 35%;
 }
 
 .mv-post{
     border: solid 1px;
     border-radius: 8px;
-    margin: 5px;
+    margin: 10px;
 }
 
 .main-explore{
@@ -121,4 +122,18 @@
 .mv-h4{
     font-weight: 400;
     padding-left: 4px;
+    font-size: large;
+}
+
+.mv-post-header > a > img, .post-owner-username, .home-post-date{
+    padding: 3px;
+}
+
+.mvpost-details{
+    width: 60%;
+    padding: 3px;
+}
+
+.mvpost-overview{
+    display: flex;
 }
