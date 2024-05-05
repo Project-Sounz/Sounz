@@ -18,6 +18,7 @@ urlpatterns = [
     path('logout',views.logout,name='logout'),
     path('signout',views.signout,name='signout'),
     path('upload', views.upload, name='upload'),
-    path('watch-profile', views.profile_tpv, name='watch-profile')
+    path('watch-profile', views.profile_tpv, name='watch-profile'),
+    path('media', views.media, name='media'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -158,3 +158,5 @@ def signout(request):
     logout(request)
     return redirect('signin')
 
+def media(request):
+    return render(request,'media.html')

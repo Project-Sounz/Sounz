@@ -1,2 +1,58 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}Sounz{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/media.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="header-for-home">{% include 'header_base.html' %}</div>
+    <div class="media">
+        <div class="media-header">
+            <a href="">
+                <img src="{% static 'images/profile-picture-specimen.png' %}" alt="">
+                <p>@username_123</p>
+            </a>
+            <a href="" class="collab"><img src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
+        </div>
+        <div class="actual-media">
+            <img src="{% static 'images/media-thumbnail.png' %}" alt="">
+        </div>
+        <div class="media-footer">
+            <h3 class="m-h3">Lorem ipsum dolor sit amet</h3>
+            <a href="" class="media-type">Vocals</a>
+            <div class="footer-btns">
+                <a href=""><img src="{% static 'images/save-black.svg' %}" alt=""></a>
+                <a href=""><img src="{% static 'images/share-black.svg' %}" alt=""></a>
+                <a href=""><img src="{% static 'images/Like-black.svg' %}" alt=""></a>
+            </div>
+        </div>
+        <p class="media-date">date</p>
+        <div class="media-desc">
+            <p class="media-caption">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.lacus mauris, 
+                gravida in metus at, consectetur blandit nisl.Mauris lacinia lectus id 
+                felis ultrices, vitae aliquet ante fermentum. Sed at massa ut ex rhoncus 
+                efficitur. Proin auctor efficitur ultrices. Aenean pharetra interdum interdum. 
+                Morbi tincidunt luctus dictum. Proin a purus ac ex bibendum iaculis. Integer 
+                dignissim eget lectus id pretium. Pellentesque sollicitudin tellus odio, ut 
+                feugiat quam eleifend vitae. Vivamus tristique magna leo, eget maximus sapien 
+                tristique et. Vivamus lacinia venenatis turpis, quis elementum purus ultrices a.
+                Proin tristique, est sed molestie posuere, erat felis euismod risus, non convallis leo ipsum 
+                sed mauris. Proin interdum sapien vel ipsum porta auctor. Sed et convallis odio. Ut 
+                sit amet porttitor est. Cras eget leo rutrum, sodales lacus at, aliquet justo. Sed a
+                 ligula nisl. Vivamus viverra odio vel neque mollis, non dictum odio iaculis. Curabitur 
+                 malesuada dapibus nulla, vehicula tincidunt lorem volutpat quis. Curabitur sed lacinia turpis.
+            </p>
+            <br>
+            <br>
+            <p class="media-tags">
+                #rap #90s #guitar #singsong #english #ifyouare #seeinthis #idontknow #what
+                #elseto #put #onthe #restofthe #page #giveme #suggestions #thenwecan
+                #createthe #desktopversion #alsoicopied #thistag #stylefrom #instagram #bcoz 
+                #idontknow #howelse #toputtags #give #me #suggestions #tomorrow
+                #iwilldo #bykevinjoshy #somebodybring #alaptoptommorow
+            </p>
+        </div>
+    </div>
+{% endblock %}
