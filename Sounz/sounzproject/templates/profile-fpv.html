@@ -32,7 +32,7 @@
 <a href="" class="mailbio">{{ user.email }}</a>
 {% endif %}
 <a href="{% url 'editprofile' %}" style="color: rgb(240, 112, 15);">Edit Profile</a>
-<a href="{% url 'logout' %}" class="logout">Log out</a>
+<a href="{% url 'signout' %}" id="logout" style="border: solid 1px; border-radius: 4px; border-color: rgba(248, 73, 27, 1);padding: 5px;float: right;color: rgba(248, 73, 27, 1);text-decoration: none;">Log out</a>
 <hr style="margin: 30px;">
 <div class="buttons">
     <input onclick="displayposts()" type="button" class="profile-content-buttons" value="Posts" id="postbutton">

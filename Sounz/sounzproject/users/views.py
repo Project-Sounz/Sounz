@@ -154,7 +154,7 @@ def editprofile(request):
             form = EditProfileForm(instance=user)
         return render(request,'editprofile.html',{'user':user}) 
 
-def logout(request):
+def signout(request):
     logout(request)
-    return redirect('log')
+    return redirect('signin')
 
