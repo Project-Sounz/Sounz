@@ -45,3 +45,61 @@
     font-size: 18px;
 }
 
+.home-post-header > a{
+    display: flex;
+}
+
+.home-post-header > a > img, .post-owner-username, .home-post-date{
+    padding: 3px;
+}
+
+.home-post-header{
+    display: flex;
+}
+
+.homefeed{
+    width: 50%;
+    margin-left: 80px;
+    font-size: medium;
+    border: solid 1px;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+
+.post-details{
+    width: 60%;
+}
+
+.post-overview{
+    display: flex;
+}
+
+.post-thumbnail{
+    padding-left: 5px;
+    margin: 0;
+    width: 35%;
+}
+
+.mostviewed-feed{
+    width: 80%;
+    font-size: small;
+    border: solid 1px;
+    border-radius: 8px;
+    margin: auto;
+}
+
+.most-viewed{
+    width: 35%;
+    height: auto;
+    border: solid 1px;
+    border-radius: 8px;
+    float: right;
+    margin-right: 80px;
+    height: 500px;
+}
+
+.most-viewed-h4{
+    margin-left: 10px;
+}
+
