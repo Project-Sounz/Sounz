@@ -51,7 +51,7 @@ def reg2(request):
                     newins.save()
                     new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
                     new_user.save()
-                    return redirect('profile')    
+                    return redirect('my-profile')    
             else:
                 prompt_message = "Passwords do not match. Please try again."
                 return render(request,'reg2.html',{'prompt_message': prompt_message})

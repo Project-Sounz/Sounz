@@ -13,23 +13,23 @@
 {% block content %}
 <div class="header">
     {% if user %}
-    <img src= '{{user.profile_picture.url}}' alt="{{user.firstname}}'s profile picture" class="imgcenter"/> 
-    <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
-    <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
-<div class="socials">
-    
-    <a href="{{ user.insta }}"><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
-    <a href="{{ user.twit }}"><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
-    <a href="{{ user.yout }}"><img src="{% static 'images/youtube.svg' %}" alt="" height="20px" width="20px"></a>
-    <a href="{{ user.email }}"><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
-</div>
-</div>
-<div class="body">
-<p id="desc">
-    {{ user.user_bio }}
-    
-</p>
-<a href="" class="mailbio">{{ user.email }}</a>
+            <img src= '{{user.profile_picture.url}}' alt="{{user.firstname}}'s profile picture" class="imgcenter"/> 
+            <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
+            <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
+            <div class="socials">
+            
+                <a href="{{ user.insta }}"><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
+                <a href="{{ user.twit }}"><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
+                <a href="{{ user.yout }}"><img src="{% static 'images/youtube.svg' %}" alt="" height="20px" width="20px"></a>
+                <a href="{{ user.email }}"><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
+            </div>
+        </div>
+        <div class="body">
+        <p id="desc">
+            {{ user.user_bio }}
+            
+        </p>
+        <a href="" class="mailbio">{{ user.email }}</a>
 {% endif %}
 <a href="{% url 'editprofile' %}" style="color: rgb(240, 112, 15);">Edit Profile</a>
 <a href="{% url 'signout' %}" id="logout" style="border: solid 1px; border-radius: 4px; border-color: rgba(248, 73, 27, 1);padding: 5px;float: right;color: rgba(248, 73, 27, 1);text-decoration: none;">Log out</a>
