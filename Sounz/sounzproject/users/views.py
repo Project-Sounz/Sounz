@@ -177,7 +177,11 @@ def mailtemplate(request):
 def sendemail(request):
     send_mail(
         "Collab Request",
-        "I like to collab",
+        """Hi {{ post_owner }}
+            {{ collaborator_name }} has expressed interest in collaborating on your post.
+            You can reach out to them at {{ collaborator_email }}.
+            Regards,
+            Team Sounz""",
         "asishchandra82@gmail.com",
         ["21rt199@vjcet.org"],
         fail_silently=False,
