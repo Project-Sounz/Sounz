@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collab Request</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+        body {
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 100;
+            font-style: normal;
+            font-variation-settings:
+            "slnt" 0;
+            background-color: #d8dada;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3%;
+        }
+        img{
+            max-width: 100%;
+        }
+        header{
+            width: 98%;
+        }
+        .logo{
+            max-width: 120px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        header h2{
+            text-align: center;
+            padding-bottom: 3%;
+        }
+        #wrapper{
+            background-color:#f0f6fb;
+        }
+        #post{
+            background-image: url(images.png);
+            width: 120px;
+            height: 250px;
+            padding-left: 50px;
+            margin-bottom: 5px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 8px;
+        }
+        #post p, h4{
+            color: #fff;
+        }
+        hr{
+            background-color: #000;
+            height: 1px;
+            clear: both;
+            width: 96%;
+            margin: auto;
+        }
+        h3{
+            text-align: center;
+            padding: 3%;
+            text-decoration: underline;
+        }
+        p{
+            margin: 3%;
+            color: #000;
+            font-weight: 300;
+        }
+        .collab{
+            border: solid 1px;
+            border-radius: 4px;
+            border-color: rgba(248, 73, 27, 1);
+            color: white;
+            background-color: rgba(248, 73, 27, 1);
+            font-weight: 600;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            padding-left: 10px;
+            padding-right: 10px;
+            float: right;
+            margin-bottom: 5px;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+        footer{
+            text-align: center;
+            padding-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <div class="logo">
+                <img src="logoSounz.png" alt="">
+            </div>
+            <h2>Create, Collaborate, Connect</h2>
+        </header>
+        <hr>
+        <h3>Collab Request</h3>
+        <div id="post">
+            <h4>Lorem ipsum</h4>
+            <p>Lorem ipsum dolor sit amet, 
+                consectetur adipiscing elit. lacus ma...
+            </p>
+        </div>
+        <div id="content">
+            <p>Hi {{ post_owner }},</p>
+            <p>{{ collaborator_name }} has expressed interest in collaborating on your post.</p>
+            <p>You can reach out to them at {{ collaborator_email }}.</p>
+            <p>Regards,</p>
+            <p>Team Sounz</p>
+            <a href="{% url 'send-email' %}" class="collab">Collab</a>
+            <hr>
+        </div>
+        <footer>
+            <p>&copy; Sounz</p>
+        </footer>
+    </div>
+</body>
+</html>

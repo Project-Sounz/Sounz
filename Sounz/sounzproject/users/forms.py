@@ -13,7 +13,7 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = profiledatadb
         fields = ['username', 'firstname', 'lastname','email','profile_picture', 'user_bio']
-        exclude=['password','phone']
+        exclude=['password','phone','yout','insta','twit']
 
 class Uploadform(forms.ModelForm):
     

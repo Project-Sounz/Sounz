@@ -4,6 +4,8 @@ from .forms import RegistrationForm,EditProfileForm,Uploadform
 from users.models import profiledatadb,postdb
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
+from django.core.mail import send_mail
+
 # Create your views here.
 def log(request):
     if request.method == 'POST':
@@ -105,10 +107,12 @@ def upload(request):
         prompt_message = "Post Uploaded"
         return render(request,'upload_form.html',{'prompt_message': prompt_message})
 
-    return render(request, 'upload_form.html',{'user':username})
+    return render(request, 'upload_form.html',{'user':userobj})
 
 def nav_saved(request):
-    return render(request, 'profile-fpv-saved.html')   
+    username=request.user.username
+    user = profiledatadb.objects.get(username=username)
+    return render(request, 'profile-fpv-saved.html',{'user':user})   
 
 def editprofile(request):
     
@@ -133,6 +137,12 @@ def editprofile(request):
                    userauth.email=request.POST.get('email')
                 if request.POST.get('bio'):   
                    user.user_bio = request.POST.get('bio')
+                if request.POST.get('insta'):   
+                   user.insta = request.POST.get('insta') 
+                if request.POST.get('yout'):   
+                   user.yout = request.POST.get('yout')
+                if request.POST.get('twit'):   
+                   user.twit = request.POST.get('twit')        
                 user.save()
                 userauth.save()
                 return render(request, 'profile-fpv.html', {'user': user})
@@ -143,5 +153,23 @@ def editprofile(request):
             form = EditProfileForm(instance=user)
         return render(request,'editprofile.html',{'user':user}) 
 
+def signout(request):
+    logout(request)
+    return redirect('signin')
 
+def media(request):
+    return render(request,'media.html')
 
+def mailtemplate(request):
+    return render(request, 'mail-template.html')
+
+def sendemail(request):
+    send_mail(
+        "Collab Request",
+        "I like to collab",
+        "asishchandra82@gmail.com",
+        ["21rt199@vjcet.org"],
+        fail_silently=False,
+    )
+
+    return render(request,'media.html')

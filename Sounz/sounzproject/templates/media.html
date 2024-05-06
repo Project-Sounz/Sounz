@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sounz{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/media.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="header-for-home">{% include 'header_base.html' %}</div>
+    <div class="media">
+        <div class="media-header">
+            <a href="">
+                <img src="{% static 'images/profile-picture-specimen.png' %}" class="media-owner-pp" alt="">
+                <p class="media-owner-un">@username_123</p>
+            </a>
+            <a href="{% url 'email' %}" class="collab"><img src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
+        </div>
+        <div class="actual-media">
+            <img src="{% static 'images/media-thumbnail.png' %}" alt="" class="media-thumbnail">
+        </div>
+        <div class="media-footer">
+            <h3 class="m-h3">Lorem ipsum dolor sit amet <a href="" class="media-type">Vocals</a> </h3>
+            <div class="footer-btns">
+                <a href=""><img src="{% static 'images/save-black.svg' %}" alt=""></a>
+                <a href=""><img src="{% static 'images/share-black.svg' %}" alt=""></a>
+                <a href=""><img src="{% static 'images/Like-black.svg' %}" alt=""></a>
+            </div>
+        </div>
+        <p class="media-date">date</p>
+        <div class="media-desc">
+            <p class="media-caption">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.lacus mauris, 
+                gravida in metus at, consectetur blandit nisl.Mauris lacinia lectus id 
+                felis ultrices, vitae aliquet ante fermentum. Sed at massa ut ex rhoncus 
+                efficitur. Proin auctor efficitur ultrices. Aenean pharetra interdum interdum. 
+                Morbi tincidunt luctus dictum. Proin a purus ac ex bibendum iaculis. Integer 
+                dignissim eget lectus id pretium. Pellentesque sollicitudin tellus odio, ut 
+                feugiat quam eleifend vitae. Vivamus tristique magna leo, eget maximus sapien 
+                tristique et. Vivamus lacinia venenatis turpis, quis elementum purus ultrices a.
+                Proin tristique, est sed molestie posuere, erat felis euismod risus, non convallis leo ipsum 
+                sed mauris. Proin interdum sapien vel ipsum porta auctor. Sed et convallis odio. Ut 
+                sit amet porttitor est. Cras eget leo rutrum, sodales lacus at, aliquet justo. Sed a
+                 ligula nisl. Vivamus viverra odio vel neque mollis, non dictum odio iaculis. Curabitur 
+                 malesuada dapibus nulla, vehicula tincidunt lorem volutpat quis. Curabitur sed lacinia turpis.
+            </p>
+            <br>
+            <p class="media-tags">
+                <div class="tags">
+                    <a href="">#rap</a>
+                    <a href="">#90s</a>
+                    <a href="">#guitar</a>
+                    <a href="">#singsong</a>
+                    <a href="">#english</a>
+                    <a href="">#ifyouare</a>
+                    <a href="">#seeinthis</a>
+                    <a href="">#idontknow</a>
+                    <a href="">#what</a>
+                    <a href="">#elseto</a>
+                    <a href="">#put</a>
+                    <a href="">#onthe</a>
+                    <a href="">#restofthe</a>
+                    <a href="">#page</a>
+                    <a href="">#giveme</a>
+                    <a href="">#suggestions</a>
+                    <a href="">#thenwecan</a>
+                    <a href="">#createthe</a>
+                    <a href="">#desktopversion</a>
+                    <a href="">#alsoicopied</a>
+                    <a href="">#thistag</a>
+                    <a href="">#stylefrom</a>
+                    <a href="">#instagram</a>
+                    <a href="">#bcoz</a>
+                    <a href="">#howelse</a>
+                    <a href="">#toputtags</a>
+                    <a href="">#give</a>
+                    <a href="">#me</a>
+                    <a href="">#suggestions</a>
+                    <a href="">#tomorrow</a>
+                </div>
+            </p>
+        </div>
+    </div>
+{% endblock %}
