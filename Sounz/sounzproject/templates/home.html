@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block content %}
+    {% if allusers %}
+    {% if user %}
+    
     <div class="header-for-home">{% include 'header_base.html' %}</div>
     <div class="search-expl">
         <center>
@@ -23,13 +26,13 @@
         <div class="sub-explore">
             <div class="homefeed">
                 <div class="home-post-header">
-                    <a href="">
+                    <a href="{% url 'watch-profile' %}">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="50px" style="border-radius: 50%;">
                         <p class="post-owner-username">@username_123</p>
                     </a>
                     <p class="home-post-date">date</p>
                 </div>
-                <a href="">
+                <a href="{% url 'media' %}">
                     <div class="post-overview">
                         <div class="post-details">
                             <h3>Lorem ipsum dolor sit amet</h3>
@@ -47,19 +50,19 @@
                         <a href=""><img src="{% static 'images/Like.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/saved-black.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/share.svg' %}" alt="" width="40px"></a>
-                        <a href=""><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
+                        <a href="{% url 'email' %}"><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
                     </div>
                 </div>
             </div>
             <div class="homefeed">
                 <div class="home-post-header">
-                    <a href="">
+                    <a href="{% url 'watch-profile' %}">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="50px" style="border-radius: 50%;">
                         <p class="post-owner-username">@username_123</p>
                     </a>
                     <p class="home-post-date">date</p>
                 </div>
-                <a href="">
+                <a href="{% url 'media' %}">
                     <div class="post-overview">
                         <div class="post-details">
                             <h3>Lorem ipsum dolor sit amet</h3>
@@ -77,19 +80,19 @@
                         <a href=""><img src="{% static 'images/Like.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/saved-black.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/share.svg' %}" alt="" width="40px"></a>
-                        <a href=""><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
+                        <a href="{% url 'email' %}"><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
                     </div>
                 </div>
             </div>
             <div class="homefeed">
                 <div class="home-post-header">
-                    <a href="">
+                    <a href="{% url 'watch-profile' %}">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="50px" style="border-radius: 50%;">
                         <p class="post-owner-username">@username_123</p>
                     </a>
                     <p class="home-post-date">date</p>
                 </div>
-                <a href="">
+                <a href="{% url 'media' %}">
                     <div class="post-overview">
                         <div class="post-details">
                             <h3>Lorem ipsum dolor sit amet</h3>
@@ -107,19 +110,19 @@
                         <a href=""><img src="{% static 'images/Like.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/saved-black.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/share.svg' %}" alt="" width="40px"></a>
-                        <a href=""><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
+                        <a href="{% url 'email' %}"><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
                     </div>
                 </div>
             </div>
             <div class="homefeed">
                 <div class="home-post-header">
-                    <a href="">
+                    <a href="{% url 'watch-profile' %}">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="50px" style="border-radius: 50%;">
                         <p class="post-owner-username">@username_123</p>
                     </a>
                     <p class="home-post-date">date</p>
                 </div>
-                <a href="">
+                <a href="{% url 'media' %}">
                     <div class="post-overview">
                         <div class="post-details">
                             <h3>Lorem ipsum dolor sit amet</h3>
@@ -137,7 +140,7 @@
                         <a href=""><img src="{% static 'images/Like.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/saved-black.svg' %}" alt="" width="40px"></a>
                         <a href=""><img src="{% static 'images/share.svg' %}" alt="" width="40px"></a>
-                        <a href=""><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
+                        <a href="{% url 'email' %}"><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
                     </div>
                 </div>
             </div>
@@ -147,13 +150,13 @@
                 <h4 class="mv-h4">Most viewed</h4>
                 <div class="mv-post">
                     <div class="mv-post-header">
-                        <a href="">
+                        <a href="{% url 'watch-profile' %}">
                             <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
                             <p class="post-owner-username">@username_123</p>
                         </a>
                         <p class="home-post-date">date</p>
                     </div>
-                    <a href="">
+                    <a href="{% url 'media' %}">
                         <div class="mvpost-overview">
                             <div class="mvpost-details">
                                 <h3>Lorem ipsum dolor sit amet</h3>
@@ -165,13 +168,13 @@
                 </div>
                 <div class="mv-post">
                     <div class="mv-post-header">
-                        <a href="">
+                        <a href="{% url 'watch-profile' %}">
                             <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
                             <p class="post-owner-username">@username_123</p>
                         </a>
                         <p class="home-post-date">date</p>
                     </div>
-                    <a href="">
+                    <a href="{% url 'media' %}">
                         <div class="mvpost-overview">
                             <div class="mvpost-details">
                                 <h3>Lorem ipsum dolor sit amet</h3>
@@ -183,13 +186,13 @@
                 </div>
                 <div class="mv-post">
                     <div class="mv-post-header">
-                        <a href="">
+                        <a href="{% url 'watch-profile' %}">
                             <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
                             <p class="post-owner-username">@username_123</p>
                         </a>
                         <p class="home-post-date">date</p>
                     </div>
-                    <a href="">
+                    <a href="{% url 'media' %}">
                         <div class="mvpost-overview">
                             <div class="mvpost-details">
                                 <h3>Lorem ipsum dolor sit amet</h3>
@@ -203,27 +206,27 @@
             <div class="top-artists">
                 <h4 class="ta-h4">Our Top Artists</h4>
                 <div class="artists">
-                    <a href="" class="artist-details">
+                    <a href="{% url 'watch-profile' %}" class="artist-details">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
                         <figcaption>Name Art</figcaption>
                     </a>
-                    <a href="" class="artist-details">
+                    <a href="{% url 'watch-profile' %}" class="artist-details">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
                         <figcaption>Name Art</figcaption>
                     </a>
-                    <a href="" class="artist-details">
+                    <a href="{% url 'watch-profile' %}" class="artist-details">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
                         <figcaption>Name Art</figcaption>
                     </a>
-                    <a href="" class="artist-details">
+                    <a href="{% url 'watch-profile' %}" class="artist-details">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
                         <figcaption>Name Art</figcaption>
                     </a>
-                    <a href="" class="artist-details">
+                    <a href="{% url 'watch-profile' %}" class="artist-details">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
                         <figcaption>Name Art</figcaption>
                     </a>
-                    <a href="" class="artist-details">
+                    <a href="{% url 'watch-profile' %}" class="artist-details">
                         <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
                         <figcaption>Name Art</figcaption>
                     </a>
@@ -234,4 +237,6 @@
             </div>
         </div>
     </div>
+{% endif %}
+{% endif %}    
 {% endblock %}

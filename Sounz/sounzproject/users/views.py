@@ -72,8 +72,7 @@ def reg2(request):
         return render(request,"reg2.html")
 
 def homeCheck(request):
-    users = profiledatadb.objects.all()
-    return render(request, 'homepage_test.html', {'allusers': users})
+    return render(request, 'homepage_test.html')
 
 def profile_fpv(request):
     try:
@@ -88,7 +87,15 @@ def profile_tpv(request):
     return render(request, 'profile-tpv.html')
 
 def homepage(request):
-    return render(request, 'home.html')
+    allusers = profiledatadb.objects.all()
+    username=request.user.username
+    user=profiledatadb.objects.get(username=username)
+    context={
+        'allusers': allusers,
+        'user':user,
+
+    }
+    return render(request, 'home.html',context)
 
 def upload(request):
     username=request.user.username
@@ -105,7 +112,11 @@ def upload(request):
         pos=postdb(username=userobj,caption=caption,descr=desc,langu=lan,mediatype=typ,location=loc,media=file)
         pos.save()
         prompt_message = "Post Uploaded"
-        return render(request,'upload_form.html',{'prompt_message': prompt_message})
+        context={
+            'user':userobj,
+            'prompt_message': prompt_message,
+        }
+        return render(request,'upload_form.html',context)
 
     return render(request, 'upload_form.html',{'user':userobj})
 
@@ -166,7 +177,11 @@ def mailtemplate(request):
 def sendemail(request):
     send_mail(
         "Collab Request",
-        "I like to collab",
+        """Hi {{ post_owner }}
+            {{ collaborator_name }} has expressed interest in collaborating on your post.
+            You can reach out to them at {{ collaborator_email }}.
+            Regards,
+            Team Sounz""",
         "asishchandra82@gmail.com",
         ["21rt199@vjcet.org"],
         fail_silently=False,

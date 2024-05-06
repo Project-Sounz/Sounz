@@ -31,6 +31,10 @@ class postdb(models.Model):
     mediatype=models.CharField(max_length=15)
     location=models.CharField(max_length=15)
     likes=models.IntegerField(default=0)
+    
+    def __str__(self):
+        return str(self.pid)
+
 
 class postdatabase(models.Model):
     username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE,default=0)
