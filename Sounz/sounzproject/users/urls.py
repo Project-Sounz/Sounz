@@ -20,5 +20,6 @@ urlpatterns = [
     path('upload', views.upload, name='upload'),
     path('watch-profile', views.profile_tpv, name='watch-profile'),
     path('media', views.media, name='media'),
+    path('e-mail',views.mailtemplate, name='email'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

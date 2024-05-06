@@ -160,3 +160,6 @@ def signout(request):
 
 def media(request):
     return render(request,'media.html')
+
+def mailtemplate(request):
+    return render(request, 'mail-template.html')
