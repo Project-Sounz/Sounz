@@ -4,6 +4,8 @@ from .forms import RegistrationForm,EditProfileForm,Uploadform
 from users.models import profiledatadb,postdb
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
+from django.core.mail import send_mail
+
 # Create your views here.
 def log(request):
     if request.method == 'POST':
@@ -163,3 +165,14 @@ def media(request):
 
 def mailtemplate(request):
     return render(request, 'mail-template.html')
+
+def sendemail(request):
+    send_mail(
+        "Collab Request",
+        "I like to collab",
+        "asishchandra82@gmail.com",
+        ["21rt199@vjcet.org"],
+        fail_silently=False,
+    )
+
+    return render(request,'media.html')
