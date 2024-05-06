@@ -72,8 +72,7 @@ def reg2(request):
         return render(request,"reg2.html")
 
 def homeCheck(request):
-    users = profiledatadb.objects.all()
-    return render(request, 'homepage_test.html', {'allusers': users})
+    return render(request, 'homepage_test.html')
 
 def profile_fpv(request):
     try:
@@ -88,7 +87,15 @@ def profile_tpv(request):
     return render(request, 'profile-tpv.html')
 
 def homepage(request):
-    return render(request, 'home.html')
+    allusers = profiledatadb.objects.all()
+    username=request.user.username
+    user=profiledatadb.objects.get(username=username)
+    context={
+        'allusers': allusers,
+        'user':user,
+
+    }
+    return render(request, 'home.html',context)
 
 def upload(request):
     username=request.user.username
