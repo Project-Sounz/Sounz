@@ -13,9 +13,9 @@
 {% block content %}
 <div class="header">
     {% if user %}
-    <img src= '{{user.profile_picture.url}}'alt="" class="imgcenter" width="90px" height="120px"/> 
+    <img src= '{{user.profile_picture.url}}' alt="{{user.firstname}}'s profile picture" class="imgcenter"/> 
     <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
-    <p id="user-name-id"><span class="username">{{ user.username }}</span><span class="user-id"></span></p>
+    <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
 <div class="socials">
     
     <a href="{{ user.insta }}"><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
