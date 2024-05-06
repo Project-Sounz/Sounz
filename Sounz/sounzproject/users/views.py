@@ -112,7 +112,11 @@ def upload(request):
         pos=postdb(username=userobj,caption=caption,descr=desc,langu=lan,mediatype=typ,location=loc,media=file)
         pos.save()
         prompt_message = "Post Uploaded"
-        return render(request,'upload_form.html',{'prompt_message': prompt_message})
+        context={
+            'user':userobj,
+            'prompt_message': prompt_message,
+        }
+        return render(request,'upload_form.html',context)
 
     return render(request, 'upload_form.html',{'user':userobj})
 
