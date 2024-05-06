@@ -12,7 +12,7 @@ def log(request):
         userr=authenticate(request,username=username,password=password)
         if userr is not None:
             login(request,userr)
-            return redirect('profile')
+            return redirect('my-profile')
         invalid="Invalid Credentials"
         return render(request,'accounttest.html')
 
@@ -74,8 +74,13 @@ def homeCheck(request):
     return render(request, 'homepage_test.html', {'allusers': users})
 
 def profile_fpv(request):
-    user=request.user.username
-    return render(request, 'profile-fpv.html',{'user':user})
+    try:
+        user=request.user.username
+        userBioCollect = profiledatadb.objects.get(username=user)
+        
+    except profiledatadb.DoesNotExist:
+        user = None
+    return render(request, 'profile-fpv.html', {'user': userBioCollect})  
 
 def profile_tpv(request):
     return render(request, 'profile-tpv.html')
@@ -101,14 +106,6 @@ def upload(request):
         return render(request,'upload_form.html',{'prompt_message': prompt_message})
 
     return render(request, 'upload_form.html',{'user':username})
-
-def profile(request):
-    try:
-        user=request.user.username
-        user = profiledatadb.objects.get(username=user)
-    except profiledatadb.DoesNotExist:
-        user = None
-    return render(request, 'profile-fpv.html', {'user': user})    
 
 def nav_saved(request):
     return render(request, 'profile-fpv-saved.html')   
