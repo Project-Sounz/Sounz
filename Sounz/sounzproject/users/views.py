@@ -51,7 +51,7 @@ def reg2(request):
                     newins.save()
                     new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
                     new_user.save()
-                    return redirect('profile')    
+                    return redirect('signin')    
             else:
                 prompt_message = "Passwords do not match. Please try again."
                 return render(request,'reg2.html',{'prompt_message': prompt_message})
@@ -72,8 +72,7 @@ def reg2(request):
         return render(request,"reg2.html")
 
 def homeCheck(request):
-    users = profiledatadb.objects.all()
-    return render(request, 'homepage_test.html', {'allusers': users})
+    return render(request, 'homepage_test.html')
 
 def profile_fpv(request):
     try:
@@ -88,7 +87,15 @@ def profile_tpv(request):
     return render(request, 'profile-tpv.html')
 
 def homepage(request):
-    return render(request, 'home.html')
+    allusers = profiledatadb.objects.all()
+    username=request.user.username
+    user=profiledatadb.objects.get(username=username)
+    context={
+        'allusers': allusers,
+        'user':user,
+
+    }
+    return render(request, 'home.html',context)
 
 def upload(request):
     username=request.user.username
@@ -105,7 +112,11 @@ def upload(request):
         pos=postdb(username=userobj,caption=caption,descr=desc,langu=lan,mediatype=typ,location=loc,media=file)
         pos.save()
         prompt_message = "Post Uploaded"
-        return render(request,'upload_form.html',{'prompt_message': prompt_message})
+        context={
+            'user':userobj,
+            'prompt_message': prompt_message,
+        }
+        return render(request,'upload_form.html',context)
 
     return render(request, 'upload_form.html',{'user':userobj})
 

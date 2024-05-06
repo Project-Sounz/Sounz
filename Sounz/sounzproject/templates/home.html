@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block content %}
+    {% if allusers %}
+    {% if user %}
+    
     <div class="header-for-home">{% include 'header_base.html' %}</div>
     <div class="search-expl">
         <center>
@@ -234,4 +237,6 @@
             </div>
         </div>
     </div>
+{% endif %}
+{% endif %}    
 {% endblock %}
