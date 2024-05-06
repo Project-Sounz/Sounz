@@ -73,16 +73,21 @@
             color: #000;
             font-weight: 300;
         }
-        #collab{
-            margin-right: 25px;
-            padding: 5px 24px;
-            background-image: linear-gradient(90deg,rgba(248,73,27,1) 0%, rgba(241,47,63,1) 50%,rgba(220,24,96,1) 100%);
-            border: none;
-            color: white;
+        .collab{
+            border: solid 1px;
             border-radius: 4px;
-            margin-bottom: 3px;
+            border-color: rgba(248, 73, 27, 1);
+            color: white;
+            background-color: rgba(248, 73, 27, 1);
+            font-weight: 600;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            padding-left: 10px;
+            padding-right: 10px;
             float: right;
-            font-size: 16px;
+            margin-bottom: 5px;
+            margin-right: 15px;
+            text-decoration: none;
         }
         footer{
             text-align: center;
@@ -112,9 +117,7 @@
             <p>You can reach out to them at {{ collaborator_email }}.</p>
             <p>Regards,</p>
             <p>Team Sounz</p>
-            <button id="collab">
-                Collab
-            </button>
+            <a href="" class="collab">Collab</a>
             <hr>
         </div>
         <footer>
