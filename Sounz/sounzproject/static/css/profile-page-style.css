@@ -81,7 +81,7 @@ p#desc{
 }
 
 .post1{
-    background-image: url(images.png);
+    background: url(images.png);
     width: 120px;
     height: 250px;
     padding-left: 50px;

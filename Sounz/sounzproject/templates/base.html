@@ -25,7 +25,7 @@
                 <a href="{% url 'home' %}"><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"></a>
                 <div id="nav-separator"></div>
                 <a href="{% url 'my-profile' %}"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"></a>
-                <a href="#"><img id="search-icon" class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a>
+                <!-- <a href="#"><img id="search-icon" class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a> -->
                 <a href="{% url 'upload' %}"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"></a>
                 <a href="{% url 'nav-saved' %}"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
                 
@@ -43,8 +43,8 @@
                 <div id="nav-separator"></div>
                 <a href="#" class="navbar-links"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{% static 'images/profile-picture-specimen.png' %}" alt=""><span class="nav-tooltip">Name</span></a>
                 <hr class="navbar-line">
-                <a href="#" class="navbar-links" id="search-icon-mob"><img class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"><span class="nav-tooltip">Search</span></a>
-                <hr class="navbar-line">
+                <!-- <a href="#" class="navbar-links" id="search-icon-mob"><img class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"><span class="nav-tooltip">Search</span></a>
+                <hr class="navbar-line"> -->
                 <a href="{% url 'upload' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"><span class="nav-tooltip">Upload</span></a>
                 <hr class="navbar-line">
                 <a href="{% url 'nav-saved' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"><span class="nav-tooltip">Saved</span></a>
