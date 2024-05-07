@@ -35,9 +35,6 @@
     <input onclick="displayposts()" type="button" class="profile-content-buttons" value="Posts" id="postbutton">
     <input onclick="displaysaved()" type="button" class="profile-content-buttons" value="Saved" id="savedbutton" autofocus>
 </div>
-
-<div id="profile-content-controller-nomedia" style="display: none;">{% include 'content-404.html'  %}</div>
-<div id="profile-content-controller-posts" style="display: none;">{% include 'posts.html'  %}</div>
 <div id="profile-content-controller-saved" style="display: block;">{% include 'saved.html'  %}</div>
 </div>
 {% endblock %}

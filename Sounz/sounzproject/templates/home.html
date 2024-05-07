@@ -33,9 +33,9 @@
                     <img src="{{ profile.image.url }}" alt="Profile Image">
                 {% endif %}
             {% endfor %}
-                        <p class="post-owner-username">{{ post.username }}</p>
+                        <p class="post-owner-username">@{{ post.username }}</p>
                     </a>
-                
+                    <p class="home-post-date"> • {{ post.timestamp|date }}</p>
                 </div>
                 {% if post.mediatype == 'video' %}
                     <video controls>
@@ -56,7 +56,8 @@
                 <div class="home-post-footer">
                     <div class="post-footer-buttons">
                         
-                        
+                        <a href=""><img src="{% static 'images/Like.svg' %}" alt="" width="40px"></a>
+                        <a href=""><img src="{% static 'images/saved-black.svg' %}" alt="" width="40px"></a>
                         <a href="{% url 'email' %}"><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
                     </div>
                 </div>
@@ -65,7 +66,30 @@
             
         </div>
         <div class="suggestions">
-            
+            <div class="mostviewed">
+                <h4 class="mv-h4">Most viewed</h4>
+                {% for post in sliced %}
+                <div class="mv-post">
+                    <div class="mv-post-header">
+                        <a href="#">
+                            <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
+                            <p class="post-owner-username">{{post.username}}</p>
+                        </a>
+
+                    </div>
+                    <a href="#">
+                        <div class="mvpost-overview">
+                            <div class="mvpost-details">
+                                <h3>{{post.caption}}</h3>
+                                <p>{{post.descr}}</p>
+                            </div>
+                            <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="mvpost-thumbnail" style="border-radius: 8px;">
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+
+            </div>
             <div class="top-artists">
                 <h4 class="ta-h4">Our Top Artists</h4>
                 <div class="artists">
