@@ -181,7 +181,18 @@ def signout(request):
     return redirect('signin')
 
 def media(request):
-    return render(request,'media.html')
+    username=request.user.username
+    user = profiledatadb.objects.get(username=username)
+    pid = request.GET.get('pid')
+    post=postdb.objects.get(pid=pid)
+    ps=post.username
+    puser=profiledatadb.objects.get(username=ps)
+    context={
+        "puser":puser,
+        "post":post,
+        "user":user
+    }
+    return render(request,'media.html',context)
 
 def mailtemplate(request):
     return render(request, 'mail-template.html')
