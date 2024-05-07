@@ -26,7 +26,7 @@
             {% for post in user_posts %}
             <div class="homefeed">
                 <div class="home-post-header">
-                    <a href="{% url 'watch-profile' %}">
+                    <a href="{% url 'watch-profile' %}?uname={{post.username}}">
                         {% for profile in all_users %}
                 {% if profile.user.username == post.username %}
                     

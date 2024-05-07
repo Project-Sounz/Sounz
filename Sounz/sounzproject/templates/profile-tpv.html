@@ -12,9 +12,11 @@
 
 {% block content %}
 <div class="header">
-    <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" class="imgcenter" width="80px">
-    <p id="profile-name">Kate William</p>
-    <p id="user-name-id"><span class="username">kate_wills</span> . <span class="user-id">#348412</span></p>
+    {% if user %}
+    {% if pname %}
+    <img src= '{{pname.profile_picture.url}}' alt="{{.firstname}}'s profile picture" class="imgcenter"/>
+    <p id="profile-name">{{ pname.firstname }}<span>  </span>{{ pname.lastname }}</p>
+    <p id="user-name-id"><span class="username"></span>{{pname.username}}</p>
 <div class="socials">
     <a href=""><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
     <a href=""><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
@@ -24,20 +26,40 @@
 </div>
 <div class="body">
 <p id="desc">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit.lacus
-     mauris, gravida in metus at, consectetur blandit nisl. Sed 
-     cursus tristique enim, vel condimentum nunc finibus et. 
-     sachb jsdvb...Lorem ipsum dolor sit amet, consectetur 
-     adipiscing elit. lacus mauris, gravida in metus at, 
-     consectetur blandit nisl.
+    {{pname.user_bio}}
 </p>
-<a href="" class="mailbio">www.katewilliams.com</a>
+<a href="" class="mailbio">{{pname.email}}</a>
 <hr style="margin: 30px;">
 <div class="text-with-lines">POSTS</div>
 
-<div id="profile-content-controller-nomedia" style="display: block;">{% include 'content-404.html'  %}</div>
-<div id="profile-content-controller-posts" style="display: none;">{% include 'posts.html'  %}</div>
+<div id="profile-content-controller-nomedia" style="display: none;">{% include 'content-404.html'  %}</div>
+<div id="profile-content-controller-posts" style="display: block;">
+    <div class="posts">
+        {% if posters %}
+            {% for p in posters %}
+    
+            <a href="{% url 'media' %}?pid={{p.pid}}">
+                <div class="post1">
+                    <h4>{{ p.caption}}</h4>
+                    <p>{{p.descr}}
+                    </p>
+                    <div class="postfooter">
+                        <h3>{{p.mediatype}}</h3>
+                        <img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px">
+                    </div>
+                </div>
+            </a>
+            
+            {% endfor %}
+        {% else %}
+        <div id="profile-content-controller-nomedia" style="display: none;">{% include 'content-404.html'  %}</div>
+        {% endif %}
+    </div>
+</div>
 
 </div>
+{% endif %}
+{% endif %}
+
 {% endblock %}
 
