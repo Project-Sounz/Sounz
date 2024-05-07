@@ -78,10 +78,16 @@ def profile_fpv(request):
     try:
         user=request.user.username
         userBioCollect = profiledatadb.objects.get(username=user)
+        post=postdb.objects.filter(username=user)
+        context={
+            'user': userBioCollect,
+            'post':post,
+
+        }
         
     except profiledatadb.DoesNotExist:
         user = None
-    return render(request, 'profile-fpv.html', {'user': userBioCollect})  
+    return render(request, 'profile-fpv.html',context)  
 
 def profile_tpv(request):
     return render(request, 'profile-tpv.html')
