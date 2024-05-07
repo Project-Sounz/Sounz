@@ -6,15 +6,17 @@
     {% if post %}
         {% for p in post %}
 
-        <div class="post1">
-            <h4>{{ p.caption}}</h4>
-            <p>{{p.descr}}
-            </p>
-            <div class="postfooter">
-                <h3>{{p.mediatype}}</h3>
-                <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
+        <a href="{% url 'media' %}?pid={{p.pid}}">
+            <div class="post1">
+                <h4>{{ p.caption}}</h4>
+                <p>{{p.descr}}
+                </p>
+                <div class="postfooter">
+                    <h3>{{p.mediatype}}</h3>
+                    <img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px">
+                </div>
             </div>
-        </div>
+        </a>
         
         {% endfor %}
     {% else %}
