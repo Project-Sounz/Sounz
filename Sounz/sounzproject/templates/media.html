@@ -12,7 +12,7 @@
     {% if puser %}
     <div class="media">
         <div class="media-header">
-            <a href="{% url 'watch-profile' %}">
+            <a href="{% url 'watch-profile' %}?uname={{post.username}}">
                 <img src="{{puser.profile_picture.url}}" class="media-owner-pp" alt="">
                 <p class="media-owner-un">{{post.username}}</p>
             </a>

@@ -90,7 +90,17 @@ def profile_fpv(request):
     return render(request, 'profile-fpv.html',context)  
 
 def profile_tpv(request):
-    return render(request, 'profile-tpv.html')
+    uname=request.GET.get('uname')
+    pname=profiledatadb.objects.get(username=uname)
+    user=request.user.username
+    userBioCollect = profiledatadb.objects.get(username=user)
+    post=postdb.objects.filter(username=pname)
+    context={
+        'pname':pname,
+        'user':userBioCollect,
+        'posters':post,
+    }
+    return render(request, 'profile-tpv.html',context)
 
 def homepage(request):
     all_users = profiledatadb.objects.all()
