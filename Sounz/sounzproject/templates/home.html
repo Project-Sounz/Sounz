@@ -89,35 +89,19 @@
                 {% endfor %}
                 
             </div>
+            
             <div class="top-artists">
                 <h4 class="ta-h4">Our Top Artists</h4>
                 <div class="artists">
+                    {% for art in topart %}
                     <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
+                        <img src="{{ art.profile_picture.url }}" alt="" width="60px" >
+                        <figcaption>{{art.username}}</figcaption>
                     </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
+                    {% endfor %}
                 </div>
             </div>
+            
             <div class="morebutton">
                 <button>More</button>
             </div>
