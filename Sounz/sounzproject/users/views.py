@@ -96,6 +96,7 @@ def homepage(request):
     all_users = profiledatadb.objects.all()
     username = request.user.username
     user = profiledatadb.objects.get(username=username)
+    sliced= profiledatadb.objects.all()[:4]
     
     # Fetch posts of the current user
     user_posts = postdb.objects.all()
@@ -103,6 +104,7 @@ def homepage(request):
         'all_users': all_users,
         'user': user,
         'user_posts': user_posts,
+        'sliced':sliced,
     }
     return render(request, 'home.html',context)
 
