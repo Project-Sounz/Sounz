@@ -70,13 +70,13 @@
                 {% for post in sliced %}
                 <div class="mv-post">
                     <div class="mv-post-header">
-                        <a href="{% url 'watch-profile' %}">
+                        <a href="#">
                             <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
                             <p class="post-owner-username">{{post.username}}</p>
                         </a>
                         
                     </div>
-                    <a href="{% url 'media' %}">
+                    <a href="#">
                         <div class="mvpost-overview">
                             <div class="mvpost-details">
                                 <h3>{{post.caption}}</h3>
@@ -95,7 +95,7 @@
                 <div class="artists">
                     {% for art in topart %}
                     <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{{ art.profile_picture.url }}" alt="" width="60px" >
+                        <img src="{{ art.profile_picture.url }}" alt="" width="60px" height="60px" style="border-radius: 50%;">
                         <figcaption>{{art.username}}</figcaption>
                     </a>
                     {% endfor %}
@@ -103,7 +103,7 @@
             </div>
             
             <div class="morebutton">
-                <button>More</button>
+                
             </div>
         </div>
     </div>
