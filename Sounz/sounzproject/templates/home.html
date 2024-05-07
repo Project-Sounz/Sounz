@@ -43,7 +43,7 @@
                         Your browser does not support the video tag.
                         </video>
                 {% endif %}
-                <a href="{% url 'media' %}">        
+                <a href="{% url 'media' %}?pid={{post.pid}}">        
                     <div class="post-overview">
                         <div class="post-details">
                             <h3>{{ post.caption }}</h3>
@@ -55,8 +55,7 @@
                 </a>
                 <div class="home-post-footer">
                     <div class="post-footer-buttons">
-                        <a href=""><img src="{% static 'images/Like.svg' %}" alt="" width="40px"></a>
-                        <a href=""><img src="{% static 'images/saved-black.svg' %}" alt="" width="40px"></a>
+                        
                         
                         <a href="{% url 'email' %}"><img src="{% static 'images/Collab-long-logo.svg' %}" alt="" width="133px"></a>
                     </div>
