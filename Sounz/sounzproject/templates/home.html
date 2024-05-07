@@ -67,90 +67,41 @@
         <div class="suggestions">
             <div class="mostviewed">
                 <h4 class="mv-h4">Most viewed</h4>
+                {% for post in sliced %}
                 <div class="mv-post">
                     <div class="mv-post-header">
                         <a href="{% url 'watch-profile' %}">
                             <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
-                            <p class="post-owner-username">@username_123</p>
+                            <p class="post-owner-username">{{post.username}}</p>
                         </a>
-                        <p class="home-post-date">date</p>
+                        
                     </div>
                     <a href="{% url 'media' %}">
                         <div class="mvpost-overview">
                             <div class="mvpost-details">
-                                <h3>Lorem ipsum dolor sit amet</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <h3>{{post.caption}}</h3>
+                                <p>{{post.descr}}</p>
                             </div>
                             <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="mvpost-thumbnail" style="border-radius: 8px;">
                         </div>
                     </a>
                 </div>
-                <div class="mv-post">
-                    <div class="mv-post-header">
-                        <a href="{% url 'watch-profile' %}">
-                            <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
-                            <p class="post-owner-username">@username_123</p>
-                        </a>
-                        <p class="home-post-date">date</p>
-                    </div>
-                    <a href="{% url 'media' %}">
-                        <div class="mvpost-overview">
-                            <div class="mvpost-details">
-                                <h3>Lorem ipsum dolor sit amet</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            </div>
-                            <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="mvpost-thumbnail" style="border-radius: 8px;">
-                        </div>
-                    </a>
-                </div>
-                <div class="mv-post">
-                    <div class="mv-post-header">
-                        <a href="{% url 'watch-profile' %}">
-                            <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
-                            <p class="post-owner-username">@username_123</p>
-                        </a>
-                        <p class="home-post-date">date</p>
-                    </div>
-                    <a href="{% url 'media' %}">
-                        <div class="mvpost-overview">
-                            <div class="mvpost-details">
-                                <h3>Lorem ipsum dolor sit amet</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            </div>
-                            <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="mvpost-thumbnail" style="border-radius: 8px;">
-                        </div>
-                    </a>
-                </div>
+                {% endfor %}
+                
             </div>
+            
             <div class="top-artists">
                 <h4 class="ta-h4">Our Top Artists</h4>
                 <div class="artists">
+                    {% for art in topart %}
                     <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
+                        <img src="{{ art.profile_picture.url }}" alt="" width="60px" >
+                        <figcaption>{{art.username}}</figcaption>
                     </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
-                    <a href="{% url 'watch-profile' %}" class="artist-details">
-                        <img src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="60px">
-                        <figcaption>Name Art</figcaption>
-                    </a>
+                    {% endfor %}
                 </div>
             </div>
+            
             <div class="morebutton">
                 <button>More</button>
             </div>
