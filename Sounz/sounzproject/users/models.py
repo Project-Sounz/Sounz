@@ -35,7 +35,9 @@ class postdb(models.Model):
     def __str__(self):
         return str(self.pid)
 
-
+class saveddb(models.Model):
+    username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE)
+    pid=models.ForeignKey(to=postdb,on_delete=models.CASCADE)
 class postdatabase(models.Model):
     username=models.ForeignKey(to=profiledatadb,on_delete=models.CASCADE,default=0)
     media_address = models.CharField(max_length=256)

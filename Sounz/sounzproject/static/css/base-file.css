@@ -41,6 +41,7 @@ img#navbar-main-logo{
 }
 img#navbar-user-profile-pic{
     width: 45px;
+    height: auto;
     border-radius: 50%;
 }
 #nav-separator{

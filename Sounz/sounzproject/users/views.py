@@ -87,13 +87,16 @@ def profile_tpv(request):
     return render(request, 'profile-tpv.html')
 
 def homepage(request):
-    allusers = profiledatadb.objects.all()
-    username=request.user.username
-    user=profiledatadb.objects.get(username=username)
-    context={
-        'allusers': allusers,
-        'user':user,
-
+    all_users = profiledatadb.objects.all()
+    username = request.user.username
+    user = profiledatadb.objects.get(username=username)
+    
+    # Fetch posts of the current user
+    user_posts = postdb.objects.all()
+    context = {
+        'all_users': all_users,
+        'user': user,
+        'user_posts': user_posts,
     }
     return render(request, 'home.html',context)
 
