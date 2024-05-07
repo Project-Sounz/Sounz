@@ -38,12 +38,10 @@
                 
                 </div>
                 {% if post.mediatype == 'video' %}
-                <a href="{% url 'media' %}">
                     <video controls>
                         <source src="{{ post.media.url }}" type="video/mp4">
                         Your browser does not support the video tag.
                         </video>
-                </a>
                 {% endif %}
                 <a href="{% url 'media' %}">
                     <div class="post-overview">
