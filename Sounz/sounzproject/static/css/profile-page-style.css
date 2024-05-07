@@ -88,52 +88,13 @@ p#desc{
     margin-bottom: 5px;
     border-radius: 4px;
 }
-.post2{
-    background-image: url(images.png);
-    width: 120px;
-    height: 250px;
-    padding-left: 50px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-}
-.post3{
-    background-image: url(images.png);
-    width: 120px;
-    height: 250px;
-    padding-left: 50px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-}
-.post4{
-    background-image: url(images.png);
-    width: 120px;
-    height: 250px;
-    padding-left: 50px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-}
-.post5{
-    background-image: url(images.png);
-    width: 120px;
-    height: 250px;
-    padding-left: 50px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-}
-.post6{
-    background-image: url(images.png);
-    width: 120px;
-    height: 250px;
-    padding-left: 50px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-}
+
 
 .posts{ 
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     color: #fff;
     padding-top: 15px;
 }
