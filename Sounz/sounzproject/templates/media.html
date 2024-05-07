@@ -19,14 +19,21 @@
             <a href="{% url 'email' %}" class="collab"><img src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
         </div>
         <div class="actual-media">
-            <img src="{% static 'images/media-thumbnail.png' %}" alt="" class="media-thumbnail">
+            
+            <video width="640" height="360" controls>
+                <source src="{{post.media.url}}" type="video/mp4" >
+                Your browser does not support the audio element
+                <audio controls>
+                    <source src="{{post.media.url}}" type="audio/mpeg" >
+                    Your browser does not support the audio element
+                </audio>
+            </video>
+            
         </div>
         <div class="media-footer">
             <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
             <div class="footer-btns">
-                <a href=""><img src="{% static 'images/save-black.svg' %}" alt=""></a>
-                <a href=""><img src="{% static 'images/share-black.svg' %}" alt=""></a>
-                <a href=""><img src="{% static 'images/Like-black.svg' %}" alt=""></a>
+                
             </div>
         </div>
         <p class="media-date">date</p>
