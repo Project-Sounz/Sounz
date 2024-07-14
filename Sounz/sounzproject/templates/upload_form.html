@@ -1,38 +1,51 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Upload{% endblock %}
+{% block title %}Sounz{% endblock %}
 {% block additional_css %}
 <link rel="stylesheet" href="{% static 'css/upload.css' %}">
 {% endblock %}
 
 {% block content %}
 {% if user %}
-<div class="header-for-home">{% include 'header_base.html' %}</div>
+<div class="header-for-home">{% include 'header-base-sub.html' %}</div>
 <div class="form-main-container">
     
     <h1 class="upload-head">Upload new post</h1>
     <form method="post" enctype="multipart/form-data" id="upload_form">
         {% csrf_token %}
         {{ form.as_p }}
-        {% if prompt_message %}
-        <div>{{ prompt_message }}</div>
-        {% endif %}
-        <input type="file" name="post" id="post_input" accept="" style="display: none;">
-        <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn"><span class="uploadLogo"><img src="{% static 'images/upload.svg' %}" alt="upload post"></span><span class="upload-postText">Upload you file</span><span class="upload-postSupport">Supported files: Video, Audio, Image</span></button>
+        <div id="prompt-message" data-message="{% if prompt_message %}{{ prompt_message }}{% endif %}" style="display: none;"></div>
         
-        <!-- <input type="file" name="thumbnail" id="thumbnail_input" accept="" style="display: none;">
-        <button type="button" onclick="document.getElementById('thumbnail').click();" class="btn">Upload Thumbnail</button>
-         -->
+        <input type="file" name="post" id="post_input" accept="" style="display: none;">
+        <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn"><span class="uploadLogo"><img src="{% static 'images/upload.svg' %}" alt="upload post"></span><span class="upload-postText">Upload you file</span></button>
+        <br>
+        
+        <input type="file" name="thumbnail" id="thumbnail_input" accept="" style="display: none;">
+        <button type="button" onclick="document.getElementById('thumbnail_input').click();" class="btn" id="thumbnail-upload-btn">Upload Thumbnail</button>
+        
          <div class="upload-postDetails">
-            <input type="text" id="title" name="title" placeholder="Caption">
-            <input type="text" id="post_description" name="post_description" placeholder="Description"></input>
-            <input type="text" id="tags" name="tags" placeholder="Media type (like 'vocals' 'guitar' 'piano' etc..)">
-            <input type="text" id="language" name="language" placeholder="Language">
-            <input type="text" name="location" id="location" placeholder="Location">
+            <input required type="text" id="title" name="title" placeholder="Caption">
+            <input required type="text" id="post_description" name="post_description" placeholder="Description"></input>
+            <select id="media_type" name="media_type">
+                <option selected value="Video">Video</option>
+                <option value="Audio">Audio</option>
+            </select>
+            <input required type="text" id="tags" name="tags" placeholder="Media type ('vocals' 'guitar' 'piano' etc..)">
+            <input type="text" id="language" name="language" placeholder="Language (optional)">
+            <input type="text" name="location" id="location" placeholder="Location (optional)">
             <button type="submit" class="btn" id="upload-publishBtn">Publish</button>
         </div>
     </form>
     
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var promptMessageElement = document.getElementById('prompt-message');
+        var promptMessage = promptMessageElement.getAttribute('data-message');
+        if (promptMessage) {
+            alert(promptMessage);
+        }
+    });
+</script>
 {% endif %}
 {% endblock %}

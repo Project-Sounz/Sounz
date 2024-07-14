@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="header-for-home">{% include 'header_base.html' %}</div>
+    <div class="header-for-home">{% include 'header-base-sub.html' %}</div>
     {% if user %}
     {% if post %}
     {% if puser %}
@@ -20,7 +20,7 @@
         </div>
         <div class="actual-media">
             
-            <video width="640" height="360" controls>
+            <video class="media-container" width="640" height="360" controls autoplay>
                 <source src="{{post.media.url}}" type="video/mp4" >
                 Your browser does not support the audio element
                 <audio controls>
@@ -33,17 +33,13 @@
         <div class="media-footer">
             <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
             <div class="footer-btns">
-                
+                <button><img src="{% static 'images/Like-black.svg' %}" alt="" srcset=""></button>
+                <button><img src="{% static 'images/save-black.svg' %}" alt="" srcset=""></button>
             </div>
         </div>
-        <p class="media-date">date</p>
-        <div class="media-desc">
-            <p class="media-caption">
-                {{post.descr}}
-            </p>
-            <br>
+        <p class="media-date">{{ post.timestamp|date }}</p>
+        <p class="media-desc">{{post.descr}}</p>
             
-        </div>
     </div>
     {% endif %}
     {% endif %}

@@ -1,68 +1,50 @@
 {% load static %}
 <head>
-    <link rel="stylesheet" href="{% static 'css/profile-posts-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile-saved-style.css' %}">
 </head>
-{% if user %}
-<div class="posts">
-    <div class="post1">
-        <h4>Lorem ipsum</h4>
-        <p>Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit. lacus ma...
-        </p>
-        <div class="postfooter">
-            <h3>Violin</h3>
-            <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
-        </div>
-    </div>
-    <div class="post2">
-        <h4>Lorem ipsum</h4>
-        <p>Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit. lacus ma...
-        </p>
-        <div class="postfooter">
-            <h3>Violin</h3>
-            <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
-        </div>
-    </div>
-    <div class="post3">
-        <h4>Lorem ipsum</h4>
-        <p>Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit. lacus ma...
-        </p>
-        <div class="postfooter">
-            <h3>Violin</h3>
-            <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
-        </div>
-    </div>
-    <div class="post4">
-        <h4>Lorem ipsum</h4>
-        <p>Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit. lacus ma...
-        </p>
-        <div class="postfooter">
-            <h3>Violin</h3>
-            <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
-        </div>
-    </div>
-    <div class="post5">
-        <h4>Lorem ipsum</h4>
-        <p>Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit. lacus ma...
-        </p>
-        <div class="postfooter">
-            <h3>Violin</h3>
-            <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
-        </div>
-    </div>
-    <div class="post6">
-        <h4>Lorem ipsum</h4>
-        <p>Lorem ipsum dolor sit amet, 
-            consectetur adipiscing elit. lacus ma...
-        </p>
-        <div class="postfooter">
-            <h3>Violin</h3>
-            <a href=""><img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px"></a>
-        </div>
-    </div>
+<div class="buttons">
+    <a href="{% url 'my-profile' %}" type="button" class="profile-content-buttons post-button">Posts</a>
+    <a href="#" type="button" class="profile-content-buttons saved-button" id="savedbutton">Saved</a>
 </div>
-{% endif %}
+<div class="posts">
+    {% if post %}
+        {% for p in post %}
+
+        <a style="margin: 20px 10px;" href="{% url 'media' %}?pid={{p.pid}}">
+            <div class="thumbnail-container">
+                {% if p.media_thumbnail %}
+                                    
+                                    <img src="{{ p.media_thumbnail.url }}" alt="" class="post-thumbnail">
+                                
+                                {% else %}
+                                    {% if p.media_format == "Audio" %}
+                                        <img src="{% static 'images/9_16 Audio.png' %}" alt="" class="post-thumbnail" >
+                                    {% elif p.media_format == "Video" %}
+                                        <img src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
+                                    {% endif %}
+                                {% endif %}
+                <!-- <img class="thumbnail-image" src="media/Media/20240312_222036.jpg" alt="" srcset=""> -->
+                <video><source src="{{ p.media }}"></video>
+                <div class="gradient-overlay">
+                    <div class="padding-controll">
+                        <h2 class="video-caption">{{ p.caption}}</h2>
+                        <p class="video-description">{{ p.descr }}</p>
+                        <p class="instrument-used">{{ p.mediatype }}</p>
+                    </div>
+                </div>
+                
+                <!-- <h4>{{ p.caption}}</h4>
+                <p>{{p.descr}}
+                </p>
+                <div class="postfooter">
+                    <h3>{{p.mediatype}}</h3>
+                    <img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px">
+                </div> -->
+            </div>
+        </a>
+        
+        {% endfor %}
+    {% else %}
+    <div id="profile-content-controller-nomedia" style="display: block; width: 100%;">{% include 'content-404.html'  %}</div>
+    {% endif %}
+</div>

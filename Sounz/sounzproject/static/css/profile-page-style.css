@@ -50,15 +50,32 @@ p#user-name-id{
 }
 p#desc{
     color: #707070;
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.6;
     font-style: italic;
 }
+.profile-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
+}
 .mailbio{
-    padding: 15px;
-    font-size: 15px;
+    /* padding: 15px; */
+    font-size: 14px;
     color: black;
-
+    text-decoration: none;
+    border-bottom: 1.5px solid black;
+}
+.edit-logout{
+    font-size: 14px;
+    margin-left: auto;
+    padding-right: 20px;
+}
+.e-l-buttons, .edit-logout > span{
+    text-decoration: none;
+    color: #707070;
 }
 
 .profile-content-buttons{
@@ -72,10 +89,11 @@ p#desc{
     border-radius: 10px;
     font-size: 20px;
     width: 15%;
-    min-width: fit-content;
+    min-width: max-content;
     cursor: pointer;
+    text-decoration: none;
 }
-.profile-content-buttons:focus{
+.post-button{
     background: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
     color: white;
 }
@@ -94,9 +112,9 @@ p#desc{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-around;
     color: #fff;
     padding-top: 15px;
+    justify-content: flex-start;
 }
 
 .posts h4{
@@ -106,6 +124,12 @@ p#desc{
 .posts h3{
     color: rgba(248, 73, 27, 1);
     
+}
+.post-thumbnail{
+    width: 100%;
+    /* height: 350px; */
+    object-fit: cover;
+    aspect-ratio: 450 / 600;
 }
 
 @media screen and (max-width: 768px){
@@ -119,4 +143,75 @@ p#desc{
         padding: 8px 28px;
         font-size: 16px;
     }
+}
+.thumbnail-container {
+    position: relative;
+    width: 258px;
+    height: 350px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, black, transparent);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* padding: 0 0 20px 20px; */
+    color: white;
+    align-items: flex-start;
+}
+.padding-controll{
+    padding: 0 0px 20px 15px;
+    text-align: start;
+    width: 100%;
+}
+
+.video-caption {
+    font-size: 1.2em;
+    margin: 0;
+    text-overflow: ellipsis;
+    max-width: 90%;
+    overflow: hidden;
+    text-transform: lowercase;
+}
+.video-caption::first-letter{
+    text-transform: uppercase;
+}
+
+.video-description {
+    font-size: 0.7em;
+    margin: 10px 0;
+    /* height: 40px; */
+    /* width: 100%; */
+    text-overflow: ellipsis;
+    max-width: 90%;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.instrument-used {
+    font-size: 1.2em;
+    /* color: #ff4c4c; */
+    background-image: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+    text-overflow: ellipsis;
+    max-width: 90%;
+    overflow: hidden;
+    text-transform: uppercase;
 }

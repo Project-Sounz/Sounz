@@ -6,8 +6,8 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('admin/',admin.site.urls),
-    path('', views.log),
+    # path('admin/',admin.site.urls),
+    # path('', views.log),
     path('', views.log,name='signin'),
     path('reg2',views.reg2,name='reg2'),
     path('home', views.homepage, name = 'home'),
@@ -23,6 +23,7 @@ urlpatterns = [
     path('upload', views.upload, name='upload'),
     path('watch-profile', views.profile_tpv, name='watch-profile'),
     path('media', views.media, name='media'),
+    path('watch-profile#ed-media', views.media_controll, name='sh-media'),
     path('e-mail',views.mailtemplate, name='email'),
     path('send-mail',views.sendemail, name='send-email'),
 ]

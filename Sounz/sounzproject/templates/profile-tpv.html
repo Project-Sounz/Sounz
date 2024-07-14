@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Name{% endblock %}
+{% block title %}Sounz{% endblock %}
 
 {% block additional_css %}
 <link rel="stylesheet" href="{% static 'css/profile-page-style.css' %}">
@@ -21,7 +21,7 @@
     <a href=""><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
     <a href=""><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
     <a href=""><img src="{% static 'images/youtube.svg' %}" alt="" height="20px" width="20px"></a>
-    <a href=""><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
+    <a href="mailto:{{ user.email }}"><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
 </div>
 </div>
 <div class="body">
@@ -30,23 +30,42 @@
 </p>
 <a href="" class="mailbio">{{pname.email}}</a>
 <hr style="margin: 30px;">
-<div class="text-with-lines">POSTS</div>
 
-<div id="profile-content-controller-nomedia" style="display: none;">{% include 'content-404.html'  %}</div>
-<div id="profile-content-controller-posts" style="display: block;">
+
     <div class="posts">
         {% if posters %}
             {% for p in posters %}
     
-            <a href="{% url 'media' %}?pid={{p.pid}}">
-                <div class="post1">
-                    <h4>{{ p.caption}}</h4>
+            <a style="margin: 20px 10px;" href="{% url 'sh-media' %}?pid={{p.pid}}">
+                <div class="thumbnail-container">
+                    {% if p.media_thumbnail %}
+                                    
+                                    <img src="{{ p.media_thumbnail.url }}" alt="" class="post-thumbnail">
+                                
+                                {% else %}
+                                    {% if p.media_format == "Audio" %}
+                                        <img src="{% static 'images/9_16 Audio.png' %}" alt="" class="post-thumbnail" >
+                                    {% elif p.media_format == "Video" %}
+                                        <img src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
+                                    {% endif %}
+                                {% endif %}
+                    <!-- <img class="thumbnail-image" src="media/Media/20240312_222036.jpg" alt="" srcset=""> -->
+                    <video><source src="{{ p.media }}"></video>
+                    <div class="gradient-overlay">
+                        <div class="padding-controll">
+                            <h2 class="video-caption">{{ p.caption}}</h2>
+                            <p class="video-description">{{ p.descr }}</p>
+                            <p class="instrument-used">{{ p.mediatype }}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- <h4>{{ p.caption}}</h4>
                     <p>{{p.descr}}
                     </p>
                     <div class="postfooter">
                         <h3>{{p.mediatype}}</h3>
                         <img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px">
-                    </div>
+                    </div> -->
                 </div>
             </a>
             
@@ -55,7 +74,7 @@
         <div id="profile-content-controller-nomedia" style="display: none;">{% include 'content-404.html'  %}</div>
         {% endif %}
     </div>
-</div>
+
 
 </div>
 {% endif %}

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Products | Account</title>
+    <title>Sounz</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/logstyle.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -18,7 +18,7 @@
         <div class="navbar">
             
             <div class="logo">
-                <a href="index.html"><img src="{% static 'images/Media.png' %}" alt="logo" width="125px"></a>
+                <img src="{% static 'images/Media.png' %}" alt="logo" width="125px">
             </div>
             <div id="cmname">Sounz</div>
             <nav>
@@ -36,9 +36,9 @@
     <div class="account-page">
         <div class="container">
             <div class="row">
-                <div class="col-2">
+                <!-- <div class="col-2">
                     <img src="{% static 'images/musc.png' %}" width="100%">
-                </div>
+                </div> -->
                 <div class="col-2">
                     <div class="form-container">
                         <div class="form-btn">
@@ -49,9 +49,9 @@
                             <input name="username" type="text" placeholder="Username" id="username">
                             <input name="password" type="password" placeholder="Password" id="password">
                             <button type="submit" class="btn">Login</button>
-                            <a href="">Forgot Password</a>
+                            <!-- <a href="">Forgot Password</a> -->
                             <br>
-                            <a href="{% url 'reg2' %}" style="color: rgb(240, 112, 15);">Signup</a>
+                            <a href="{% url 'reg2' %}" style="color: rgb(240, 112, 15);">New user? Register now!</a>
                             
                             
                         </form>
@@ -63,7 +63,7 @@
 
 
     <!-- Footer -->
-    <div class="footer">
+    <!-- <div class="footer">
         <div class="container">
            
             <div class="footer-col-4">
@@ -80,7 +80,7 @@
             </div>
             <hr>
         </div>
-    </div>
+    </div> -->
 
     <!-- javascript -->
 

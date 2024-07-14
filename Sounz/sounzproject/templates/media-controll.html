@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sounz{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/media.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="header-for-home">{% include 'header-base-sub.html' %}</div>
+    {% if user %}
+    {% if post %}
+    {% if puser %}
+    <div class="media">
+        <div class="media-header">
+            <a href="{% url 'watch-profile' %}?uname={{post.username}}">
+                <img src="{{puser.profile_picture.url}}" class="media-owner-pp" alt="">
+                <p class="media-owner-un">{{post.username}}</p>
+            </a>
+            
+            <!-- <a href="{% url 'email' %}" class="collab"><img src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a> -->
+        </div>
+        <div class="actual-media">
+            
+            <video class="media-container" width="640" height="360" controls autoplay>
+                <source src="{{post.media.url}}" type="video/mp4" >
+                Your browser does not support the audio element
+                <audio controls>
+                    <source src="{{post.media.url}}" type="audio/mpeg" >
+                    Your browser does not support the audio element
+                </audio>
+            </video>
+            
+        </div>
+        <div class="media-footer">
+            <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
+            <!-- <div class="footer-btns">
+                <button class="e-d-button"><a class="e-d-buttons" href="">Edit</a></button>
+            </div> -->
+        </div>
+        <p class="media-date">{{ post.timestamp|date }}</p>
+        <p class="media-desc">{{post.descr}}</p>
+            
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+{% endblock %}

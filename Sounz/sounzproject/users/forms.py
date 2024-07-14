@@ -19,5 +19,5 @@ class Uploadform(forms.ModelForm):
     
     class Meta:
         model=postdb
-        fields=['media']
+        fields=['media', 'media_thumbnail']
         exclude=['pid','username','media','caption','descr','langu','mediatype','location']

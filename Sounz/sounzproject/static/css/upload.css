@@ -15,7 +15,13 @@
 form{
     display: grid;
 }
-
+#thumbnail-upload-btn{
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    color: #777;
+    cursor: pointer;
+}
 #post-upload-btn{
     span{
         img{

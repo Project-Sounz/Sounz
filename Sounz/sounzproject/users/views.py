@@ -5,6 +5,7 @@ from users.models import profiledatadb,postdb
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.core.mail import send_mail
+import random
 
 # Create your views here.
 def log(request):
@@ -41,10 +42,10 @@ def reg2(request):
                 profile_picture = request.FILES.get('profile_picture')
             if password == password1:
                 if User.objects.filter(email=email).exists():
-                     prompt_message = "Email taken"
+                     prompt_message = "Mail already taken!"
                      return render(request,'reg2.html',{'prompt_message': prompt_message})
                 elif User.objects.filter(username=uname).exists():
-                     prompt_message = "Username taken"
+                     prompt_message = "Username taken!"
                      return render(request,'reg2.html',{'prompt_message': prompt_message})
                 else:
                     newins=profiledatadb(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
@@ -107,15 +108,16 @@ def homepage(request):
     username = request.user.username
     user = profiledatadb.objects.get(username=username)
     sliced= profiledatadb.objects.all()[:4]
-    topart=profiledatadb.objects.all()[:6]
+    topart=profiledatadb.objects.all()
+    random_profiles = random.sample(list(topart), min(len(topart), 4))
     # Fetch posts of the current user
-    user_posts = postdb.objects.all()
+    user_posts = postdb.objects.all().order_by('-timestamp')
     context = {
         'all_users': all_users,
         'user': user,
         'user_posts': user_posts,
         'sliced':sliced,
-        'topart':topart
+        'topart':random_profiles
     }
     return render(request, 'home.html',context)
 
@@ -126,14 +128,16 @@ def upload(request):
         caption=request.POST.get('title')
         desc=request.POST.get('post_description')
         typ=request.POST.get('tags')
+        media_type = request.POST.get('media_type')
         lan=request.POST.get('language')
         loc=request.POST.get('location')
         form=Uploadform(request.POST,request.GET)
         if form.is_valid(): 
                 file=request.FILES.get('post')
-        pos=postdb(username=userobj,caption=caption,descr=desc,langu=lan,mediatype=typ,location=loc,media=file)
+                gotthumbnail=request.FILES.get('thumbnail')
+        pos=postdb(username=userobj,caption=caption,descr=desc,langu=lan,mediatype=typ,location=loc,media=file,media_format=media_type,media_thumbnail=gotthumbnail)
         pos.save()
-        prompt_message = "Post Uploaded"
+        prompt_message = "Post successfully uploaded!"
         context={
             'user':userobj,
             'prompt_message': prompt_message,
@@ -143,9 +147,21 @@ def upload(request):
     return render(request, 'upload_form.html',{'user':userobj})
 
 def nav_saved(request):
-    username=request.user.username
-    user = profiledatadb.objects.get(username=username)
-    return render(request, 'profile-fpv-saved.html',{'user':user})   
+    # username=request.user.username
+    # user = profiledatadb.objects.get(username=username)
+    # return render(request, 'profile-fpv-saved.html',{'user':user})   
+
+
+    user=request.user.username
+    test = 'nn'
+    userBioCollect = profiledatadb.objects.get(username=user)
+    post=postdb.objects.filter(username=test)
+    context={
+        'user': userBioCollect,
+        'post':post,
+
+    }
+    return render(request, 'profile-fpv-saved.html',context)
 
 def editprofile(request):
     
@@ -203,6 +219,20 @@ def media(request):
         "user":user
     }
     return render(request,'media.html',context)
+
+def media_controll(request):
+    username=request.user.username
+    user = profiledatadb.objects.get(username=username)
+    pid = request.GET.get('pid')
+    post=postdb.objects.get(pid=pid)
+    ps=post.username
+    puser=profiledatadb.objects.get(username=ps)
+    context={
+        "puser":puser,
+        "post":post,
+        "user":user
+    }
+    return render(request,'media-controll.html',context)
 
 def mailtemplate(request):
     return render(request, 'mail-template.html')

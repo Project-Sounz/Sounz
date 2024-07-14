@@ -1,4 +1,4 @@
-
+        
         #cmname{
             font-weight: 500;
             font: bold;
@@ -61,8 +61,9 @@
             display: none;
         }
         .account-page{
-            padding: 50px 0;
-            background: linear-gradient(#030303, #0f0f0f);
+            padding: 0;
+            background-color: #fff;
+            /* background: linear-gradient(#030303, #0f0f0f); */
         }
         .form-containereg{
             background: #fff;
@@ -90,14 +91,20 @@
             box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             overflow: hidden;
+            
         }
-        .form-container span{
-            font-weight: bold;
+        .form-container span, .register-label{
+            /* font-weight: bold; */
             padding: 0 10px;
             color: #555;
             cursor: pointer;
-            width: 100px;
+            /* width: 100px; */
             display: inline-block;
+            font-size: 20px;
+            border-bottom: 2px solid;
+        }
+        .register-label{
+            margin-bottom: 40px;
         }
         .form-btn{
             display: inline-block;
@@ -119,28 +126,47 @@
             position: absolute;
             top: 130px;
             transition: transform 1s;
+            
         }
-        form input{
+        form input,form textarea{
             width: 100%;
-            height: 30px;
-            margin: 10px 0;
-            padding: 0 10px;
+            /* height: 30px; */
+            margin: 10px 20px;
+            padding: 10px;
             border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            /* padding: 20px 10px; */
+            resize: none;
+            outline: none;
         }
+        
         form .btn{
             width: 100%;
-            border: none;
-            cursor: pointer;
-            margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        /* margin: 10px 0; */
+        border-radius: 10px;
+        font-size: 14px;
+        padding: 10px ;
         }
         form .btn:focus{
             outline: none;
         }
-        #LogForm{
+        #LogForm, #LogForm >input{
             left: 0;
+            margin: 10px 0;
+            box-sizing: border-box;
         }
         #RegForm{
-            left: 0;
+            height: 500px;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
         }
         form a{
             font-size: 12px;
@@ -162,21 +188,17 @@
             transform: translateX(100px);
             transition: transform 1s;
         }
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        
 
         body{
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         .navbar
         {
             display: flex;
             align-items: center;
-            padding: 20px;
+            /* padding: 20px; */
         }
 
         nav{
@@ -199,16 +221,21 @@
             color: #555;
         }
         .container{
-            max-width: 1300px;
-            margin: auto;
-            padding-left: 25px;
-            padding-right: 25px;
+            padding: 0px 25px;
+        }
+        .container-reg{
+            display: flex;
+    justify-content: center;
         }
         .row{
             display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+    max-height: 100%;
+    margin: auto;
         }
         .col-2{
             flex-basis: 50%;
@@ -307,6 +334,37 @@
             text-align: left;
         }
 
-
+.head-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
         
-    
+.reg-form-main-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-around;
+    align-items: center;
+}
+.dp-btn{
+    width: fit-content;
+    padding: 10px;
+    /* height: min-content; */
+    background-color: whitesmoke;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #555;
+    width: 100%;
+    cursor: pointer;
+}
+#upload-dp-img{
+    padding: 10px;
+    /* background-color: whitesmoke; */
+    width: 75px;
+}

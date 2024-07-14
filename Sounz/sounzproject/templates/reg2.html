@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Products | Account</title>
+    <title>Sounz</title>
     <link rel="stylesheet" href="{% static 'css/logstyle.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <div class="head-container">
     <div class="container">
         <div class="navbar">
             
@@ -34,51 +35,59 @@
 
     <!-- Account Page -->
     <div class="account-page">
-        <div class="container">
+        <div class="container-reg">
             <div class="row">
-                <div class="col-2">
+                <!-- <div class="col-2">
                     <img src="{% static 'images/musc.png' %}" width="100%">
-                </div>
+                </div> -->
                 <div class="col-2">
-                    <div class="form-containereg">
-                        <div class="form-btn">
-                            <span onclick="register()">Register</span>
-                            <hr id="Indicatoreg">
-                        </div>
+                    <div class="reg-form-main-container">
+                        <p class="register-label">Register</p>
                         
-
                         <form id="RegForm" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            {% if prompt_message %}
-                            <div>{{ prompt_message }}</div>
-                            {% endif %}
+                            <div id="prompt-message" data-message="{% if prompt_message %}{{ prompt_message }}{% endif %}" style="display: none;"></div>
                             
-                            <input type="text" placeholder="Username" id="username" name="username">
-                            <input type="email" placeholder="Email" id="email" name="email">
-                            <input type="password" placeholder="Password" id="password" name="password">
-                            <input type="password" placeholder="Confirm Password"  id="confirmPassword" name="confirmPassword">
-                            <input type="text" placeholder="Firstname" name="first_name">
-                            <input type="text" placeholder="Lastname" name="last_name">
+                            <input type="text" required placeholder="Firstname" name="first_name">
+                            <input type="text" required placeholder="Lastname" name="last_name">
+                            <input type="text" required placeholder="Username" id="username" name="username">
+                            <input type="email" required placeholder="Email" id="email" name="email">
+                            <input type="password" required placeholder="Password" id="password" name="password">
+                            <input type="password" required placeholder="Confirm Password"  id="confirmPassword" name="confirmPassword">
+                            <input name="phonenumber" type="number" placeholder="Phone number (optional)">
+                            <input type="text" name="instagram-link" id="instagram_link" placeholder="Instagram profile (optional)">
+                            <input type="text" name="x-link" id="x_link" placeholder="X profile (optional)">
+                            <input type="text" name="youtube-link" id="yputube_link" placeholder="Youtube Channel (optional)">
+                            
                             <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
-                            <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Add Profile Picture</button>
+                            <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" src="{% static 'images/upload.svg' %}" alt="upload profile picture"></span><span class="dp-upload-label">Upload your profile picture</span></button>
+                            <!-- <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Add Profile Picture</button> -->
                               
-                            
-    
-                            <input name="phonenumber" type="number" placeholder="Phonenumber">
-                            <textarea name="bio" rows="5" cols="30" name="text" placeholder="User bio"></textarea>
+                            <!-- <input type="text" name="bio bio-text-area" id="bio" placeholder="User bio"> -->
+                        
+                            <textarea name="bio" rows="3" cols="20" name="text" placeholder="User bio"></textarea>
                             
                             <button type="submit" class="btn">Register</button>
+                            <a href="{% url 'signin' %}" style="color: rgb(240, 112, 15);">Have an account? Login!</a>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var promptMessageElement = document.getElementById('prompt-message');
+            var promptMessage = promptMessageElement.getAttribute('data-message');
+            if (promptMessage) {
+                alert(promptMessage);
+            }
+        });
+    </script>
 
     <!-- Footer -->
-    <div class="footer">
+    <!-- <div class="footer">
         <div class="container">
            
             <div class="footer-col-4">
@@ -95,14 +104,18 @@
             </div>
             <hr>
         </div>
-    </div>
+    </div> -->
 
     <!-- javascript -->
 
  
    
    
-
+</div>
 </body>
 
 </html>
+
+
+
+

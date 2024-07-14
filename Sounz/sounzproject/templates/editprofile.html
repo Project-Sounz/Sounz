@@ -1,48 +1,24 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}Sounz{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/logstyle.css' %}">
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Products | Account</title>
-    <link rel="stylesheet" href="{% static 'css/logstyle.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-</head>
-
-<body>
-    <div class="container">
-        <div class="navbar">
-            
-            <div class="logo">
-                <a href="index.html"><img src="{% static 'images/Media.png' %}" alt="logo" width="125px"></a>
-            </div>
-            <div id="cmname">Sounz</div>
-            <nav>
-                <ul id="MenuItems">
-                    <li>Start your music journey today</li>
-                    
-                </ul>
-            </nav>
-            
-            <img src="{% static 'images/menu.png' %}" class="menu-icon" onclick="menutoggle()">
-        </div>
-    </div>
-
+{% block content %}
+    <div class="header-for-home">{% include 'header-base-sub.html' %}</div>
+        
     <!-- Account Page -->
     <div class="account-page">
-        <div class="container">
+        <div class="container-reg">
             <div class="row">
                 {% if user %}
                 
                 <div class="col-2">
-                    <div class="form-containereg">
+                    <div class="reg-form-main-container">
                         <div class="form-btn">
-                            <span onclick="register()">Edit Profile</span>
-                            <hr id="Indicatoreg">
+                            <p class="register-label">Edit Profile</p>
+                            <!-- <hr id="Indicatoreg"> -->
                         </div>
                         
 
@@ -62,13 +38,17 @@
                             <input type="url" placeholder="Add Youtube channel link" id="email" name="yout">
                             <input type="url" placeholder="Add X profile link" id="email" name="twit">
                             <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
-                            <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Change Profile Picture</button>
+                            <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" src="{% static 'images/upload.svg' %}" alt="upload profile picture"></span><span class="dp-upload-label">Change your profile picture</span></button>
+                            <!-- <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Change Profile Picture</button> -->
                               
                             
     
+                            {% if user.user_bio == "" %}
                             
-                            <textarea name="bio" rows="5" cols="30" name="text" placeholder="{{ user.user_bio }}"></textarea>
-                            
+                                <textarea name="bio" rows="5" cols="30" name="text" placeholder="User Bio"></textarea>
+                            {% else %}
+                                <textarea name="bio" rows="5" cols="30" name="text" placeholder="{{ user.user_bio }}"></textarea>
+                            {% endif %}
                             <button type="submit" class="btn">Update Profile</button>
                         </form>
                     </div>
@@ -77,7 +57,7 @@
             </div>
         </div>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
         <div class="container">
            
             <div class="footer-col-4">
@@ -94,4 +74,5 @@
             </div>
             <hr>
         </div>
-    </div>
+    </div> -->
+    {% endblock %}

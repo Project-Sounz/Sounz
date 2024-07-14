@@ -1,25 +1,34 @@
 .media{
     width: 50%;
     margin: auto;
+    padding: 20px 0;
 }
 
 .media-owner-pp{
-    width:60px;
+    width: 55px;
     border-radius: 50%;
 }
 
 .media-owner-un{
     margin-left: 10px;
+    font-size: 16px;
+    color: #000;
+    font-weight: 300;
+    /* text-decoration: none; */
+    text-transform: lowercase;
 }
 
 .media-header{
     display: flex;
+    /* margin-top: 5px; */
+    align-items: center;
+    flex-direction: row;
     justify-content: space-between;
-    margin-top: 5px;
 }
 
 .media-header > a{
     display: flex;
+    text-decoration: none;
 }
 
 .media-thumbnail{
@@ -32,10 +41,25 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-.footer-btns{
-    margin-top: 18px;
+.footer-btns > button{
+    background: #f1f1f1;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    justify-items: center;
+    cursor: pointer;
+}
+button.e-d-button{
+    width: 60px;
+}
+.footer-btns > button > image, .footer-btns > button > a{
+    width: 25px;
 }
 
 .footer-btns > a{
@@ -49,9 +73,55 @@
 
 .media-type{
     text-decoration: none;
-    color: black;
-    border: solid 1px;
-    border-radius: 4px;
+    margin-left: 10px;
+    border: 1px solid rgba(226, 28, 102, 1);
     padding: 5px;
-    margin-left: 2px;
+    border-radius: 4px;
+    text-transform: capitalize;
+    background-image: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 25%, rgba(220, 24, 96, 1) 75%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    cursor: default;
+    font-size: 18px;
+    font-weight: 500;
+}
+.media-container{
+    width: auto;
+    margin: 10px auto;
+    border-radius: 10px;
+    background: white;
+    padding: 10px;
+    /* border: 1px solid #ececec; */
+    height: auto;
+    min-width: 90%;
+    max-width: 100%;
+    max-height: 500px;
+}
+.actual-media{
+    display: flex;
+}
+.m-h3{
+    font-size: 24px;
+    max-width: 80%;
+    line-height: 1.5;
+}
+.media-date{
+    color: #969696;
+    font-weight: 400;
+    font-size: 16px;
+}
+.media-desc{
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.5;
+}
+.edit-delete{
+    font-size: 16px;
+    margin-left: auto;
+    padding-right: 20px;
+}
+.e-d-buttons, .edit-logout > span{
+    text-decoration: none;
+    color: #707070;
 }

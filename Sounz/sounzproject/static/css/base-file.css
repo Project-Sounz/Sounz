@@ -40,9 +40,10 @@ img#navbar-main-logo{
     width: 45px;
 }
 img#navbar-user-profile-pic{
-    width: 45px;
+    width: 50px;
     height: auto;
     border-radius: 50%;
+    aspect-ratio: 8 / 8;
 }
 #nav-separator{
     width: 80%;
