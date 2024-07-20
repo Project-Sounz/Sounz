@@ -21,7 +21,7 @@
     {% if user %}
     <div class="main-docker">
         <div class="nav-section-web">
-            <nav class="navigation-controlling-deck">
+            <nav class="navigation-controlling-deck" id="navigation-controlling-deck">
                 <a href="{% url 'home' %}"><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"></a>
                 <div id="nav-separator"></div>
                 {% if user.profile_picture.url %}

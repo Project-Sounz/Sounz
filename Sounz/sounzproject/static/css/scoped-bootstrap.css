@@ -1,0 +1,8 @@
+@import url('bootstrap/bootstrap.min.css');
+
+/* Scope Bootstrap styles to .scoped-bootstrap-container */
+.scoped-bootstrap-container :is(.col) {
+    @import url('bootstrap.min.css');
+}
+
+/* Include any additional Bootstrap classes you need to scope */

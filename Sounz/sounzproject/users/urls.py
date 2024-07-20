@@ -13,6 +13,7 @@ urlpatterns = [
     path('home', views.homepage, name = 'home'),
     path('homeCheck', views.homeCheck, name = 'homeCheck'),
     path('my-profile', views.profile_fpv, name = 'my-profile'),
+    path('my-profile-new', views.profile_new, name = 'my-profile-new'),
     path('watch-profile', views.profile_tpv, name = 'watch-profile'),
     path('upload', views.upload, name = 'upload'),
     # path('profile', views.profile, name='profile'),

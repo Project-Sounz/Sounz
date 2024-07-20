@@ -67,7 +67,7 @@
 .post-date-specific{
     color: #969696;
     font-weight: 200;
-    font-size: 16px;
+    font-size: medium;
 }
 
 .home-post-header{
@@ -307,4 +307,24 @@
     text-transform: capitalize;white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 1050px){
+    .suggestion-content-username{
+        display: none;
+    }
+    .suggestion-content-postuser{
+        display: none;
+    }
+    .post-media-format-display{
+        display: none;
+    }
+}
+@media screen and (max-width: 768px){
+    .suggestions{
+        display: none;
+    }
+    .sub-explore{
+        max-width: 100%;
+    }
 }

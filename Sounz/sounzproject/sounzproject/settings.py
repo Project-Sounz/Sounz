@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.cache_control_middleware.CacheControlMiddleware',
 ]
 
 ROOT_URLCONF = 'sounzproject.urls'

@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import * 
+from django.http import HttpResponseRedirect
 from .forms import RegistrationForm,EditProfileForm,Uploadform
+from django.core.exceptions import ValidationError
 from users.models import profiledatadb,postdb
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
@@ -90,6 +92,42 @@ def profile_fpv(request):
         user = None
     return render(request, 'profile-fpv.html',context)  
 
+def nav_saved(request):
+    # username=request.user.username
+    # user = profiledatadb.objects.get(username=username)
+    # return render(request, 'profile-fpv-saved.html',{'user':user})   
+
+
+    user=request.user.username
+    test = 'nn'
+    userBioCollect = profiledatadb.objects.get(username=user)
+    post=postdb.objects.filter(username=test)
+    context={
+        'user': userBioCollect,
+        'post':post,
+
+    }
+    return render(request, 'profile-fpv-saved.html',context)
+
+def profile_new(request):
+    try:
+        user=request.user.username
+        userBioCollect = profiledatadb.objects.get(username=user)
+        post=postdb.objects.filter(username=user)
+        test = 'king'
+        saved=postdb.objects.filter(username=test)
+        context={
+            'user': userBioCollect,
+            'post':post,
+            'saved':saved,
+
+        }
+        
+    except profiledatadb.DoesNotExist:
+        user = None
+    return render(request, 'profile-new.html',context)
+
+
 def profile_tpv(request):
     uname=request.GET.get('uname')
     pname=profiledatadb.objects.get(username=uname)
@@ -122,46 +160,35 @@ def homepage(request):
     return render(request, 'home.html',context)
 
 def upload(request):
-    username=request.user.username
-    userobj=profiledatadb.objects.get(username=username)
-    if request.method=='POST':
-        caption=request.POST.get('title')
-        desc=request.POST.get('post_description')
-        typ=request.POST.get('tags')
+    username = request.user.username
+    userobj = profiledatadb.objects.get(username=username)
+    
+    if request.method == 'POST':
+        caption = request.POST.get('title')
+        desc = request.POST.get('post_description')
+        typ = request.POST.get('tags')
         media_type = request.POST.get('media_type')
-        lan=request.POST.get('language')
-        loc=request.POST.get('location')
-        form=Uploadform(request.POST,request.GET)
+        lan = request.POST.get('language')
+        loc = request.POST.get('location')
+        form = Uploadform(request.POST, request.GET)
+
         if form.is_valid(): 
-                file=request.FILES.get('post')
-                gotthumbnail=request.FILES.get('thumbnail')
-        pos=postdb(username=userobj,caption=caption,descr=desc,langu=lan,mediatype=typ,location=loc,media=file,media_format=media_type,media_thumbnail=gotthumbnail)
-        pos.save()
-        prompt_message = "Post successfully uploaded!"
-        context={
-            'user':userobj,
-            'prompt_message': prompt_message,
-        }
-        return render(request,'upload_form.html',context)
+            file = request.FILES.get('post')
+            gotthumbnail = request.FILES.get('thumbnail')
 
-    return render(request, 'upload_form.html',{'user':userobj})
+            # Validate file type
+            if file and not file.content_type.startswith(('video/', 'audio/')):
+                prompt_message = "Invalid file type. Only video and audio files are allowed."
+                return render(request, 'upload_form.html', {'user': userobj, 'prompt_message': prompt_message})
 
-def nav_saved(request):
-    # username=request.user.username
-    # user = profiledatadb.objects.get(username=username)
-    # return render(request, 'profile-fpv-saved.html',{'user':user})   
+            pos = postdb(username=userobj, caption=caption, descr=desc, langu=lan, mediatype=typ, location=loc, media=file, media_format=media_type, media_thumbnail=gotthumbnail)
+            pos.save()
 
+            prompt_message = "Post successfully uploaded!"
+            return render(request, 'upload_form.html', {'user': userobj, 'prompt_message': prompt_message})
 
-    user=request.user.username
-    test = 'nn'
-    userBioCollect = profiledatadb.objects.get(username=user)
-    post=postdb.objects.filter(username=test)
-    context={
-        'user': userBioCollect,
-        'post':post,
+    return render(request, 'upload_form.html', {'user': userobj})
 
-    }
-    return render(request, 'profile-fpv-saved.html',context)
 
 def editprofile(request):
     
@@ -204,7 +231,11 @@ def editprofile(request):
 
 def signout(request):
     logout(request)
-    return redirect('signin')
+    response = HttpResponseRedirect('/')
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
 
 def media(request):
     username=request.user.username

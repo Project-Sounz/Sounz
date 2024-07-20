@@ -1,4 +1,9 @@
 
+
+  ::before,
+  ::after {
+    box-sizing: inherit;
+  }
 .imgcenter {
     margin-left: auto;
     margin-right: auto;
@@ -93,7 +98,7 @@ p#desc{
     cursor: pointer;
     text-decoration: none;
 }
-.post-button{
+.profile-content-buttons.active{
     background: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
     color: white;
 }
@@ -110,11 +115,16 @@ p#desc{
 
 .posts{ 
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     color: #fff;
     padding-top: 15px;
     justify-content: flex-start;
+}
+.post-row{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 10px;
 }
 
 .posts h4{
@@ -131,25 +141,13 @@ p#desc{
     object-fit: cover;
     aspect-ratio: 450 / 600;
 }
-
-@media screen and (max-width: 768px){
-    .socials{
-        margin-left: 0;
-        img{
-            width: 10%;
-        }
-    }
-    .profile-content-buttons{
-        padding: 8px 28px;
-        font-size: 16px;
-    }
-}
 .thumbnail-container {
     position: relative;
-    width: 258px;
-    height: 350px;
+    max-width: 15em;
+    /* height: 350px; */
     border-radius: 10px;
     overflow: hidden;
+    flex: 1 1 calc(25% - 20px);
 }
 
 .thumbnail-image {
@@ -172,18 +170,21 @@ p#desc{
     align-items: flex-start;
 }
 .padding-controll{
-    padding: 0 0px 20px 15px;
+    padding: 0 10px 15px 10px;
     text-align: start;
-    width: 100%;
+    /* width: 90%; */
 }
 
 .video-caption {
     font-size: 1.2em;
     margin: 0;
+    text-transform:capitalize;
     text-overflow: ellipsis;
-    max-width: 90%;
+    /* max-width: 90%; */
+    -webkit-box-orient: vertical;
+    display: -webkit-box; 
+    -webkit-line-clamp: 1;
     overflow: hidden;
-    text-transform: lowercase;
 }
 .video-caption::first-letter{
     text-transform: uppercase;
@@ -195,7 +196,7 @@ p#desc{
     /* height: 40px; */
     /* width: 100%; */
     text-overflow: ellipsis;
-    max-width: 90%;
+    /* max-width: 90%; */
     -webkit-box-orient: vertical;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -212,6 +213,63 @@ p#desc{
     margin: 0;
     text-overflow: ellipsis;
     max-width: 90%;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+.each-saved-footer{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+}
+.profile-content{
+    display: flex;
+    justify-content: center;
+}
+/* #post-wrapper{
+    flex: 0 0 25%;
+} */
+/* #post-wrapper:not(:last-child) {
+    margin-right: 10px;
+  } */
+  @media screen and (max-width: 1050px){
+    .video-description{
+        font-size: 0.6em;
+        -webkit-line-clamp: 2;
+    }
+    .video-caption{
+        font-size: 1em;
+    }
+    .instrument-used{
+        font-size: 1em;
+    }
+}
+@media screen and (max-width: 768px){
+    .socials{
+        margin-left: 0;
+        img{
+            width: 10%;
+        }
+    }
+    .profile-content-buttons{
+        padding: 8px 28px;
+        font-size: 16px;
+    }
+    .instrument-used{
+        max-width: 50%;
+    }
+}
+@media screen and (max-width: 480px){
+    .post-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px 0;
+    }
+}
+.saved-thumbnail-display-username{
+    text-overflow: ellipsis;
     overflow: hidden;
     text-transform: uppercase;
 }

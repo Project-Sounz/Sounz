@@ -3,7 +3,6 @@
 {% block title %}Sounz{% endblock %}
 {% block additional_css %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
-<script src="stop-scroll.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -50,7 +49,7 @@
                                             {% endfor %}
                                             <p class="post-owner-username username-specific">@{{ post.username }}</p>
                                         </a>
-                                        <p class="home-post-date post-date-specific"> • {{ post.timestamp|date }} • {{ post.media_format }}</p>
+                                        <p class="home-post-date post-date-specific"> • {{ post.timestamp|date }} <span class="post-media-format-display">• {{ post.media_format }}</span></p>
                                     </div>
 
                                     <a href="{% url 'media' %}?pid={{post.pid}}" class="post-details">
@@ -101,7 +100,7 @@
                         <span class="suggestion-post-details">      <!--  media deatails and thumbnail container -->
                             <h3 class="suggestion-post-caption">{{ post.caption }}</h3>
                             <span class="suggestion-content-username">&nbsp;by&nbsp;</span>
-                            <p>{{ post.username }}</p>
+                            <p class="suggestion-content-postuser">{{ post.username }}</p>
                         </span> 
                         {% if post.media_thumbnail %}
                                     

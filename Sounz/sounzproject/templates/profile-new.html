@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sounz{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/profile-page-style.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="header">
+    {% if user %}
+    <div class="edit-logout">
+        <a class="e-l-buttons" href="{% url 'editprofile' %}">Edit Profile</a><span> | </span>
+        <a class="e-l-buttons" href="{% url 'signout' %}" id="logout">Log out</a>
+    </div>
+    <img src= '{{user.profile_picture.url}}' alt="{{user.firstname}}'s profile picture" class="imgcenter"/> 
+    <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
+    <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
+    <div class="socials">
+        <a href="{{ user.insta }}"><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
+        <a href="{{ user.twit }}"><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
+        <a href="{{ user.yout }}"><img src="{% static 'images/youtube.svg' %}" alt="" height="20px" width="20px"></a>
+        <a href="mailto:{{ user.email }}"><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
+    </div>
+</div>
+<div class="body">
+    <div class="profile-info">
+        <p id="desc">{{ user.user_bio }}</p>
+        <a href="" class="mailbio">{{ user.email }}</a>
+    </div>
+{% endif %}
+    <hr style="margin: 30px;">
+
+    <!-- post-saved buttons -->
+
+    <div class="buttons">
+        <button onclick="loadPosts()" class="profile-content-buttons" id="postbutton">Posts</button>
+        <button onclick="loadSaved()" class="profile-content-buttons" id="savedbutton">Saved</button>
+    </div>
+
+    <!-- profile post-media area -->
+    <div id="profile-content-controller-posts">
+        <div class="profile-content">
+            <div class="posts">
+                {% if post %}
+                    {% for media in post %}
+                        {% if forloop.counter0|divisibleby:"4" %}
+                            <div class="post-row">
+                        {% endif %}
+                        <a id="post-wrapper" href="{% url 'sh-media' %}?pid={{media.pid}}">
+                            <div class="thumbnail-container">
+                                {% if media.media_thumbnail %}
+                                    <img loading="lazy" src="{{ media.media_thumbnail.url }}" alt="" class="post-thumbnail">
+                                {% else %}
+                                    {% if media.media_format == "Audio" %}
+                                        <img loading="lazy" src="{% static 'images/9_16 Audio.png' %}" alt="" class="post-thumbnail" >
+                                    {% elif media.media_format == "Video" %}
+                                        <img loading="lazy" src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
+                                    {% endif %}
+                                {% endif %}
+                                <div class="gradient-overlay">
+                                    <div class="padding-controll">
+                                        <h2 class="video-caption">{{ media.caption}}</h2>
+                                        <p class="video-description">{{ media.descr }}</p>
+                                        <p class="instrument-used">{{ media.mediatype }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {% if forloop.counter0|add:"1"|divisibleby:"4" or forloop.last %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <div id="profile-content-controller-nomedia" style="display: block; width: 100%;">{% include 'content-404.html'  %}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- saved media field -->
+
+    <div id="profile-content-controller-saved">
+        <div class="profile-content scoped-bootstrap">
+            <div class="posts">
+                {% if saved %}
+                    {% for media in saved %}
+                        {% if forloop.counter0|divisibleby:"4" %}
+                            <div class="post-row">
+                        {% endif %}
+                        <a class="post-wrapper" href="{% url 'media' %}?pid={{media.pid}}">
+                            <div class="thumbnail-container">
+                                {% if media.media_thumbnail %}
+                                    <img loading="lazy" src="{{ media.media_thumbnail.url }}" alt="" class="post-thumbnail">
+                                {% else %}
+                                    {% if media.media_format == "Audio" %}
+                                        <img loading="lazy" src="{% static 'images/9_16 Audio.png' %}" alt="" class="post-thumbnail" >
+                                    {% elif media.media_format == "Video" %}
+                                        <img loading="lazy" src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
+                                    {% endif %}
+                                {% endif %}
+                                <!-- <img class="thumbnail-image" src="media/Media/20240312_222036.jpg" alt="" srcset=""> -->
+                                <!-- <video><source src="{{ media.media }}"></video> -->
+                                <div class="gradient-overlay">
+                                    <div class="padding-controll">
+                                        <h2 class="video-caption">{{ media.caption }}</h2>
+                                        <p class="video-description">{{ media.descr }}</p>
+                                        <div class="each-saved-footer">
+                                            <p class="instrument-used">{{ media.mediatype }}</p>
+                                            <p class="saved-thumbnail-display-username">&nbsp;|&nbsp;{{ media.username }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- <h4>{{ media.caption}}</h4>
+                                <p>{{media.descr}}
+                                </p>
+                                <div class="postfooter">
+                                    <h3>{{media.mediatype}}</h3>
+                                    <img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px">
+                                </div> -->
+                            </div>
+                        </a>
+                        {% if forloop.counter0|add:"1"|divisibleby:"4" or forloop.last %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <div id="profile-content-controller-nomedia" style="display: block; width: 100%;">{% include 'content-404.html'  %}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="{% static 'js/profilepage-content.js' %}"></script>
+{% endblock %}
+

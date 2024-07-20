@@ -17,7 +17,8 @@
         <div id="prompt-message" data-message="{% if prompt_message %}{{ prompt_message }}{% endif %}" style="display: none;"></div>
         
         <input type="file" name="post" id="post_input" accept="" style="display: none;">
-        <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn"><span class="uploadLogo"><img src="{% static 'images/upload.svg' %}" alt="upload post"></span><span class="upload-postText">Upload you file</span></button>
+        <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn"><span class="uploadLogo"><img src="{% static 'images/upload.svg' %}" alt="upload post"></span><span class="upload-postText">Upload you file</span><span class="support-postText" style="font-size: 12px;
+    color: #969696;">Supports Audio and Video formats.</span></button>
         <br>
         
         <input type="file" name="thumbnail" id="thumbnail_input" accept="" style="display: none;">
@@ -27,8 +28,8 @@
             <input required type="text" id="title" name="title" placeholder="Caption">
             <input required type="text" id="post_description" name="post_description" placeholder="Description"></input>
             <select id="media_type" name="media_type">
-                <option selected value="Video">Video</option>
-                <option value="Audio">Audio</option>
+                <option selected value="Audio">Audio</option>
+                <option value="Video">Video</option>
             </select>
             <input required type="text" id="tags" name="tags" placeholder="Media type ('vocals' 'guitar' 'piano' etc..)">
             <input type="text" id="language" name="language" placeholder="Language (optional)">
