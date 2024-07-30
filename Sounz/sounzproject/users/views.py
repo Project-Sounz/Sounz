@@ -23,6 +23,19 @@ def log(request):
 
     return render(request,'accounttest.html')
 
+def log_new(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        userr=authenticate(request,username=username,password=password)
+        if userr is not None:
+            login(request,userr)
+            return redirect('my-profile')
+        invalid="Invalid Credentials"
+        return render(request,'log-new.html')
+
+    return render(request,'log-new.html')
+
 def reg2(request):
 
          
@@ -74,6 +87,43 @@ def reg2(request):
             
         return render(request,"reg2.html")
 
+
+def registration_new(request):
+
+         
+        if request.method == 'POST':
+
+            uname = request.POST.get('username')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            password1=request.POST.get('confirmPassword')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            bio = request.POST.get('bio')
+            print(uname,email,password,first_name,last_name,bio)
+            form = RegistrationForm(request.POST, request.FILES)
+            if form.is_valid(): 
+                user = form.save(commit=False)
+                user.save()
+                profile_picture = request.FILES.get('profile_picture')
+            if password == password1:
+                if User.objects.filter(email=email).exists():
+                     prompt_message = "Mail already taken!"
+                     return render(request,'register-new.html',{'prompt_message': prompt_message})
+                elif User.objects.filter(username=uname).exists():
+                     prompt_message = "Username taken!"
+                     return render(request,'register-new.html',{'prompt_message': prompt_message})
+                else:
+                    newins=profiledatadb(username=uname,password=password,firstname=first_name,lastname=last_name,email=email,profile_picture=profile_picture,user_bio=bio)
+                    newins.save()
+                    new_user = User.objects.create_user(username=uname, password=password, email=email, first_name=first_name, last_name=last_name)
+                    new_user.save()
+                    return redirect('log-in')    
+            else:
+                prompt_message = "Passwords do not match. Please try again."
+                return render(request,'register-new.html',{'prompt_message': prompt_message})
+        return render(request,"register-new.html")
+
 def homeCheck(request):
     return render(request, 'homepage_test.html')
 
@@ -114,7 +164,7 @@ def profile_new(request):
         user=request.user.username
         userBioCollect = profiledatadb.objects.get(username=user)
         post=postdb.objects.filter(username=user)
-        test = 'king'
+        test = 'Stephen'
         saved=postdb.objects.filter(username=test)
         context={
             'user': userBioCollect,

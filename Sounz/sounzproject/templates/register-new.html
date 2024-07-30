@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sounz</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/log-new.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var registerButton = document.getElementById('register-button');
+            var termsCheckbox = document.getElementById('agree');
+
+            termsCheckbox.addEventListener('change', function() {
+                registerButton.disabled = !termsCheckbox.checked;
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="reg-main-container">
+        <div class="main-left-section">
+            <h1 class="sounz-title">Sounz.</h1>
+        </div>
+        <div class="main-right-section" id="main-right-section">
+            <form id="register-form" method="post" class="register-main-form xpcovi34"  onsubmit="return validateForm()">
+                <p class="register-form-header"><span class="register-form-title">Register</span><span class="login-register-redirect"><a href="{% url 'log-in' %}">Have an account? Login now!</a></span></p>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
+                <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" src="{% static 'images/upload.svg' %}" alt="upload profile picture"></span><img id="profile_picture_preview" alt="Profile Picture Preview"><span class="dp-upload-label">Profile picture</span></button>
+                
+
+                {% if prompt_message %}
+                    <div class="prompt-message">{{ prompt_message }}</div>
+                {% endif %} 
+
+                <label for="fname">FIRST NAME</label>
+                <input id="fname" type="text" required placeholder="first name" name="first_name">
+                
+                <label for="lname">LAST NAME</label>
+                <input id="lname" type="text" required placeholder="last name" name="last_name">
+                
+                <label for="username">USERNAME</label>
+                <span id="username-error" class="error-message"></span>
+                <input type="text" required placeholder="Username" id="username" name="username">
+                
+                <label for="email">E-MAIL</label>
+                <input type="email" required placeholder="Email" id="email" name="email">
+
+                <label for="password">PASSWORD <span class="show-hide-label password-toggle" onclick="togglePassword('password', this)">:: show</span></label>
+                <input name="password" type="password" required placeholder="Password" id="password">
+                
+                <label for="confirmPassword">CONFIRM PASSWORD <span class="show-hide-label password-toggle" onclick="togglePassword('confirmPassword', this)">:: show</span></label>
+                <input name="confirmPassword" type="password" required placeholder="Confirm Password" id="confirmPassword">
+
+                <label for="user-bio">USER BIO</label>
+                <textarea id="user-bio" name="bio" rows="3" cols="20" placeholder="User bio"></textarea>
+
+                
+                <span style="display: flex;margin-top: 30px;"><input type="checkbox" id="agree" name="agree" required><p class="TandC-agreement">&nbsp;I have read and agree to the <span class="TandC" onclick="ua()">terms and conditions.</span></p></span>
+                <!-- <label for="agree"></label> -->
+
+                <button type="submit" class="login-submit-button" id="register-button" disabled>Register</button>
+            </form>
+        </div>
+        <div class="user-agreement" id="user-agreement">
+            <div class="user-agreement-content">
+                <center><h1 class="agreement-title">USER AGREEMENT</h1></center>
+                <p class="agreement-content">Welcome to Sounz! Before you start using our services, please read the following terms and conditions carefully:
+
+                    <br><br><span class="content-heading">1. Acceptance of Terms</span><br><br>
+                    By registering an account on Sounz, you agree to be bound by these terms and conditions. If you do not agree with these terms, you must not register for or use the services.
+                    
+                    <br><br><span class="content-heading">2. User Conduct</span><br><br>
+                    You agree to use Sounz in a lawful manner. Do not post any content that is offensive, defamatory, or infringes on the rights of others. Respect other users and engage positively within the community.
+                    <br><br><span class="content-heading">3. Content Ownership</span><br><br>
+                    All content you upload remains your property. However, by uploading, you grant Sounz a license to use, display, and distribute your content on our platform. This helps us showcase your work and allows other users to discover and appreciate your compositions.
+                    <br><br><span class="content-heading">4. Termination</span><br><br>
+                    We reserve the right to terminate your account if you violate these terms and conditions. This includes, but is not limited to, engaging in prohibited conduct or repeatedly violating our guidelines.
+                    <br><br>
+                    <div class="close-button">
+                       <center><button class="close-ua" onclick="ua()">CLOSE</button></center>
+                    </div>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    document.getElementById('profile_picture_input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('profile_picture_preview');
+                    const uploadImg = document.getElementById('upload-dp-img');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    uploadImg.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    function ua(){
+        var uaContent = document.getElementById("user-agreement");
+        var rightContent = document.getElementById("main-right-section");
+        if(uaContent.style.display === "none"){
+            uaContent.style.display = "block";
+            rightContent.style.display = "none";
+        }
+        else{
+            uaContent.style.display = "none";
+            rightContent.style.display = "block";
+        }
+        
+    }
+function togglePassword(fieldId, toggleElement) {
+            var passwordField = document.getElementById(fieldId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleElement.textContent = ":: hide";
+            } else {
+                passwordField.type = "password";
+                toggleElement.textContent = ":: show";
+            }
+        }
+function validateForm() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var isValid = true;
+
+            if (username === "") {
+                document.getElementById('username-error').innerText = "* username is required";
+                isValid = false;
+            } else {
+                document.getElementById('username-error').innerText = "";
+            }
+
+            if (password === "") {
+                document.getElementById('password-error').innerText = "* password is required";
+                isValid = false;
+            } else {
+                document.getElementById('password-error').innerText = "";
+            }
+
+            return isValid;
+        }
+</script>
+</html>

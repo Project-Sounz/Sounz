@@ -5,7 +5,16 @@
     min-height: 0;
     box-sizing: border-box;
   }
-  
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+::-webkit-scrollbar-track{
+    background-color: #fff;
+}
+::-webkit-scrollbar-thumb {
+    background: #bebebe;
+    border-radius: 10px;
+  }
 html, body{
     margin: 0;
     padding: 0;

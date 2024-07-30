@@ -58,6 +58,7 @@ p#desc{
     font-size: 14px;
     line-height: 1.6;
     font-style: italic;
+    margin: 15px 0px;
 }
 .profile-info{
     display: flex;
