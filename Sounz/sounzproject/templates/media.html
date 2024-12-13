@@ -17,7 +17,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken')
             },
-            body: JSON.stringify({liked: isLiked})
+            body: JSON.stringify({liked: !isLiked})
         })
         .then(response => response.json())
         .then(data => {
@@ -81,7 +81,7 @@
         <div class="media-footer">
             <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
             <div class="footer-btns">
-                <button><img src="{% static 'images/Like-black.svg' %}" alt="Like Button" srcset="" onclick="toggleLike()" data-liked="false"  id="likeImage"/></button>
+                <button><img src="{% static 'images/Like-black.svg' %}" alt="Like Button" srcset="" onclick="toggleLike()" data-liked="false"  id="likeImage" style="cursor: pointer;"/></button>
                 <button><img src="{% static 'images/save-black.svg' %}" alt="" srcset=""></button>
             </div>
         </div>
