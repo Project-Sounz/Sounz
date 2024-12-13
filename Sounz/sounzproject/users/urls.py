@@ -29,5 +29,6 @@ urlpatterns = [
     path('watch-profile#ed-media', views.media_controll, name='sh-media'),
     path('e-mail',views.mailtemplate, name='email'),
     path('send-mail',views.sendemail, name='send-email'),
+    path('toggle-like/', views.toggle_like, name='toggle_like'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

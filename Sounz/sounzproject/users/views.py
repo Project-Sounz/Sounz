@@ -8,6 +8,9 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.core.mail import send_mail
 import random
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Create your views here.
 def log(request):
@@ -332,3 +335,18 @@ def sendemail(request):
     )
 
     return render(request,'media.html')
+
+
+
+#like and unlike
+@csrf_exempt
+def toggle_like(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            liked = data.get('liked', False)
+
+            return JsonResponse({'success': True, 'liked': liked})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
