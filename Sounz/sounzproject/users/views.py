@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse, get_object_or_404
 from .models import * 
 from django.http import HttpResponseRedirect
 from .forms import RegistrationForm,EditProfileForm,Uploadform
@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 import random
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 import json
 
 # Create your views here.
@@ -339,14 +340,62 @@ def sendemail(request):
 
 
 #like and unlike
-@csrf_exempt
+@login_required
 def toggle_like(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            liked = data.get('liked', False)
+            post_id = data.get('post_id')
 
-            return JsonResponse({'success': True, 'liked': liked})
+            # Log post_id for debugging
+            print(f"Received post_id: {post_id}")
+
+            # Fetch the post
+            post = get_object_or_404(postdb, pid=post_id)
+
+            # Check if the user already liked the post
+            user = request.user
+            like = Like.objects.filter(user=user, post=post).first()
+
+            if like:
+                # Remove like
+                like.delete()
+                post.likes -= 1
+                liked = False
+            else:
+                # Add like
+                Like.objects.create(user=user, post=post)
+                post.likes += 1
+                liked = True
+
+            post.save()
+
+            return JsonResponse({
+                'success': True,
+                'liked': liked,
+                'like_count': post.likes
+            })
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
+
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+def media(request):
+    username = request.user.username
+    user = profiledatadb.objects.get(username=username)
+    pid = request.GET.get('pid')
+    post = postdb.objects.get(pid=pid)
+
+    user_liked = Like.objects.filter(user=request.user, post=post).exists()
+
+    ps = post.username
+    puser = profiledatadb.objects.get(username=ps)
+    context = {
+        "puser": puser,
+        "post": post,
+        "user": user,
+        "user_liked": user_liked
+    }
+
+    return render(request, 'media.html', context)

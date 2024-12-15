@@ -7,27 +7,35 @@
 
 {% block additional_js %}
 <script>
-    function toggleLike(){
-        const likeImage = document.getElementById('likeImage');
+    function toggleLike(postId) {
+        const likeImage = document.getElementById(`likeImage-${postId}`);
+        const likeCount = document.getElementById(`likeCount-${postId}`);
+
+        if (!likeImage) {
+            console.error(`Error: Like button for post ${postId} not found.`);
+            return;
+        }
+
         const isLiked = likeImage.dataset.liked === 'true';
 
-        fetch('/toggle-like/',{
+        fetch('/toggle-like/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken')
             },
-            body: JSON.stringify({liked: !isLiked})
+            body: JSON.stringify({ post_id: postId }) // Send post ID correctly
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success){
+            if (data.success) {
                 likeImage.src = data.liked
-                 ? "{% static 'images/onclick.svg' %}"
-                 : "{% static 'images/Like-black.svg' %}";
+                    ? "{% static 'images/onclick.svg' %}" 
+                    : "{% static 'images/Like-black.svg' %}";
                 likeImage.dataset.liked = data.liked;
+                likeCount.textContent = data.like_count;
             } else {
-                console.error("Error updating like state");
+                console.error("Error updating like state:", data.error);
             }
         })
         .catch(error => console.error("Error:", error));
@@ -35,18 +43,20 @@
 
     function getCookie(name) {
         let cookieValue = null;
-        if (document.cookie && document.cookie != "") {
+        if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === name + '=') {
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
                 }
             }
         }
-        return cookieValue
+        return cookieValue;
     }
+
+
 
 </script>
 {% endblock %}
@@ -81,7 +91,16 @@
         <div class="media-footer">
             <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
             <div class="footer-btns">
-                <button><img src="{% static 'images/Like-black.svg' %}" alt="Like Button" srcset="" onclick="toggleLike()" data-liked="false"  id="likeImage" style="cursor: pointer;"/></button>
+                <button>
+                    <img src="{% static 'images/Like-black.svg' %}" alt="Like Button"
+                         onclick="toggleLike('{{ post.pid }}')" 
+                         data-liked="false" 
+                         id="likeImage-{{ post.pid }}" 
+                         style="cursor: pointer;" />
+                </button>
+                <span id="likeCount-{{ post.pid }}">{{ post.likes }}</span> Likes
+                
+                
                 <button><img src="{% static 'images/save-black.svg' %}" alt="" srcset=""></button>
             </div>
         </div>
