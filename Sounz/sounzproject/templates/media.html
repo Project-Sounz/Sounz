@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}Sounz{% endblock %}
+
 {% block additional_css %}
 <link rel="stylesheet" href="{% static 'css/media.css' %}">
 {% endblock %}
 
 {% block additional_js %}
 <script>
+    // Function to toggle the like state when clicked
     function toggleLike(postId) {
         const likeImage = document.getElementById(`likeImage-${postId}`);
         const likeCount = document.getElementById(`likeCount-${postId}`);
@@ -18,22 +21,24 @@
 
         const isLiked = likeImage.dataset.liked === 'true';
 
+        // Send a POST request to toggle like state
         fetch('/toggle-like/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for security
             },
-            body: JSON.stringify({ post_id: postId }) // Send post ID correctly
+            body: JSON.stringify({ post_id: postId })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // Update the image and like state in the frontend
                 likeImage.src = data.liked
                     ? "{% static 'images/onclick.svg' %}" 
                     : "{% static 'images/Like-black.svg' %}";
-                likeImage.dataset.liked = data.liked;
-                likeCount.textContent = data.like_count;
+                likeImage.dataset.liked = data.liked; // Store the current like state in the dataset
+                likeCount.textContent = data.like_count; // Update the like count dynamically
             } else {
                 console.error("Error updating like state:", data.error);
             }
@@ -41,6 +46,7 @@
         .catch(error => console.error("Error:", error));
     }
 
+    // Helper function to get the CSRF token from cookies
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -55,60 +61,52 @@
         }
         return cookieValue;
     }
-
-
-
 </script>
 {% endblock %}
-
-
 
 {% block content %}
     <div class="header-for-home">{% include 'header-base-sub.html' %}</div>
     {% if user %}
-    {% if post %}
-    {% if puser %}
-    <div class="media">
-        <div class="media-header">
-            <a href="{% url 'watch-profile' %}?uname={{post.username}}">
-                <img src="{{puser.profile_picture.url}}" class="media-owner-pp" alt="">
-                <p class="media-owner-un">{{post.username}}</p>
-            </a>
-            <a href="{% url 'email' %}" class="collab"><img src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
-        </div>
-        <div class="actual-media">
-            
-            <video class="media-container" width="640" height="360" controls autoplay>
-                <source src="{{post.media.url}}" type="video/mp4" >
-                Your browser does not support the audio element
-                <audio controls>
-                    <source src="{{post.media.url}}" type="audio/mpeg" >
-                    Your browser does not support the audio element
-                </audio>
-            </video>
-            
-        </div>
-        <div class="media-footer">
-            <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
-            <div class="footer-btns">
-                <button>
-                    <img src="{% static 'images/Like-black.svg' %}" alt="Like Button"
-                         onclick="toggleLike('{{ post.pid }}')" 
-                         data-liked="false" 
-                         id="likeImage-{{ post.pid }}" 
-                         style="cursor: pointer;" />
-                </button>
-                <span id="likeCount-{{ post.pid }}">{{ post.likes }}</span> Likes
-                
-                
-                <button><img src="{% static 'images/save-black.svg' %}" alt="" srcset=""></button>
-            </div>
-        </div>
-        <p class="media-date">{{ post.timestamp|date }}</p>
-        <p class="media-desc">{{post.descr}}</p>
-            
-    </div>
-    {% endif %}
-    {% endif %}
+        {% if post %}
+            {% if puser %}
+                <div class="media">
+                    <div class="media-header">
+                        <a href="{% url 'watch-profile' %}?uname={{post.username}}">
+                            <img src="{{puser.profile_picture.url}}" class="media-owner-pp" alt="">
+                            <p class="media-owner-un">{{post.username}}</p>
+                        </a>
+                        <a href="{% url 'email' %}" class="collab"><img src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
+                    </div>
+                    <div class="actual-media">
+                        <video class="media-container" width="640" height="360" controls autoplay>
+                            <source src="{{post.media.url}}" type="video/mp4" >
+                            Your browser does not support the audio element
+                            <audio controls>
+                                <source src="{{post.media.url}}" type="audio/mpeg" >
+                                Your browser does not support the audio element
+                            </audio>
+                        </video>
+                    </div>
+                    <div class="media-footer">
+                        <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
+                        <div class="footer-btns">
+                            <button>
+                                <!-- Dynamically set the like button image based on whether the user liked the post -->
+                                <img src="{% if user_liked %}{% static 'images/onclick.svg' %}{% else %}{% static 'images/Like-black.svg' %}{% endif %}" 
+                                     alt="Like Button"
+                                     onclick="toggleLike('{{ post.pid }}')" 
+                                     data-liked="{% if user_liked %}true{% else %}false{% endif %}"
+                                     id="likeImage-{{ post.pid }}" 
+                                     style="cursor: pointer;" />
+                            </button>
+                            <span id="likeCount-{{ post.pid }}">{{ post.likes }}</span> Likes
+                            <button><img src="{% static 'images/save-black.svg' %}" alt="" srcset=""></button>
+                        </div>
+                    </div>
+                    <p class="media-date">{{ post.timestamp|date }}</p>
+                    <p class="media-desc">{{post.descr}}</p>
+                </div>
+            {% endif %}
+        {% endif %}
     {% endif %}
 {% endblock %}

@@ -298,10 +298,12 @@ def media(request):
     post=postdb.objects.get(pid=pid)
     ps=post.username
     puser=profiledatadb.objects.get(username=ps)
+    user_liked = Like.objects.filter(user=user, post=post).exists()
     context={
         "puser":puser,
         "post":post,
-        "user":user
+        "user":user,
+        "user_liked": user_liked
     }
     return render(request,'media.html',context)
 
