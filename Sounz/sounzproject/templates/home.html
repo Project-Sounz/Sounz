@@ -44,7 +44,7 @@
                                       <a href="{% url 'watch-profile' %}?uname={{post.username}}">
                                             {% for profile in all_users %}
                                                 {% if profile.user.username == post.username %}
-                                                    <img src="{{ profile.image.url }}" alt="Profile Image">
+                                                    <img src="{{ profile.image.url }}" alt="{{ post.username }}'s Profile Image">
                                                 {% endif %}
                                             {% endfor %}
                                             <p class="post-owner-username username-specific">@{{ post.username }}</p>
@@ -52,7 +52,7 @@
                                         <p class="home-post-date post-date-specific"> • {{ post.timestamp|date }} <span class="post-media-format-display">• {{ post.media_format }}</span></p>
                                     </div>
 
-                                    <a href="{% url 'media' %}?pid={{post.pid}}" class="post-details">
+                                    <a href="{% url 'media' %}?pid={{post.pid}}" class="post-details" id="post-details">
                                         <h3 class="post-caption">{{ post.caption }}</h3>
                                         <p class="post-description">{{ post.descr }}</p>
                                     </a>
@@ -69,13 +69,13 @@
                                 </div>
                                 {% if post.media_thumbnail %}
                                     
-                                    <img src="{{ post.media_thumbnail.url }}" alt="" class="post-thumbnail">
+                                    <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail">
                                 
                                 {% else %}
                                     {% if post.media_format == "Audio" %}
-                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="" class="post-thumbnail" >
+                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
                                     {% elif post.media_format == "Video" %}
-                                        <img src="{% static 'images/16_9 Video.png' %}" alt="" class="post-thumbnail">
+                                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
                                     {% endif %}
                                 {% endif %}
                             </div>

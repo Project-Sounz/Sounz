@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sounz</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/log-new.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -20,8 +22,12 @@
         </div>
         <div class="main-right-section">
             <form id="login-form" method="post" class="login-main-form"  onsubmit="return validateForm()">
-                <p class="login-form-header"><span class="login-form-title">Log in</span><span class="login-register-redirect"><a href="{% url 'registration-new' %}">New user? Register now!</a></span></p>
+                <p class="login-form-header"><span class="login-form-title">Log in</span>
+                    <span class="login-register-redirect"><a href="{% url 'registration-new' %}">New user? Register now!</a></span></p>
                 {% csrf_token %}
+                {% if prompt_message %}
+                    <div class="prompt-message">{{ prompt_message }}</div>
+                {% endif %} 
                 <label for="username">USERNAME</label>
                 <span id="username-error" class="error-message"></span>
                 <input name="username" type="text" placeholder="Username" id="username">

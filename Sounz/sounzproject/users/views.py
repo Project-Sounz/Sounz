@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse, get_object_or_404
 from .models import * 
+from django.http import Http404
 from django.http import HttpResponseRedirect
 from .forms import RegistrationForm,EditProfileForm,Uploadform
 from django.core.exceptions import ValidationError
@@ -31,14 +32,15 @@ def log_new(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        userr=authenticate(request,username=username,password=password)
+        userr = authenticate(request, username=username, password=password)
         if userr is not None:
-            login(request,userr)
+            login(request, userr)
             return redirect('my-profile')
-        invalid="Invalid Credentials"
-        return render(request,'log-new.html')
+        else:
+            prompt_message = "Incorrect username or password"
+            return render(request, 'log-new.html', {'prompt_message': prompt_message})
 
-    return render(request,'log-new.html')
+    return render(request, 'log-new.html')
 
 def reg2(request):
 
@@ -165,21 +167,21 @@ def nav_saved(request):
 
 def profile_new(request):
     try:
-        user=request.user.username
+        user = request.user.username
         userBioCollect = profiledatadb.objects.get(username=user)
-        post=postdb.objects.filter(username=user)
+        post = postdb.objects.filter(username=user)
         test = 'Stephen'
-        saved=postdb.objects.filter(username=test)
-        context={
+        saved = postdb.objects.filter(username=test)
+        context = {
             'user': userBioCollect,
-            'post':post,
-            'saved':saved,
-
+            'post': post,
+            'saved': saved,
         }
         
     except profiledatadb.DoesNotExist:
-        user = None
-    return render(request, 'profile-new.html',context)
+        return render(request, '404.html', status=404)
+    return render(request, 'profile-new.html', context)
+
 
 
 def profile_tpv(request):
@@ -339,6 +341,7 @@ def sendemail(request):
 
     return render(request,'media.html')
 
+<<<<<<< HEAD
 
 
 #like and unlike
@@ -401,3 +404,8 @@ def media(request):
     }
 
     return render(request, 'media.html', context)
+=======
+def custom_404(request, exception):
+    print("Custom 404 handler called")
+    return render(request, '404.html', status=404)
+>>>>>>> 01a68a8 (unknown)

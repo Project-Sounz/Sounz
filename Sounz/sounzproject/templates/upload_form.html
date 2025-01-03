@@ -16,12 +16,19 @@
         {{ form.as_p }}
         <div id="prompt-message" data-message="{% if prompt_message %}{{ prompt_message }}{% endif %}" style="display: none;"></div>
         
-        <input type="file" name="post" id="post_input" accept="" style="display: none;">
-        <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn"><span class="uploadLogo"><img src="{% static 'images/upload.svg' %}" alt="upload post"></span><span class="upload-postText">Upload you file</span><span class="support-postText" style="font-size: 12px;
-    color: #969696;">Supports Audio and Video formats.</span></button>
+        <input type="file" name="post" id="post_input" accept="video/*,audio/*" style="display: none;">
+        <button type="button" onclick="document.getElementById('post_input').click();" class="btn" id="post-upload-btn">
+            <span class="uploadLogo">
+                <img id="upload-button-logo" src="{% static 'images/upload.svg' %}" alt="upload post">
+            </span>
+            <span class="upload-postText" id="upload-postText">Upload your file</span>
+            <span class="support-postText" id="support-postText" style="font-size: 12px; color: #969696;">
+                Supports Audio and Video formats.
+            </span>
+        </button>
         <br>
         
-        <input type="file" name="thumbnail" id="thumbnail_input" accept="" style="display: none;">
+        <input type="file" name="thumbnail" id="thumbnail_input" accept="image/*" style="display: none;">
         <button type="button" onclick="document.getElementById('thumbnail_input').click();" class="btn" id="thumbnail-upload-btn">Upload Thumbnail</button>
         
          <div class="upload-postDetails">
@@ -47,6 +54,32 @@
             alert(promptMessage);
         }
     });
+    document.getElementById('post_input').addEventListener('change', function(event) {
+            var fileInput = document.getElementById('post_input');
+            var fileSelected = document.getElementById('upload-postText');
+            var filenameDisplay = document.getElementById('support-postText');
+            var uploadLogo = document.getElementById('upload-button-logo');
+            var file = fileInput.files[0];
+
+            if (file) {
+                fileSelected.innerText = 'File Selected';
+                filenameDisplay.innerText = file.name;
+                uploadLogo.src = "{% static 'images/success.svg' %}";
+            } else {
+                filenameDisplay.textContent = 'No file selected';
+            }
+        });
+    document.getElementById('thumbnail_input').addEventListener('change', function(event) {
+            var fileInput = document.getElementById('thumbnail_input');
+            var thumbnailMessage = document.getElementById('thumbnail-upload-btn');
+            var file = fileInput.files[0];
+
+            if (file) {
+                thumbnailMessage.innerText = 'Thumbnail: ' + file.name;
+            } else {
+                thumbnailMessage.innerText = 'File Error!';
+            }
+        });
 </script>
 {% endif %}
 {% endblock %}

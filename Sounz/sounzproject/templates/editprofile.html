@@ -2,77 +2,66 @@
 {% load static %}
 {% block title %}Sounz{% endblock %}
 {% block additional_css %}
-<link rel="stylesheet" href="{% static 'css/logstyle.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/log-new.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="header-for-home">{% include 'header-base-sub.html' %}</div>
-        
-    <!-- Account Page -->
-    <div class="account-page">
-        <div class="container-reg">
-            <div class="row">
-                {% if user %}
-                
-                <div class="col-2">
-                    <div class="reg-form-main-container">
-                        <div class="form-btn">
-                            <p class="register-label">Edit Profile</p>
-                            <!-- <hr id="Indicatoreg"> -->
-                        </div>
-                        
-
-                        <form id="RegForm" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            {% if prompt_message %}
-                            <div>{{ prompt_message }}</div>
-                            {% endif %}
-                            
-            
-                            
-                            <input type="text" placeholder="{{ user.firstname }}" name="first_name">
-                            <input type="text" placeholder="{{ user.lastname }}" name="last_name">
-                            <input type="email" placeholder="{{ user.email }}" id="email" name="email">
-                            <input type="url" placeholder="Add instagram profile link" id="email" name="insta">
-                            <input type="url" placeholder="Add Youtube channel link" id="email" name="yout">
-                            <input type="url" placeholder="Add X profile link" id="email" name="twit">
-                            <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
-                            <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" src="{% static 'images/upload.svg' %}" alt="upload profile picture"></span><span class="dp-upload-label">Change your profile picture</span></button>
-                            <!-- <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="btn">Change Profile Picture</button> -->
-                              
-                            
     
-                            {% if user.user_bio == "" %}
-                            
-                                <textarea name="bio" rows="5" cols="30" name="text" placeholder="User Bio"></textarea>
-                            {% else %}
-                                <textarea name="bio" rows="5" cols="30" name="text" placeholder="{{ user.user_bio }}"></textarea>
-                            {% endif %}
-                            <button type="submit" class="btn">Update Profile</button>
-                        </form>
-                    </div>
-                </div>
+    
+    <div class="reg-main-container">
+        <div class="main-left-section">
+            <h1 class="sounz-title">Sounz.</h1>
+        </div>
+        <div class="main-right-section" id="main-right-section">
+            {% if user %}
+                <form id="register-form" method="post" class="register-main-form xpcovi34">
+                    <p class="register-form-header"><span class="register-form-title">Edit Profile</span></p>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    {% if user.profile_picture %}
+                        <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
+                        <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" class="change-img-profile-picture" src="{{ user.profile_picture.url }}" alt="change profile picture"></span><span class="dp-upload-label">Change profile picture</span></button>
+                    {% endif %}
+
+                    {% if prompt_message %}
+                        <div class="prompt-message">{{ prompt_message }}</div>
+                    {% endif %} 
+
+                    <label for="fname">FIRST NAME</label>
+                    <input id="fname" type="text"  placeholder="{{ user.firstname }}" name="first_name">
+                    
+                    <label for="lname">LAST NAME</label>
+                    <input id="lname" type="text"  placeholder="{{ user.lastname }}" name="last_name">
+                    
+                    <label for="email">E-MAIL</label>
+                    <input type="email" placeholder="{{ user.email }}" id="email" name="email">
+                    
+                    <label for="insta">INSTAGRAM PROFILE</label>
+                    <input type="url" placeholder="{{ user.insta }}" id="insta" name="insta">
+                    
+                    <label for="youtube">YOUTUBE PROFILE</label>
+                    <input type="url" placeholder="{{ user.yout }}" id="youtube" name="youtube">    
+                    
+                    <label for="xcom">X PROFILE</label>
+                    <input type="url" placeholder="{{ user.twit }}" id="xcom" name="xcom">
+
+                {% if user.user_bio == "" %}
+                    <label for="user-bio">USER BIO</label>
+                    <textarea id="user-bio" name="bio" rows="3" cols="20" placeholder="User bio"></textarea>
+                {% else %}
+                    <label for="user-bio">USER BIO</label>
+                    <textarea id="user-bio" name="bio" rows="5" cols="20" placeholder="{{ user.user_bio }}"></textarea>
                 {% endif %}
-            </div>
+                    <button type="submit" class="login-submit-button" id="register-button">Update Profile</button>
+                    <!-- <a href="{% url 'my-profile' %}"><button type="button" class="login-submit-button" id="register-button">Cancel</button></a> -->
+                </form>
+            {% endif %}
         </div>
+    
     </div>
-    <!-- <div class="footer">
-        <div class="container">
-           
-            <div class="footer-col-4">
-                <p>Create . Collaborate . Connect
-                </p>
-                <br>
-                <h3>Follow Us</h3>
-                <ul>
-                    <li>Facebook</li>
-                    <li>Twitter</li>
-                    <li>Instagram</li>
-                    <li>Youtube</li>
-                </ul>
-            </div>
-            <hr>
-        </div>
-    </div> -->
+
+
+    
+   
     {% endblock %}
