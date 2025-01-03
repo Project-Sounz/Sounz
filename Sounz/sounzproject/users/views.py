@@ -341,7 +341,6 @@ def sendemail(request):
 
     return render(request,'media.html')
 
-<<<<<<< HEAD
 
 
 #like and unlike
@@ -404,8 +403,6 @@ def media(request):
     }
 
     return render(request, 'media.html', context)
-=======
 def custom_404(request, exception):
     print("Custom 404 handler called")
     return render(request, '404.html', status=404)
->>>>>>> 01a68a8 (unknown)
