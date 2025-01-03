@@ -236,3 +236,8 @@ button.login-submit-button:disabled{
         font-size: 10px;
     }
 }
+.change-img-profile-picture{
+    max-width: 7rem;
+    max-height: 7rem;
+    border-radius: 50%;
+}

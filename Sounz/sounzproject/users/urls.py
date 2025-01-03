@@ -4,12 +4,15 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+from django.conf.urls import handler404
+from users.views import custom_404
+
+handler404 = custom_404
 
 urlpatterns = [
     # path('admin/',admin.site.urls),
     # path('', views.log),
-    path('', views.log,name='signin'),
-    path('log-new', views.log_new,name='log-in'),
+    path('', views.log_new,name='log-in'),
     path('reg2',views.reg2,name='reg2'),
     path('registration-new',views.registration_new,name='registration-new'),
     path('home', views.homepage, name = 'home'),
@@ -28,6 +31,7 @@ urlpatterns = [
     path('media', views.media, name='media'),
     path('watch-profile#ed-media', views.media_controll, name='sh-media'),
     path('e-mail',views.mailtemplate, name='email'),
+    # path('404-not-found',views.notfound, name='404-not-found'),
     path('send-mail',views.sendemail, name='send-email'),
     path('toggle-like/', views.toggle_like, name='toggle_like'),
 ]
