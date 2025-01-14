@@ -429,6 +429,8 @@ def search(request):
             'topart':random_profiles
             }
             return render(request,'search.html',context)
+
+            
     all_users = profiledatadb.objects.all()
     username = request.user.username
     user = profiledatadb.objects.get(username=username)
