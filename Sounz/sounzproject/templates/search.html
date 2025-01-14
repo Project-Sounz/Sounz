@@ -7,21 +7,34 @@
 
 {% block content %}
 
-<div class="header-for-home">{% include 'header_base.html' %}</div>
-<div class="search-expl">
+<!--<div class="header-for-home">{% include 'header_base.html' %}</div>-->
+<div class="search-expl1">
+    
     <center>
-        <h1 id="explr-or-comnty" class="explr-or-comnty">Explore our community</h1>
-    </center>
-    <center>
-       <!-- <div class="search-container" id="search-container">
-            <img id="search-logo" src="{% static 'images/search-icon.svg' %}" alt="">
-            <input type="text" name="search-input" class="search-input" placeholder="Search...">
-        </div>-->
+        <div class="search-container1" id="search-container1">
+            <div style="position: relative; width: 100%; max-width: 400px;">
+                <form id="search-form" method="post">
+                  {% csrf_token %}
+                  {{ form.as_p }}   
+                  <input type="text" name="search-input1" class="search-input1" placeholder="Search..." style="width: 100%; padding: 10px 10px 10px 40px; border: 2px solid #ccc; border-radius: 20px; background-color: white; font-size: 16px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='#007bff';" onblur="this.style.borderColor='#ccc';">
+                  <!-- Button with image -->
+                  <button type="submit" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; padding: 0;">
+                    <img id="search-logo1" src="{% static 'images/search-icon.svg' %}" alt="" style="width: 20px; height: 20px;">
+                  </button>
+                </form>
+              </div>
+              
+              
+
+        </div>
     </center>
 </div>
 
+
 <div class="main-explore">
+    
     <div class="sub-explore">
+        
             
             {% for post in user_posts %}
                 <div class="homefeed"><!-- media each-main container -->

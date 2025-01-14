@@ -34,5 +34,6 @@ urlpatterns = [
     # path('404-not-found',views.notfound, name='404-not-found'),
     path('send-mail',views.sendemail, name='send-email'),
     path('toggle-like/', views.toggle_like, name='toggle_like'),
+    path('search',views.search,name='search'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

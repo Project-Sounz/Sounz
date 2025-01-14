@@ -12,6 +12,7 @@ import random
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 import json
 
 # Create your views here.
@@ -406,3 +407,45 @@ def media(request):
 def custom_404(request, exception):
     print("Custom 404 handler called")
     return render(request, '404.html', status=404)
+
+def search(request):
+    if request.method == 'POST':
+        if request.POST.get("search-input1"):
+            input_value = request.POST.get("search-input1")
+            posts = postdb.objects.filter(
+            Q(mediatype__icontains=input_value) | Q(username=input_value) | Q(caption__icontains=input_value)
+            )
+            all_users = profiledatadb.objects.all()
+            username = request.user.username
+            user = profiledatadb.objects.get(username=username)
+            sliced= profiledatadb.objects.all()[:4]
+            topart=profiledatadb.objects.all()
+            random_profiles = random.sample(list(topart), min(len(topart), 4))
+            context = {
+            'all_users': all_users,
+            'user': user,
+            'user_posts': posts,
+            'sliced':sliced,
+            'topart':random_profiles
+            }
+            return render(request,'search.html',context)
+
+            
+    all_users = profiledatadb.objects.all()
+    username = request.user.username
+    user = profiledatadb.objects.get(username=username)
+    sliced= profiledatadb.objects.all()[:4]
+    topart=profiledatadb.objects.all()
+    random_profiles = random.sample(list(topart), min(len(topart), 4))
+    # Fetch posts of the current user
+    user_posts = postdb.objects.all().order_by('-timestamp')
+    context = {
+        'all_users': all_users,
+        'user': user,
+        'user_posts': user_posts,
+        'sliced':sliced,
+        'topart':random_profiles
+    }
+
+    return render(request,'search.html',context)
+    
