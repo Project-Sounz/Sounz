@@ -9,6 +9,25 @@
 
 {% block additional_js %}
 <script>
+    // Function to share post details using the Web Share API
+    function sharePost(postId, postUrl, postTitle, postDescription) {
+        if (navigator.share) {
+            navigator.share({
+                title: postTitle,
+                text: postDescription,
+                url: postUrl
+            })
+            .then(() => console.log('Post shared successfully'))
+            .catch(error => console.error('Error sharing post:', error));
+        } else {
+            alert('Web Share API is not supported in this browser.');
+        }
+    }
+
+
+
+
+
     // Function to toggle the like state when clicked
     function toggleLike(postId) {
         const likeImage = document.getElementById(`likeImage-${postId}`);
@@ -101,6 +120,9 @@
                             </button>
                             <span id="likeCount-{{ post.pid }}">{{ post.likes }}</span> Likes
                             <button><img src="{% static 'images/save-black.svg' %}" alt="" srcset=""></button>
+                            <button onclick="sharePost('{{ post.pid }}', '{{ post.media.url|escapejs }}', '{{ post.caption|escapejs }}', '{{ post.descr|escapejs }}')">
+                                <img src="{% static 'images/share-black.svg' %}" alt="" srcset="">
+                            </button>
                         </div>
                     </div>
                     <p class="media-date">{{ post.timestamp|date }}</p>
