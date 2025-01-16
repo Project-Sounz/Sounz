@@ -80,6 +80,34 @@
         }
         return cookieValue;
     }
+
+    // Function to toggle the button's state and update the image
+    function toggleSaveButton(postId) {
+        const saveImage = document.getElementById(`saveImage-${postId}`);
+
+        fetch('/toggle-save/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for security
+            },
+            body: JSON.stringify({ post_id: postId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the image and like state in the frontend
+                saveImage.src = data.saved
+                    ? "{% static 'images/onclickSaved.svg' %}" 
+                    : "{% static 'images/save-black.svg' %}";
+                saveImage.dataset.saved = data.saved;
+            } else {
+                console.error("Error updating like state:", data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+
 </script>
 {% endblock %}
 
@@ -119,7 +147,15 @@
                                      style="cursor: pointer;" />
                             </button>
                             <span id="likeCount-{{ post.pid }}">{{ post.likes }}</span> Likes
-                            <button><img src="{% static 'images/save-black.svg' %}" alt="" srcset=""></button>
+                            <button>
+                                <!-- Dynamically set the save button image based on whether the user saved the post -->
+                                <img src="{% if user_saved %}{% static 'images/onclickSaved.svg' %}{% else %}{% static 'images/save-black.svg' %}{% endif %}" 
+                                     alt="Save Button"
+                                     onclick="toggleSaveButton('{{ post.pid }}')" 
+                                     data-liked="{% if user_saved %}true{% else %}false{% endif %}"
+                                     id="saveImage-{{ post.pid }}" 
+                                     style="cursor: pointer;" />
+                            </button> 
                             <button onclick="sharePost('{{ post.pid }}', '{{ post.media.url|escapejs }}', '{{ post.caption|escapejs }}', '{{ post.descr|escapejs }}')">
                                 <img src="{% static 'images/share-black.svg' %}" alt="" srcset="">
                             </button>

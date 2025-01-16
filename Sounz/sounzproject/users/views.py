@@ -171,12 +171,12 @@ def profile_new(request):
         user = request.user.username
         userBioCollect = profiledatadb.objects.get(username=user)
         post = postdb.objects.filter(username=user)
-        test = 'Stephen'
-        saved = postdb.objects.filter(username=test)
+        saved = Save.objects.filter(user=request.user).values_list('post', flat=True)
+        savedposts = postdb.objects.filter(pid__in=saved)
         context = {
             'user': userBioCollect,
             'post': post,
-            'saved': saved,
+            'saved': savedposts,
         }
         
     except profiledatadb.DoesNotExist:
@@ -385,6 +385,44 @@ def toggle_like(request):
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
+@login_required
+def toggle_save(request):
+    if request.method == 'POST':
+        try:
+            print("hello")
+            data = json.loads(request.body)
+            post_id = data.get('post_id')
+
+            # Log post_id for debugging
+            print(f"Received post_id: {post_id}")
+
+            # Fetch the post
+            post = get_object_or_404(postdb, pid=post_id)
+
+            # Check if the user already liked the post
+            user = request.user
+            save = Save.objects.filter(user=user, post=post).first()
+
+            if save:
+                # Remove like
+                save.delete()
+                saved = False
+            else:
+                # Add like
+                Save.objects.create(user=user, post=post)
+                saved = True
+
+            post.save()
+            print("success")
+            return JsonResponse({
+                'success': True,
+                'saved': saved,
+            })
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
 
 def media(request):
     username = request.user.username
@@ -393,6 +431,7 @@ def media(request):
     post = postdb.objects.get(pid=pid)
 
     user_liked = Like.objects.filter(user=request.user, post=post).exists()
+    user_saved = Save.objects.filter(user=request.user, post=post).exists()
 
     ps = post.username
     puser = profiledatadb.objects.get(username=ps)
@@ -400,7 +439,9 @@ def media(request):
         "puser": puser,
         "post": post,
         "user": user,
-        "user_liked": user_liked
+        "user_liked": user_liked,
+        "user_saved": user_saved
+
     }
 
     return render(request, 'media.html', context)
