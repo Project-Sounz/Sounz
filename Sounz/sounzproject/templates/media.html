@@ -136,6 +136,11 @@
                     </div>
                     <div class="media-footer">
                         <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
+                        {% if user.username == puser.username %}
+                            <div class="editdelete">
+                                <a href="">Edit</a> | <a href="">Delete</a>
+                            </div>
+                        {% endif %}
                         <div class="footer-btns">
                             <button>
                                 <!-- Dynamically set the like button image based on whether the user liked the post -->
