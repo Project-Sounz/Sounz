@@ -49,7 +49,7 @@
                         {% if forloop.counter0|divisibleby:"4" %}
                             <div class="post-row">
                         {% endif %}
-                        <a id="post-wrapper" href="{% url 'sh-media' %}?pid={{media.pid}}">
+                        <a id="post-wrapper" href="{% url 'media' %}?pid={{media.pid}}">
                             <div class="thumbnail-container">
                                 {% if media.media_thumbnail %}
                                     <img loading="lazy" src="{{ media.media_thumbnail.url }}" alt="" class="post-thumbnail">
