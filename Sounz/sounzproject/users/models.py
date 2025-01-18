@@ -12,7 +12,7 @@ class profiledatadb(models.Model):
     firstname=models.CharField(max_length=30)
     lastname=models.CharField(max_length=30)
     email = models.EmailField()
-    profile_picture = models.ImageField(upload_to='Media/', blank=True, null=True, default='media/default_profile_picture.jpg')
+    profile_picture = models.ImageField(upload_to='Media/')
     user_bio=models.TextField()
     phone=models.IntegerField(null=True)
     timestamp=models.DateTimeField(auto_now_add=True,null=True)

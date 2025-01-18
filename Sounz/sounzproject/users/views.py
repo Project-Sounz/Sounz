@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,HttpResponse, get_object_or_404
+from django.shortcuts import render,redirect, get_object_or_404
 from .models import * 
 from django.http import Http404
 from django.http import HttpResponseRedirect
@@ -93,8 +93,6 @@ def reg2(request):
 
             
         return render(request,"reg2.html")
-
-
 def registration_new(request):
 
          
@@ -107,12 +105,16 @@ def registration_new(request):
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             bio = request.POST.get('bio')
-            print(uname,email,password,first_name,last_name,bio)
+            profile_picture = request.FILES.get('profile_picture')
+            if not profile_picture:
+                profile_picture = 'default/user.png'
+
+            print(uname,email,password,first_name,last_name,bio,profile_picture)
             form = RegistrationForm(request.POST, request.FILES)
             if form.is_valid(): 
                 user = form.save(commit=False)
                 user.save()
-                profile_picture = request.FILES.get('profile_picture')
+                
             if password == password1:
                 if User.objects.filter(email=email).exists():
                      prompt_message = "Mail already taken!"
