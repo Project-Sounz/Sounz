@@ -45,7 +45,7 @@ def log_new(request):
 
 def reg2(request):
 
-         
+
         if request.method == 'POST':
 
             uname = request.POST.get('username')
@@ -78,24 +78,24 @@ def reg2(request):
             else:
                 prompt_message = "Passwords do not match. Please try again."
                 return render(request,'reg2.html',{'prompt_message': prompt_message})
-            
-            
-            
-            
+
+
+
+
             if new_user is not None:
                 login(request,new_user)
                 return redirect('/')
             return redirect('/')
-    
 
 
-        
 
-            
+
+
+
         return render(request,"reg2.html")
 def registration_new(request):
 
-         
+
         if request.method == 'POST':
 
             uname = request.POST.get('username')
@@ -114,7 +114,7 @@ def registration_new(request):
             if form.is_valid(): 
                 user = form.save(commit=False)
                 user.save()
-                
+
             if password == password1:
                 if User.objects.filter(email=email).exists():
                      prompt_message = "Mail already taken!"
@@ -146,7 +146,7 @@ def profile_fpv(request):
             'post':post,
 
         }
-        
+
     except profiledatadb.DoesNotExist:
         user = None
     return render(request, 'profile-fpv.html',context)  
@@ -180,7 +180,7 @@ def profile_new(request):
             'post': post,
             'saved': savedposts,
         }
-        
+
     except profiledatadb.DoesNotExist:
         return render(request, '404.html', status=404)
     return render(request, 'profile-new.html', context)
@@ -221,7 +221,7 @@ def homepage(request):
 def upload(request):
     username = request.user.username
     userobj = profiledatadb.objects.get(username=username)
-    
+
     if request.method == 'POST':
         caption = request.POST.get('title')
         desc = request.POST.get('post_description')
@@ -250,11 +250,11 @@ def upload(request):
 
 
 def editprofile(request):
-    
+
         username=request.user.username
         user = profiledatadb.objects.get(username=username)
         userauth=User.objects.get(username=username)
-        
+
 
 
 
@@ -281,8 +281,8 @@ def editprofile(request):
                 user.save()
                 userauth.save()
                 return render(request, 'profile-fpv.html', {'user': user})
-                
-            
+
+
 
         else:
             form = EditProfileForm(instance=user)
@@ -473,7 +473,7 @@ def search(request):
             }
             return render(request,'search.html',context)
 
-            
+
     all_users = profiledatadb.objects.all()
     username = request.user.username
     user = profiledatadb.objects.get(username=username)
@@ -491,4 +491,3 @@ def search(request):
     }
 
     return render(request,'search.html',context)
-    
