@@ -490,3 +490,39 @@ def search(request):
 
     return render(request,'search.html',context)
     
+
+def editpost(request):
+    username = request.user.username
+    userobj = profiledatadb.objects.get(username=username)
+    post_id = request.POST.get('pid')
+    print(post_id)
+    try:
+        pos = postdb.objects.get(pid=post_id, username=userobj)
+    except postdb.DoesNotExist:
+        prompt_message = "Post not found."
+        return render(request, 'edit-post.html', {'user': userobj, 'prompt_message': prompt_message})
+    
+    if request.method == 'POST':
+        caption = request.POST.get('title')
+        desc = request.POST.get('post_description')
+        typ = request.POST.get('tags')
+        media_type = request.POST.get('media_type')
+        lan = request.POST.get('language')
+        loc = request.POST.get('location')
+        form = Uploadform(request.POST, request.GET)
+
+        if form.is_valid():
+            # Update only the specified post fields
+            pos.caption = caption
+            pos.descr = desc
+            pos.langu = lan
+            pos.mediatype = typ
+            pos.location = loc
+            pos.media_format = media_type
+            pos.save()
+
+            prompt_message = "Post successfully updated!"
+            return render(request, 'edit_form.html', {'user': userobj, 'prompt_message': prompt_message, 'post': pos})
+    
+    return render(request, 'edit-post.html', {'user': userobj, 'post': pos})
+
