@@ -158,12 +158,14 @@ def nav_saved(request):
 
 
     user=request.user.username
-    test = 'nn'
     userBioCollect = profiledatadb.objects.get(username=user)
-    post=postdb.objects.filter(username=test)
+    post=postdb.objects.filter(username=user)
+    saved = Save.objects.filter(user=request.user).values_list('post', flat=True)
+    savedposts = postdb.objects.filter(pid__in=saved)
     context={
         'user': userBioCollect,
         'post':post,
+        'saved': savedposts,
 
     }
     return render(request, 'profile-fpv-saved.html',context)
