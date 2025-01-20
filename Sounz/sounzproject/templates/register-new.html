@@ -31,13 +31,13 @@
             <h1 class="sounz-title">Sounz.</h1>
         </div>
         <div class="main-right-section" id="main-right-section">
-            <form id="register-form" method="post" class="register-main-form xpcovi34"  onsubmit="return validateForm()">
+            <form id="register-form" method="post" class="register-main-form xpcovi34" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <p class="register-form-header"><span class="register-form-title">Register</span><span class="login-register-redirect"><a href="{% url 'log-in' %}">Have an account? Login now!</a></span></p>
                 {% csrf_token %}
                 {{ form.as_p }}
+                
                 <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
                 <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" src="{% static 'images/upload.svg' %}" alt="upload profile picture"></span><img id="profile_picture_preview" alt="Profile Picture Preview"><span class="dp-upload-label">Profile picture</span></button>
-                
 
                 {% if prompt_message %}
                     <div class="prompt-message">{{ prompt_message }}</div>

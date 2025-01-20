@@ -6,6 +6,7 @@
 
 .media-owner-pp{
     width: 55px;
+    aspect-ratio: 1/1;
     border-radius: 50%;
 }
 
@@ -29,6 +30,8 @@
 .media-header > a{
     display: flex;
     text-decoration: none;
+    flex-direction: row;
+    align-items: center;
 }
 
 .media-thumbnail{
