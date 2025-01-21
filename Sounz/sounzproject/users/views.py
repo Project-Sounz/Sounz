@@ -498,10 +498,9 @@ def search(request):
 def editpost(request):
     username = request.user.username
     userobj = profiledatadb.objects.get(username=username)
-    post_id = request.POST.get('pid')
-    print(post_id)
+    post_id = request.GET.get('post_id')
     try:
-        pos = postdb.objects.get(pid=post_id, username=userobj)
+        pos = postdb.objects.get(pid=post_id)
     except postdb.DoesNotExist:
         prompt_message = "Post not found."
         return render(request, 'edit-post.html', {'user': userobj, 'prompt_message': prompt_message})
