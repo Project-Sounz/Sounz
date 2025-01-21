@@ -282,7 +282,8 @@ def editprofile(request):
                    user.twit = request.POST.get('twit')        
                 user.save()
                 userauth.save()
-                return render(request, 'profile-fpv.html', {'user': user})
+                
+                return redirect('my-profile')
 
 
 

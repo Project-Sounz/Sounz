@@ -7,24 +7,61 @@
 
 {% block content %}
     
-    
+    <script>
+        function updateProfilePicture(event) {
+            const input = event.target;
+            const imgElement = document.getElementById('upload-dp-img');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                imgElement.setAttribute('data-loading', 'true');
+                reader.onload = function (e) {
+                    setTimeout(() => {
+                        imgElement.src = e.target.result;
+                        imgElement.setAttribute('data-loading', 'false');
+                    }, 500);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
     <div class="reg-main-container">
         <div class="main-left-section">
             <h1 class="sounz-title">Sounz.</h1>
         </div>
         <div class="main-right-section" id="main-right-section">
             {% if user %}
-                <form id="register-form" method="post" class="register-main-form xpcovi34">
+                <form id="register-form" method="post" class="register-main-form xpcovi34"  enctype="multipart/form-data">
                     <p class="register-form-header"><span class="register-form-title">Edit Profile</span></p>
                     {% csrf_token %}
                     {{ form.as_p }}
-
+                    
                     {% if user.profile_picture %}
-                        <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
-                        <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" class="change-img-profile-picture" src="{{ user.profile_picture.url }}" alt="change profile picture"></span><span class="dp-upload-label">Change profile picture</span></button>
+                        <input 
+                            type="file" 
+                            name="profile_picture" 
+                            id="profile_picture_input" 
+                            accept="image/*" 
+                            style="display: none;" 
+                            onchange="updateProfilePicture(event)">
+                        <button 
+                            type="button" 
+                            onclick="document.getElementById('profile_picture_input').click();" 
+                            class="dp-btn" 
+                            id="dp-upload-btn">
+                            <span class="uploadLogo">
+                                <img 
+                                    id="upload-dp-img" 
+                                    class="change-img-profile-picture" 
+                                    src="{{ user.profile_picture.url }}" 
+                                    alt="Current profile picture" 
+                                    data-loading="false">
+                            </span>
+                            <span class="dp-upload-label">Change profile picture</span>
+                        </button>
                     {% endif %}
 
-                    {% if prompt_message %}
+                    {% if prompt_message %} 
                         <div class="prompt-message">{{ prompt_message }}</div>
                     {% endif %} 
 

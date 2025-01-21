@@ -43,16 +43,17 @@
         <div class="blinder"></div>
         <div class="nav-section-mobile">
             <nav class="navigation-controlling-deck">
-                <a href="{% url 'home' %}" class="navbar-links"v><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"><span class="nav-tooltip">Sounz</span></a>
+                <a href="{% url 'home' %}" class="navbar-links"v><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"><span class="nav-tooltip">Home</span></a>
                 <div id="nav-separator"></div>
-                <a href="#" class="navbar-links"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{% static 'images/profile-picture-specimen.png' %}" alt=""><span class="nav-tooltip">Name</span></a>
-                <hr class="navbar-line">
+                <a href="{% url 'my-profile' %}"class="navbar-links"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"><span class="nav-tooltip">Name</span></a>
+
+                <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'search' %}" class="navbar-links" id="search-icon-mob"><img class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"><span class="nav-tooltip">Search</span></a>
-                <hr class="navbar-line">
+                <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'upload' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"><span class="nav-tooltip">Upload</span></a>
-                <hr class="navbar-line">
+                <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'nav-saved' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"><span class="nav-tooltip">Saved</span></a>
-                <hr class="navbar-line">
+                <!-- <hr class="navbar-line"> -->
             </nav>
         </div>
         <div class="export-htmls">

@@ -77,6 +77,9 @@ html, body{
     letter-spacing: -0.5px;
     color: #969696;
 }
+form > input#username{
+    text-transform: lowercase;
+}
 form > input, form > textarea {
     border: none;
     border-bottom: 1px solid #969696;
@@ -89,7 +92,7 @@ form > input::placeholder, textarea::placeholder{
     text-transform: lowercase;
 }
 textarea{
-    text-transform: lowercase;
+    /* text-transform: lowercase; */
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-weight: normal;
@@ -123,6 +126,7 @@ form > label{
     color: red;
     font-size: 12px;
 }
+/* Container styles */
 .dp-btn {
     width: 100%;
     padding: 10px;
@@ -136,10 +140,22 @@ form > label{
     position: relative;
     overflow: hidden;
 }
-#upload-dp-img{
-    padding: 10px;
+#upload-dp-img {
     width: 110px;
+    height: 110px;
+    border-radius: 50%;
     cursor: pointer;
+    object-fit: cover;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#upload-dp-img[data-loading="true"] {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+#upload-dp-img[data-loading="false"] {
+    opacity: 1;
+    transform: scale(1);
 }
 .user-agreement{
     height: 100%;
@@ -213,6 +229,13 @@ button.login-submit-button:disabled{
     .main-right-section{
         width: 100%;
     }
+    .login-submit-button{
+        color: #000;
+        font-weight: 300;
+    }
+    .login-submit-button:disabled{
+        color: #dadada;
+    }
 }
 @media screen and (max-width: 768px){
     .log-main-container, .reg-main-container{
@@ -221,14 +244,26 @@ button.login-submit-button:disabled{
         border-radius: 0;
     }
     .main-left-section{
-        height: 33%;
+        height: 20%;
     }
     .sounz-title{
-        font-size: 80px;
-        letter-spacing: -9px;
+        font-size: 60px;
+        letter-spacing: -8px;
     }
     .login-register-redirect > a{
         font-size: 12px;
+    }
+    .user-agreement{
+        width: 100%;
+    }
+    .agreement-title{
+        font-size: 30px;
+    }
+    .agreement-content{
+        font-size: 12px;
+    }
+    .TandC-agreement{
+        font-size: 11px;
     }
 }
 @media screen and (max-width: 480px){
@@ -240,4 +275,7 @@ button.login-submit-button:disabled{
     max-width: 7rem;
     max-height: 7rem;
     border-radius: 50%;
+}
+form > input, form > textarea {
+    font-size: 16px;
 }

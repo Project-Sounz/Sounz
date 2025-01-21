@@ -12,26 +12,35 @@
 <div class="header">
     {% if user %}
     <div class="edit-logout">
-        <a class="e-l-buttons" href="{% url 'editprofile' %}">Edit Profile</a><span> | </span>
+        <a class="e-l-buttons" href="{% url 'editprofile' %}">Edit Profile</a><span id="spacer"> | </span>
         <a class="e-l-buttons" href="{% url 'signout' %}" id="logout">Log out</a>
+        <div class="three-dot-menu">
+            <button class="menu-button" id="three-dot-menu">⋮</button>
+            <div class="menu-options">
+                <a class="e-l-buttons-three" style="border-bottom: 0.5px solid #505050;" href="{% url 'editprofile' %}">Edit Profile</a>
+                <a class="e-l-buttons-three" style="color: #ff6b6b;" href="{% url 'signout' %}" id="logout">Log out</a>
+            </div>
+        </div>
     </div>
+   
     <img src= '{{user.profile_picture.url}}' alt="{{user.firstname}}'s profile picture" class="imgcenter"/> 
     <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
     <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
     <div class="socials">
-        <a href="{{ user.insta }}"><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
-        <a href="{{ user.twit }}"><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
-        <a href="{{ user.yout }}"><img src="{% static 'images/youtube.svg' %}" alt="" height="20px" width="20px"></a>
-        <a href="mailto:{{ user.email }}"><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
+        <a href="{{ user.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="" ></a>
+        <a href="{{ user.twit }}"><img src="{% static 'images/x 64.png' %}" alt="" ></a>
+        <a href="{{ user.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="" ></a>
     </div>
 </div>
 <div class="body">
+    
     <div class="profile-info">
         <p id="desc">{{ user.user_bio }}</p>
         <a href="mailto:{{ user.email }}" class="mailbio">{{ user.email }}</a>
+        
     </div>
 {% endif %}
-    <hr style="margin: 30px;">
+    <hr style="border: 0.5px solid; margin: 30px; border-color: #e2e2e2;">
 
     <!-- post-saved buttons -->
 
@@ -137,5 +146,20 @@
 
 </div>
 <script src="{% static 'js/profilepage-content.js' %}"></script>
+<script>// Select the menu button and menu options
+    const menuButton = document.getElementById('three-dot-menu');
+    const menuOptions = document.querySelector('.menu-options');
+    
+    // Toggle the menu visibility on button click
+    menuButton.addEventListener('click', () => {
+        menuOptions.parentElement.classList.toggle('active');
+    });
+    
+    // Close the menu if clicked outside
+    document.addEventListener('click', (event) => {
+        if (!menuButton.contains(event.target) && !menuOptions.contains(event.target)) {
+            menuOptions.parentElement.classList.remove('active');
+        }
+    });</script>
 {% endblock %}
 

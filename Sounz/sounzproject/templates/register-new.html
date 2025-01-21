@@ -37,7 +37,7 @@
                 {{ form.as_p }}
                 
                 <input type="file" name="profile_picture" id="profile_picture_input" accept="image/*" style="display: none;">
-                <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" src="{% static 'images/upload.svg' %}" alt="upload profile picture"></span><img id="profile_picture_preview" alt="Profile Picture Preview"><span class="dp-upload-label">Profile picture</span></button>
+                <button type="button" onclick="document.getElementById('profile_picture_input').click();" class="dp-btn" id="dp-upload-btn"><span class="uploadLogo"><img id="upload-dp-img" src="{% static 'images/upload.svg' %}" alt="upload profile picture"></span><img id="profile_picture_preview" alt="Profile Picture Preview"><span class="dp-upload-label" style="padding-top: 10px;">Profile picture</span></button>
 
                 {% if prompt_message %}
                     <div class="prompt-message">{{ prompt_message }}</div>
@@ -51,7 +51,7 @@
                 
                 <label for="username">USERNAME</label>
                 <span id="username-error" class="error-message"></span>
-                <input type="text" required placeholder="Username" id="username" name="username">
+                <input type="text" oninput="this.value = this.value.toLowerCase()" required placeholder="Username" id="username" name="username">
                 
                 <label for="email">E-MAIL</label>
                 <input type="email" required placeholder="Email" id="email" name="email">

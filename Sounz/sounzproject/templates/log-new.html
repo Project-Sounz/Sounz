@@ -30,7 +30,7 @@
                 {% endif %} 
                 <label for="username">USERNAME</label>
                 <span id="username-error" class="error-message"></span>
-                <input name="username" type="text" placeholder="Username" id="username">
+                <input name="username" type="text" placeholder="Username" id="username" oninput="this.value = this.value.toLowerCase()">
                 <label for="password">PASSWORD <span class="show-hide-label" id="show-hide-label" onclick="togglePassword()">:: show</span> </label>
                 <span id="password-error" class="error-message"></span>
                 <input name="password" type="password" placeholder="Password" id="password">
