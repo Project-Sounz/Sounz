@@ -299,21 +299,21 @@ def signout(request):
     response['Expires'] = '0'
     return response
 
-def media(request):
-    username=request.user.username
-    user = profiledatadb.objects.get(username=username)
-    pid = request.GET.get('pid')
-    post=postdb.objects.get(pid=pid)
-    ps=post.username
-    puser=profiledatadb.objects.get(username=ps)
-    user_liked = Like.objects.filter(user=user, post=post).exists()
-    context={
-        "puser":puser,
-        "post":post,
-        "user":user,
-        "user_liked": user_liked
-    }
-    return render(request,'media.html',context)
+# def media(request):
+#     username=request.user.username
+#     user = profiledatadb.objects.get(username=username)
+#     pid = request.GET.get('pid')
+#     post=postdb.objects.get(pid=pid)
+#     ps=post.username
+#     puser=profiledatadb.objects.get(username=ps)
+#     user_liked = Like.objects.filter(user=user, post=post).exists()
+#     context={
+#         "puser":puser,
+#         "post":post,
+#         "user":user,
+#         "user_liked": user_liked
+#     }
+#     return render(request,'media.html',context)
 
 def media_controll(request):
     username=request.user.username
@@ -526,7 +526,20 @@ def editpost(request):
             pos.save()
 
             prompt_message = "Post successfully updated!"
-            return render(request, 'edit_form.html', {'user': userobj, 'prompt_message': prompt_message, 'post': pos})
+            ps = pos.username
+            puser = profiledatadb.objects.get(username=ps)
+            user_liked = Like.objects.filter(user=request.user, post=pos).exists()
+            user_saved = Save.objects.filter(user=request.user, post=pos).exists()
+            context = {
+                "puser": puser,
+                "post": pos,
+                "user": userobj,
+                "user_liked": user_liked,
+                "user_saved": user_saved
+
+            }
+
+            return render(request, 'media.html', context)
     
     return render(request, 'edit-post.html', {'user': userobj, 'post': pos})
 
