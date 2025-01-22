@@ -138,7 +138,7 @@
                         <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
                         {% if user.username == puser.username %}
                             <div class="editdelete">
-                                <a href="">Edit</a> | <a href="">Delete</a>
+                                <a href="{% url 'edit-post' %}?post_id={{post.pid}}">Edit</a> | <a href="">Delete</a>
                             </div>
                         {% endif %}
                         <div class="footer-btns">

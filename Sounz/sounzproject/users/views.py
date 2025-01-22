@@ -158,12 +158,14 @@ def nav_saved(request):
 
 
     user=request.user.username
-    test = 'nn'
     userBioCollect = profiledatadb.objects.get(username=user)
-    post=postdb.objects.filter(username=test)
+    post=postdb.objects.filter(username=user)
+    saved = Save.objects.filter(user=request.user).values_list('post', flat=True)
+    savedposts = postdb.objects.filter(pid__in=saved)
     context={
         'user': userBioCollect,
         'post':post,
+        'saved': savedposts,
 
     }
     return render(request, 'profile-fpv-saved.html',context)
@@ -280,7 +282,8 @@ def editprofile(request):
                    user.twit = request.POST.get('twit')        
                 user.save()
                 userauth.save()
-                return render(request, 'profile-fpv.html', {'user': user})
+                
+                return redirect('my-profile')
 
 
 
@@ -491,3 +494,39 @@ def search(request):
     }
 
     return render(request,'search.html',context)
+
+
+def editpost(request):
+    username = request.user.username
+    userobj = profiledatadb.objects.get(username=username)
+    post_id = request.GET.get('post_id')
+    try:
+        pos = postdb.objects.get(pid=post_id)
+    except postdb.DoesNotExist:
+        prompt_message = "Post not found."
+        return render(request, 'edit-post.html', {'user': userobj, 'prompt_message': prompt_message})
+    
+    if request.method == 'POST':
+        caption = request.POST.get('title')
+        desc = request.POST.get('post_description')
+        typ = request.POST.get('tags')
+        media_type = request.POST.get('media_type')
+        lan = request.POST.get('language')
+        loc = request.POST.get('location')
+        form = Uploadform(request.POST, request.GET)
+
+        if form.is_valid():
+            # Update only the specified post fields
+            pos.caption = caption
+            pos.descr = desc
+            pos.langu = lan
+            pos.mediatype = typ
+            pos.location = loc
+            pos.media_format = media_type
+            pos.save()
+
+            prompt_message = "Post successfully updated!"
+            return render(request, 'edit_form.html', {'user': userobj, 'prompt_message': prompt_message, 'post': pos})
+    
+    return render(request, 'edit-post.html', {'user': userobj, 'post': pos})
+

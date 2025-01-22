@@ -36,5 +36,6 @@ urlpatterns = [
     path('toggle-like/', views.toggle_like, name='toggle_like'),
     path('toggle-save/', views.toggle_save, name='toggle_save'),
     path('search',views.search,name='search'),
+    path('edit-post', views.editpost, name='edit-post'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

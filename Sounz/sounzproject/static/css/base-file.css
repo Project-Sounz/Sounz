@@ -80,10 +80,10 @@ img#navbar-user-profile-pic{
 }
 .bar {
     width: 25px;
-    height: 3px;
+    height: 2px;
     background-color: #fff;
     margin: 3px 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 .menu-toggle.close .bar:nth-child(1) {
@@ -95,7 +95,7 @@ img#navbar-user-profile-pic{
 }
 
 .menu-toggle.close .bar:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
+    transform: translateY(-7px) rotate(-45deg);
 }
 .nav-section-mobile{
     display: flex;

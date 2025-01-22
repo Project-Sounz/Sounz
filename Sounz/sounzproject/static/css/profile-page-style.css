@@ -8,8 +8,10 @@
     margin-left: auto;
     margin-right: auto;
     width: 125px;
-    height: 125px;
+    /* height: 125px; */
+    aspect-ratio: 1;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .header{
@@ -28,23 +30,25 @@
 p#profile-name{
     margin: 0px;
     font-size: 35px;
-    padding: 10px;
+    padding: 10px 0 5px 0;
 }
 p#user-name-id{
     margin: 0;
     color: #969696;
+    font-size: 14px;
+    font-weight: 300;
 }
 
 .socials{
     margin-left: auto;
-    padding: 10px;
+    padding: 15px 0 10px;
 }
 .socials > *{
     padding: 5px;
     
     img{
         width: 13%;
-        aspect-ratio: 3 / 2;
+        aspect-ratio: 1;
         object-fit: contain;
     }
 }
@@ -67,34 +71,51 @@ p#desc{
     align-items: center;
 
 }
-.mailbio{
-    /* padding: 15px; */
+.mailbio {
     font-size: 14px;
-    color: black;
+    font-weight: 300;
+    color: #3d729f;
     text-decoration: none;
-    border-bottom: 1.5px solid black;
+    position: relative;
+    display: inline-block;
+}
+
+.mailbio::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    opacity: 0;
+    background-color: #3d729f;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.mailbio:hover::after {
+    opacity: 1;
 }
 .edit-logout{
-    font-size: 14px;
     margin-left: auto;
     padding-right: 20px;
 }
 .e-l-buttons, .edit-logout > span{
     text-decoration: none;
-    color: #707070;
+    color: #8b8b8b;
+    font-size: 12px;
 }
 
 .profile-content-buttons{
     padding: 10px 24px;
-    margin: 0 20px;
+    margin: 0 10px;
     background-image: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
-    -webkit-background-clip: text; /* Clip the background to the text */
+    -webkit-background-clip: text;
     background-clip: text;
-    color: transparent; 
+    color: transparent;
     border: 1px solid rgba(226, 28, 102, 1);
     border-radius: 10px;
-    font-size: 20px;
-    width: 15%;
+    font-size: 16px;
+    width: 18%;
     min-width: max-content;
     cursor: pointer;
     text-decoration: none;
@@ -229,6 +250,43 @@ p#desc{
     display: flex;
     justify-content: center;
 }
+.menu-button {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0;
+    color: white;
+    margin-top: 15px;
+}
+.three-dot-menu {
+    position: relative;
+    display: none;
+}
+.menu-options {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background-color: #2f2f2fed;
+    /* border: 1px solid #dcdcdc; */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 120px;
+}
+.menu-options a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 14px;
+    letter-spacing: -0.5px;
+}
+.three-dot-menu.active .menu-options {
+    display: block;
+}
 /* #post-wrapper{
     flex: 0 0 25%;
 } */
@@ -246,12 +304,13 @@ p#desc{
     .instrument-used{
         font-size: 1em;
     }
+    
 }
 @media screen and (max-width: 768px){
     .socials{
         margin-left: 0;
         img{
-            width: 10%;
+            width: 13%;
         }
     }
     .profile-content-buttons{
@@ -260,6 +319,21 @@ p#desc{
     }
     .instrument-used{
         max-width: 50%;
+    }
+    .three-dot-menu{
+        display: inline-block;
+    }
+    .e-l-buttons, span#spacer{
+        display: none;
+    }
+    .imgcenter{
+        width: 100px;
+    }
+    p#profile-name{
+        font-size: 26px;
+    }
+    .header{
+        height: auto;
     }
 }
 @media screen and (max-width: 480px){
