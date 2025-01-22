@@ -457,7 +457,7 @@ def search(request):
             input_value = request.POST.get("search-input1")
             posts = postdb.objects.filter(
             Q(mediatype__icontains=input_value) | Q(username=input_value) | Q(caption__icontains=input_value)
-            )
+            )   
             all_users = profiledatadb.objects.all()
             username = request.user.username
             user = profiledatadb.objects.get(username=username)
