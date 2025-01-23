@@ -35,6 +35,9 @@
                 
             </nav>
         </div>
+
+        <!-- mobile navigation -->
+         
         <div class="menu-toggle" onclick="toggleMenu()">
             <div class="bar"></div>
             <div class="bar"></div>
@@ -45,7 +48,10 @@
             <nav class="navigation-controlling-deck">
                 <a href="{% url 'home' %}" class="navbar-links"v><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"><span class="nav-tooltip">Home</span></a>
                 <div id="nav-separator"></div>
-                <a href="{% url 'my-profile' %}"class="navbar-links"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"><span class="nav-tooltip">Name</span></a>
+                <a href="{% url 'my-profile' %}"class="navbar-links"><img style="border: 1px solid rgba(241, 47, 63, 1);
+                    padding: 5px;
+                    width: 50px;
+                    height: auto;" class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"><span class="nav-tooltip">Profile</span></a>
 
                 <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'search' %}" class="navbar-links" id="search-icon-mob"><img class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"><span class="nav-tooltip">Search</span></a>
