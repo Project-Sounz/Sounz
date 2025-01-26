@@ -1,13 +1,15 @@
 .media{
-    width: 50%;
+    width: 65%;
     margin: auto;
     padding: 20px 0;
 }
 
 .media-owner-pp{
     width: 55px;
-    aspect-ratio: 1/1;
+    /* aspect-ratio: 1 / 1; */
     border-radius: 50%;
+    height: 55px;
+    object-fit: cover;
 }
 
 .media-owner-un{
@@ -43,20 +45,45 @@
 .media-footer{
     width: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.footer-btns,.editdelete{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #f2f1f1;
+    max-width: max-content;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
-.footer-btns > button{
-    background: #f1f1f1;
+.footer-btns > button, .editdelete > button{
+    background: transparent;
     border: none;
     padding: 10px;
     border-radius: 10px;
-    width: 40px;
-    height: 40px;
+    /* width: 40px; */
+    /* height: 40px; */
     margin: 5px;
     justify-items: center;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.footer-btns > button > span.span-controller,.editdelete >button>a{
+    padding-left: 5px;
+    font-size: 16px;
+    color: #6e6e6e;
+    text-decoration: none;
+}
+.footer-btns > button > .icon-controller-class,.editdelete > button > svg.icon-controller-class{
+    height: 25px;
 }
 button.e-d-button{
     width: 60px;
@@ -119,12 +146,94 @@ button.e-d-button{
     font-weight: 300;
     line-height: 1.5;
 }
-.edit-delete{
-    font-size: 16px;
-    margin-left: auto;
-    padding-right: 20px;
-}
 .e-d-buttons, .edit-logout > span{
     text-decoration: none;
     color: #707070;
 }
+
+@media screen and (max-width: 768px){
+    .media{
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+.like-animate {
+    animation: scale-up 0.3s ease-in-out;
+}
+
+@keyframes scale-up {
+    0% {
+        transform: scale(0.8);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Common style for the save icon */
+/* Save icon styling */
+.save-icon {
+    height: 30px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Position the + symbol on the top right */
+.plus-symbol {
+    position: absolute;
+    top: -4px;
+    left: 24px;
+    font-size: 20px;
+    color: rgb(241, 67, 43);
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Animate the save button on click */
+.save-icon.saved {
+    animation: saveScaleUp 0.3s forwards;
+}
+
+
+/* Animate the + symbol when saving */
+.plus-symbol.active {
+    opacity: 1;
+    transform: scale(1.5);
+    animation: ease-in 0.3s forwards;
+}
+
+/* Keyframes for save icon */
+@keyframes saveScaleUp {
+    0% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateY(4px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.share-sheet-btn{
+    cursor: pointer;
+  padding: 1em;
+  font-size: 1em;
+  aspect-ratio: 1/0.25;
+  color: #000;
+  background: #fff;
+  background-size: cover;
+  
+  border-radius: 0.5em;
+ 
+  border: 0;
+  
+}
+/* Keyframes for the + symbol pulse effect 

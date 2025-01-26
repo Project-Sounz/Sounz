@@ -23,48 +23,50 @@
             alert('Web Share API is not supported in this browser.');
         }
     }
-
-
-
-
-
-    // Function to toggle the like state when clicked
+ // Function to toggle the like state when clicked
     function toggleLike(postId) {
-        const likeImage = document.getElementById(`likeImage-${postId}`);
-        const likeCount = document.getElementById(`likeCount-${postId}`);
+    const likeImage = document.getElementById(`likeImage-${postId}`);
+    const likeCount = document.getElementById(`likeCount-${postId}`);
 
-        if (!likeImage) {
-            console.error(`Error: Like button for post ${postId} not found.`);
-            return;
-        }
+    if (!likeImage) {
+        console.error(`Error: Like button for post ${postId} not found.`);
+        return;
+    }
 
-        const isLiked = likeImage.dataset.liked === 'true';
+    const isLiked = likeImage.dataset.liked === 'true';
 
-        // Send a POST request to toggle like state
-        fetch('/toggle-like/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for security
-            },
-            body: JSON.stringify({ post_id: postId })
-        })
+    // Add a scaling animation to the like button
+    likeImage.classList.add('like-animate'); // Add animation class
+
+    // Remove the animation class after the animation ends
+    likeImage.addEventListener('animationend', () => {
+        likeImage.classList.remove('like-animate');
+    }, { once: true });
+
+    // Send a POST request to toggle the like state
+    fetch('/toggle-like/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // Add CSRF token for security
+        },
+        body: JSON.stringify({ post_id: postId })
+    })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 // Update the image and like state in the frontend
                 likeImage.src = data.liked
-                    ? "{% static 'images/onclick.svg' %}" 
+                    ? "{% static 'images/onclick.svg' %}"
                     : "{% static 'images/Like-black.svg' %}";
                 likeImage.dataset.liked = data.liked; // Store the current like state in the dataset
-                likeCount.textContent = data.like_count; // Update the like count dynamically
+                likeCount.textContent = data.like_count + " likes"; // Update the like count dynamically
             } else {
                 console.error("Error updating like state:", data.error);
             }
         })
         .catch(error => console.error("Error:", error));
-    }
-
+}
     // Helper function to get the CSRF token from cookies
     function getCookie(name) {
         let cookieValue = null;
@@ -83,30 +85,43 @@
 
     // Function to toggle the button's state and update the image
     function toggleSaveButton(postId) {
-        const saveImage = document.getElementById(`saveImage-${postId}`);
+    const saveImage = document.getElementById(`saveImage-${postId}`);
+    const plusSymbol = document.getElementById(`plusSymbol-${postId}`);
+    const saveTooltip = document.getElementById(`saveTooltip-${ postId }`);
 
-        fetch('/toggle-save/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for security
-            },
-            body: JSON.stringify({ post_id: postId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the image and like state in the frontend
-                saveImage.src = data.saved
-                    ? "{% static 'images/onclickSaved.svg' %}" 
-                    : "{% static 'images/save-black.svg' %}";
-                saveImage.dataset.saved = data.saved;
+    fetch('/toggle-save/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for security
+        },
+        body: JSON.stringify({ post_id: postId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the save icon's class for animation and state
+            if (data.saved) {
+                saveImage.classList.remove('unsaved');
+                saveImage.classList.add('saved');
+                saveImage.src = "{% static 'images/onclickSavedNew1.svg' %}";
+                saveTooltip.innerText = "Saved!";
+                
+                // Animate the + symbol
+                plusSymbol.classList.add('active');
+                setTimeout(() => plusSymbol.classList.remove('active'), 800);
             } else {
-                console.error("Error updating like state:", data.error);
+                saveImage.classList.remove('saved');
+                saveImage.classList.add('unsaved');
+                saveImage.src = "{% static 'images/saved-black.svg' %}";
+                saveTooltip.innerText = "Save";
             }
-        })
-        .catch(error => console.error("Error:", error));
-    }
+        } else {
+            console.error("Error updating save state:", data.error);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
 
 </script>
 {% endblock %}
@@ -135,12 +150,7 @@
                         </video>
                     </div>
                     <div class="media-footer">
-                        <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
-                        {% if user.username == puser.username %}
-                            <div class="editdelete">
-                                <a href="{% url 'edit-post' %}?post_id={{post.pid}}">Edit</a> | <a href="">Delete</a>
-                            </div>
-                        {% endif %}
+                        
                         <div class="footer-btns">
                             <button>
                                 <!-- Dynamically set the like button image based on whether the user liked the post -->
@@ -149,26 +159,71 @@
                                      onclick="toggleLike('{{ post.pid }}')" 
                                      data-liked="{% if user_liked %}true{% else %}false{% endif %}"
                                      id="likeImage-{{ post.pid }}" 
+                                     class="like-button icon-controller-class" 
                                      style="cursor: pointer;" />
-                            </button>
-                            <span id="likeCount-{{ post.pid }}">{{ post.likes }}</span> Likes
-                            <button>
+                                     <span class="span-controller" id="likeCount-{{ post.pid }}">{{ post.likes }} likes</span>
+                                </button>
+
+                                    
                                 <!-- Dynamically set the save button image based on whether the user saved the post -->
-                                <img src="{% if user_saved %}{% static 'images/onclickSaved.svg' %}{% else %}{% static 'images/save-black.svg' %}{% endif %}" 
-                                     alt="Save Button"
-                                     onclick="toggleSaveButton('{{ post.pid }}')" 
-                                     data-liked="{% if user_saved %}true{% else %}false{% endif %}"
-                                     id="saveImage-{{ post.pid }}" 
-                                     style="cursor: pointer;" />
-                            </button> 
-                            <button onclick="sharePost('{{ post.pid }}', '{{ post.media.url|escapejs }}', '{{ post.caption|escapejs }}', '{{ post.descr|escapejs }}')">
-                                <img src="{% static 'images/share-black.svg' %}" alt="" srcset="">
+                                <button
+                                onclick="toggleSaveButton('{{ post.pid }}')" 
+                                style="cursor: pointer; background: none; border: none; position: relative;">
+                                <img 
+                                    src="{% if user_saved %}{% static 'images/onclickSavedNew1.svg' %}{% else %}{% static 'images/saved-black.svg' %}{% endif %}" 
+                                    alt="Save Button" 
+                                    id="saveImage-{{ post.pid }}" 
+                                    class="save-icon {% if user_saved %}saved{% else %}unsaved{% endif %} icon-controller-class" />
+                                    <span id="plusSymbol-{{ post.pid }}" class="plus-symbol">+</span>
+                                <span class="span-controller" id="saveTooltip-{{ post.pid }}">{% if user_saved %}Saved!{% else %}Save{% endif %}</span>
                             </button>
+
+                            <button class="share-sheet-btn" onclick="sharePost('{{ post.pid }}', '{{ post.media.url|escapejs }}', '{{ post.caption|escapejs }}', '{{ post.descr|escapejs }}')">
+                                <svg class="share-icon icon-controller-class" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" >
+                                    <path
+                                        d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z">
+                                    </path>
+                                </svg>
+                               <span class="span-controller">Share</span> 
+                              </button>
+
+                            
                         </div>
+                        {% if user.username == puser.username %}
+                            <div class="editdelete">
+                                <button>
+                                    <svg class="css-i6dzq1  icon-controller-class" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24" >
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                    </svg>
+                                    <a href="{% url 'edit-post' %}?post_id={{post.pid}}">Edit</a>
+                                </button>
+                                <button>
+            
+                                        <svg
+                                          class="w-6 h-6  icon-controller-class"
+                                          stroke="red"
+                                          stroke-width="1.5"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <path
+                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                            stroke-linejoin="round"
+                                            stroke-linecap="round"
+                                          ></path>
+                                        </svg>
+                                    <a href="">Delete</a></button>
+                                 
+                            </div>
+                        {% endif %}
                     </div>
-                    <p class="media-date">{{ post.timestamp|date }}</p>
+                    <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
+                        
                     <p class="media-desc">{{post.descr}}</p>
+                    <p class="media-date">{{ post.timestamp|date }}</p>
                 </div>
+
             {% endif %}
         {% endif %}
     {% endif %}

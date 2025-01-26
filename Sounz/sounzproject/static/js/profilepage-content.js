@@ -13,10 +13,15 @@ var savedButton = document.getElementById('savedbutton');
 
 const postSection = document.getElementById('profile-content-controller-posts');
 const savedSection = document.getElementById('profile-content-controller-saved');
-document.addEventListener('DOMContentLoaded', function() {
-    postButton.classList.add('active');
-    postSection.style.display = 'block';
-    savedSection.style.display = 'none';
+document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const section = urlParams.get('section'); // Get the 'section' query parameter
+
+    if (section === 'saved') {
+        loadSaved(); // Switch to the saved section
+    } else {
+        loadPosts(); // Default to the posts section
+    }
 });
 function loadPosts(){
     postButton.classList.add('active');
