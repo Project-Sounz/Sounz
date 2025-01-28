@@ -140,12 +140,14 @@ img#navbar-user-profile-pic{
 }
 .navbar-links{
     display: flex;
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    align-items: center;
     text-align: center;
-    color: #fff;
+    color: #d8d8d8;
     text-decoration: none;
     font-size: 16px;
+    font-weight: 300;
+    justify-content: space-around;
+    
 }
 .navbar-line{
     width: 100%;
@@ -157,11 +159,12 @@ img#navbar-user-profile-pic{
     background-color: black;
     position: fixed;
     display: none;
-    animation: opacity-animate 80ms ease-in-out;
+    animation: opacity-animate 0.1s ease-in;
 }
 .blinder.active{
     display: block;
-    opacity: 0.5;
+    opacity: 0.8;
+    z-index: 998;
 }
 @media screen and (max-width: 768px){
     .nav-section-mobile.active{
@@ -180,6 +183,7 @@ img#navbar-user-profile-pic{
     flex-direction: column;
     margin: 20px;
     z-index: 999;
+    /* margin-top: 14%; */
     }
     .menu-toggle.close{
         position: fixed;
@@ -197,8 +201,9 @@ img#navbar-user-profile-pic{
         padding: 0;
     }
     nav{
-        padding: 80px 20px;
+        padding: 110px 20px;
         align-items: flex-start;
+        width: 100%;
     }
     #nav-separator{
         width: 100%;

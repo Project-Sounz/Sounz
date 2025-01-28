@@ -10,31 +10,44 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/base-file.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loader.css' %}">
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <script src="{% static 'js/base-file.js' %}"></script>
     <script src="{% static 'js/search-box.js' %}"></script>
+    <script src="{% static 'js/loader.js' %}"></script>
     {% block additional_css %}{% endblock %}
     {% block additional_js %}{% endblock %}
 </head>
 <body>
+<!-- loader -->
+
+<div class="loader" id="loader">
+    <div class="inner one"></div>
+    <div class="inner two"></div>
+    <div class="inner three"></div>
+  </div>
+  <!-- loader end -->
+
     {% if user %}
     <div class="main-docker">
         <div class="nav-section-web">
             <nav class="navigation-controlling-deck" id="navigation-controlling-deck">
                 <a href="{% url 'home' %}"><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"></a>
                 <div id="nav-separator"></div>
+                <!-- <a href="{% url 'my-profile' %}"><img class="navbar-control-icons" id="navbar-user-profile-pic-loader" src="{{'media/default/user.png'}}" alt="" width="10px" height="40px"></a> -->
                 {% if user.profile_picture.url %}
                     <a href="{% url 'my-profile' %}"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"></a>
-                {% else %}
-                    <a href="{% url 'my-profile' %}"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{% static 'images/profile-picture-specimen.png' %}" alt="" width="10px" height="40px"></a>
                 {% endif %}
                 <a href="{% url 'search' %}"><img id="search-icon" class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a>
                 <a href="{% url 'upload' %}"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"></a>
-                <a href="{% url 'nav-saved' %}"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
+                <a href="{% url 'my-profile' %}?section=saved"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
                 
             </nav>
         </div>
+
+        <!-- mobile navigation -->
+         
         <div class="menu-toggle" onclick="toggleMenu()">
             <div class="bar"></div>
             <div class="bar"></div>
@@ -45,18 +58,30 @@
             <nav class="navigation-controlling-deck">
                 <a href="{% url 'home' %}" class="navbar-links"v><img class="navbar-control-icons" id="navbar-main-logo" src="{% static 'images/Sounz_logo.svg' %}" alt="Sounz logo"><span class="nav-tooltip">Home</span></a>
                 <div id="nav-separator"></div>
-                <a href="{% url 'my-profile' %}"class="navbar-links"><img class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"><span class="nav-tooltip">Name</span></a>
+            
+        <!-- loader-picture -->
+        <!-- <a href="{% url 'my-profile' %}"class="navbar-links" id="navbar-user-profile-pic-loader"><img style="border: 1px solid rgba(241, 47, 63, 1);
+            padding: 5px;
+            width: 50px;
+            height: auto;" class="navbar-control-icons" id="navbar-user-profile-pic" src="{{'media/default/user.png'}}" alt="" width="10px" height="40px"><span class="nav-tooltip">Profile</span></a>
+
+         -->
+
+                <a href="{% url 'my-profile' %}"class="navbar-links" id="navbar-user-profile-pic-a"><img style="border: 1px solid rgba(241, 47, 63, 1);
+                    padding: 5px;
+                    width: 50px;
+                    height: auto;" class="navbar-control-icons" id="navbar-user-profile-pic" src="{{user.profile_picture.url}}" alt="" width="10px" height="40px"><span class="nav-tooltip">Profile</span></a>
 
                 <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'search' %}" class="navbar-links" id="search-icon-mob"><img class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"><span class="nav-tooltip">Search</span></a>
                 <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'upload' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"><span class="nav-tooltip">Upload</span></a>
                 <!-- <hr class="navbar-line"> -->
-                <a href="{% url 'nav-saved' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"><span class="nav-tooltip">Saved</span></a>
+                <a href="{% url 'my-profile' %}?section=saved" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"><span class="nav-tooltip">Saved</span></a>
                 <!-- <hr class="navbar-line"> -->
             </nav>
         </div>
-        <div class="export-htmls">
+        <div class="export-htmls" id="export-htmls" style="display: none;">
             {% block content %}
             {% endblock %}
         </div>
