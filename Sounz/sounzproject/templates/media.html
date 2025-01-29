@@ -135,7 +135,11 @@
                     <div class="media-header">
                         <a href="{% url 'watch-profile' %}?uname={{post.username}}">
                             <img src="{{puser.profile_picture.url}}" class="media-owner-pp" alt="">
-                            <p class="media-owner-un">{{post.username}}</p>
+                            <p class="media-owner-un">{{puser.firstname}} <span>
+                                {% if puser.lastname %}
+                                    {{puser.lastname}}
+                                {% endif %}
+                            </span></p>
                         </a>
                         {% if user.username == puser.username %}
                             <div class="editdelete">
@@ -206,8 +210,10 @@
 
                             
                         </div>
-                        <a href="{% url 'email' %}" class="collab"><img style="width: 160px;" src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
-                    </div>
+                        {% if user.username != puser.username %}
+                            <a href="{% url 'email' %}" class="collab"><img style="width: 160px;" src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
+                        {% endif %}
+                        </div>
                     <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
                         
                     <p class="media-desc">{{post.descr}}</p>

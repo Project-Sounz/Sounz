@@ -15,10 +15,9 @@
 .media-owner-un{
     margin-left: 10px;
     font-size: 16px;
-    color: #000;
-    font-weight: 300;
+    color: #6e6e6e;
+    font-weight: 400;
     /* text-decoration: none; */
-    text-transform: lowercase;
 }
 
 .media-header{
@@ -45,11 +44,34 @@
 .media-footer{
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: row;
     justify-content: space-between;
 }
-.footer-btns,.editdelete{
+.editdelete{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: max-content;
+}
+.editdelete > button{
+    background: transparent;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    /* width: 40px; */
+    /* height: 40px; */
+    /* margin: 5px; */
+    justify-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.footer-btns{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -59,7 +81,7 @@
     margin-bottom: 20px;
 }
 
-.footer-btns > button, .editdelete > button{
+.footer-btns > button{
     background: transparent;
     border: none;
     padding: 10px;
@@ -82,8 +104,14 @@
     color: #6e6e6e;
     text-decoration: none;
 }
-.footer-btns > button > .icon-controller-class,.editdelete > button > svg.icon-controller-class{
+.footer-btns > button > .icon-controller-class{
     height: 25px;
+}
+.editdelete >button>a{
+    font-size: 14px;
+}
+.editdelete > button > svg.icon-controller-class{
+    height: 20px;
 }
 button.e-d-button{
     width: 60px;
@@ -132,9 +160,12 @@ button.e-d-button{
     display: flex;
 }
 .m-h3{
-    font-size: 24px;
+    display: flex;
     max-width: 80%;
     line-height: 1.5;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
 }
 .media-date{
     color: #969696;
@@ -145,6 +176,7 @@ button.e-d-button{
     font-size: 16px;
     font-weight: 300;
     line-height: 1.5;
+    margin: 10px 0;
 }
 .e-d-buttons, .edit-logout > span{
     text-decoration: none;
