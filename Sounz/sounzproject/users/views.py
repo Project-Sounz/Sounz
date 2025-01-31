@@ -543,3 +543,10 @@ def editpost(request):
     
     return render(request, 'edit-post.html', {'user': userobj, 'post': pos})
 
+#delete post
+def delete_post(request, post_id):
+    if request.method == "POST":
+        post = get_object_or_404(postdb, pid=post_id)
+        post.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
