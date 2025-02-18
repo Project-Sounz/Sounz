@@ -190,17 +190,24 @@ def profile_new(request):
 
 
 def profile_tpv(request):
-    uname=request.GET.get('uname')
-    pname=profiledatadb.objects.get(username=uname)
-    user=request.user.username
-    userBioCollect = profiledatadb.objects.get(username=user)
-    post=postdb.objects.filter(username=pname)
-    context={
-        'pname':pname,
-        'user':userBioCollect,
-        'posters':post,
-    }
-    return render(request, 'profile-tpv.html',context)
+    try:
+        current_user = request.user.username
+        uname=request.GET.get('uname')
+        if uname == current_user :
+            return redirect('my-profile')
+        else:
+            pname=profiledatadb.objects.get(username=uname)
+            user=request.user.username
+            userBioCollect = profiledatadb.objects.get(username=user)
+            post=postdb.objects.filter(username=pname)
+            context={
+                'pname':pname,
+                'user':userBioCollect,
+                'posters':post,
+            }
+            return render(request, 'profile-tpv.html',context)
+    except profiledatadb.DoesNotExist:
+        return render(request, '404.html', status=404)
 
 def homepage(request):
     all_users = profiledatadb.objects.all()
