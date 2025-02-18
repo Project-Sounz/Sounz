@@ -38,6 +38,7 @@ html, body{
     top: 0;
     height: 100%;
     max-width: 65px;
+    z-index: 99999;
 }
 #navigation-controlling-deck{
     display:flex;

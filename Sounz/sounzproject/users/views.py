@@ -4,7 +4,7 @@ from django.http import Http404
 from django.http import HttpResponseRedirect
 from .forms import RegistrationForm,EditProfileForm,Uploadform
 from django.core.exceptions import ValidationError
-from users.models import profiledatadb,postdb
+from users.models import profiledatadb,postdb,Collab_Information, Member_Information
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -543,3 +543,19 @@ def editpost(request):
     
     return render(request, 'edit-post.html', {'user': userobj, 'post': pos})
 
+def save_collab(request):
+    username=request.user.username
+
+    if request.method == "POST":
+        post_id = request.POST.get("post_id")
+        post = get_object_or_404(postdb, pid=post_id)
+        base_plan = request.POST.get("base-plan")
+        
+        collab = Collab_Information.objects.create(
+            base_post_id=post,
+            base_plan=base_plan,
+            collab_requestor=username
+            )
+        print(f"Collaboration Created: {collab.collaboration_Id}")
+
+        

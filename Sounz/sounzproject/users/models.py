@@ -7,7 +7,7 @@ from django.utils import timezone
 
 # Create your models here.
 class profiledatadb(models.Model):
-    username=models.CharField(primary_key=True,max_length=15,unique=True)
+    username=models.CharField(primary_key=True,max_length=25,unique=True)
     password = models.CharField(max_length=15)
     firstname=models.CharField(max_length=30)
     lastname=models.CharField(max_length=30)
@@ -81,7 +81,25 @@ class saveddb(models.Model):
     def __str__(self):
         return str(self.pid)     
     
-      
-        
+class Collab_Information(models.Model):
+    collaboration_Id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    base_post_id = models.ForeignKey(postdb, on_delete=models.CASCADE)
+    request_status = models.CharField(max_length=20, default="pending")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    collaboration_title = models.CharField(max_length=50, default="Untitled collaboration")
+    collaborated_members = models.ManyToManyField(User, through="Member_Information")
+    base_plan = models.CharField(max_length=200,default=None)
+    collab_requestor = models.CharField(max_length=25,default=None)
 
+    def __str__(self):
+        return self.collaboration_title
+    
+class Member_Information(models.Model):
+    collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('collaboration', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} in {self.collaboration.collaboration_title}"

@@ -42,6 +42,7 @@
                 <a href="{% url 'search' %}"><img id="search-icon" class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a>
                 <a href="{% url 'upload' %}"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"></a>
                 <a href="{% url 'my-profile' %}?section=saved"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
+                <a href="{% url 'my-profile' %}?section=saved"><img class="navbar-control-icons" src="{% static 'images/collab_nav.svg' %}" alt="Save icon"></a>
                 
             </nav>
         </div>
@@ -78,6 +79,7 @@
                 <a href="{% url 'upload' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"><span class="nav-tooltip">Upload</span></a>
                 <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'my-profile' %}?section=saved" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"><span class="nav-tooltip">Saved</span></a>
+                <a href="{% url 'my-profile' %}?section=saved" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/collab_nav.svg' %}" alt="collab tab icon"><span class="nav-tooltip">Collabs</span></a>
                 <!-- <hr class="navbar-line"> -->
             </nav>
         </div>
