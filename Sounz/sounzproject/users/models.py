@@ -87,6 +87,10 @@ class Notification(models.Model):
         ('like', 'Like'),
         ('collab', 'Collaboration Request'),
     )
+    STATUS_CHOICES = [
+        ('unread', 'Unread'),
+        ('read', 'Read'),
+    ]
 
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -94,6 +98,7 @@ class Notification(models.Model):
     message = models.TextField()
     notification_type = models.CharField(max_length=10, choices=NOTIFICATION_TYPES)
     timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='unread')
 
     class Meta:
         indexes = [

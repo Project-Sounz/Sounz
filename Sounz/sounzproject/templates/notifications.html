@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Notifications</h2>
+
+    {% if notifications %}
+        <ul class="notification-list">
+            {% for notification in notifications %}
+                <li class="notification">
+                    <strong>{{ notification.sender.username }}</strong>
+                    {% if notification.notification_type == "like" %}
+                        liked your post: <strong>{{ notification.post.caption }}</strong>
+                    {% endif %}
+                    <span class="timestamp">{{ notification.timestamp|date:"F j, Y, g:i a" }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No notifications yet.</p>
+    {% endif %}
+</div>
+
+<style>
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+    }
+    .notification-list {
+        list-style: none;
+        padding: 0;
+    }
+    .notification {
+        background: #f4f4f4;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .timestamp {
+        display: block;
+        font-size: 12px;
+        color: gray;
+    }
+</style>
+{% endblock %}

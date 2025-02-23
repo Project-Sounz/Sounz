@@ -42,7 +42,7 @@
                 <a href="{% url 'search' %}"><img id="search-icon" class="navbar-control-icons" src="{% static 'images/Search button.svg' %}" alt="Search icon"></a>
                 <a href="{% url 'upload' %}"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"></a>
                 <a href="{% url 'my-profile' %}?section=saved"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
-                
+                <a href="{% url 'notifications' %}"><img class="navbar-control-icons" src="{% static 'images/notifications.svg' %}" alt="notification icon"></a>
             </nav>
         </div>
 
@@ -79,6 +79,8 @@
                 <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'my-profile' %}?section=saved" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"><span class="nav-tooltip">Saved</span></a>
                 <!-- <hr class="navbar-line"> -->
+                <a href="{% url 'notifications' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/notifications.svg' %}" alt="notification icon"><span class="nav-tooltip">Upload</span></a>
+                <!-- <hr class="navbar-line"> --> 
             </nav>
         </div>
         <div class="export-htmls" id="export-htmls" style="display: none;">

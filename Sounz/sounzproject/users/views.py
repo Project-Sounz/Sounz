@@ -354,9 +354,6 @@ def sendemail(request):
 
     return render(request,'media.html')
 
-
-
-#like and unlike
 @login_required
 def toggle_like(request):
     if request.method == 'POST':
@@ -364,27 +361,61 @@ def toggle_like(request):
             data = json.loads(request.body)
             post_id = data.get('post_id')
 
-            # Log post_id for debugging
-            print(f"Received post_id: {post_id}")
+            print(f"🔍 Received post_id: {post_id}")  # Debugging Log
 
             # Fetch the post
             post = get_object_or_404(postdb, pid=post_id)
+            print(f"✅ Post Found: {post.caption} by {post.username.username}")  # Debugging Log
 
-            # Check if the user already liked the post
+            # Get the current user
             user = request.user
-            like = Like.objects.filter(user=user, post=post).first()
+            print(f"👤 Current User: {user.username}")  # Debugging Log
 
-            if like:
-                # Remove like
-                like.delete()
-                post.likes -= 1
-                liked = False
-            else:
-                # Add like
-                Like.objects.create(user=user, post=post)
-                post.likes += 1
+            # Get the post owner (Convert profiledatadb → User)
+            try:
+                post_owner = User.objects.get(username=post.username.username)  
+                print(f"🎯 Post Owner Found: {post_owner.username}")  # Debugging Log
+            except User.DoesNotExist:
+                print(f"❌ Error: User not found for post {post_id}")
+                return JsonResponse({'success': False, 'error': 'Post owner not found'})
+
+            # Check if the user has already liked the post
+            like, created = Like.objects.get_or_create(user=user, post=post)
+
+            if created:
+                # User liked the post
                 liked = True
+                post.likes += 1
+                print(f"👍 Like Added! New Count: {post.likes}")  # Debugging Log
 
+                # Ensure the user is not liking their own post
+                if user != post_owner:
+                    Notification.objects.create(
+                        recipient=post_owner,  # FIX: Now using the correct User instance
+                        sender=user,
+                        post=post,
+                        notification_type="like",
+                        message=f"{user.username} liked your post: {post.caption}"
+                    )
+                    print(f"✅ Notification Created: {user.username} → {post_owner.username}")  # Debugging Log
+
+            else:
+                # User unliked the post (delete the like)
+                like.delete()
+                liked = False
+                post.likes = max(0, post.likes - 1)  # Prevents negative values
+                print(f"👎 Like Removed! New Count: {post.likes}")  # Debugging Log
+
+                # Delete like notification when unliking
+                Notification.objects.filter(
+                    recipient=post_owner,  # FIX: Now using the correct User instance
+                    sender=user,
+                    post=post,
+                    notification_type="like"
+                ).delete()
+                print(f"🗑️ Notification Deleted: {user.username} → {post_owner.username}")  # Debugging Log
+
+            # Save the updated post like count
             post.save()
 
             return JsonResponse({
@@ -392,10 +423,27 @@ def toggle_like(request):
                 'liked': liked,
                 'like_count': post.likes
             })
+
         except Exception as e:
+            print(f"❌ Error in toggle_like: {e}")  # Debugging log
             return JsonResponse({'success': False, 'error': str(e)})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+
+@login_required
+def notifications(request):
+    """ Display all notifications for the logged-in user """
+    user_notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')
+
+    # ✅ Only update if the `status` field exists
+    if hasattr(Notification, 'status'):
+        user_notifications.update(status="read")
+
+    return render(request, 'notifications.html', {'notifications': user_notifications})
+
+
 
 @login_required
 def toggle_save(request):

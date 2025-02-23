@@ -34,6 +34,7 @@ urlpatterns = [
     # path('404-not-found',views.notfound, name='404-not-found'),
     path('send-mail',views.sendemail, name='send-email'),
     path('toggle-like/', views.toggle_like, name='toggle_like'),
+    path('notifications/', views.notifications, name='notifications'),
     path('toggle-save/', views.toggle_save, name='toggle_save'),
     path('search',views.search,name='search'),
     path('edit-post', views.editpost, name='edit-post'),
