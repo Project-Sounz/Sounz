@@ -680,21 +680,279 @@ def editpost(request):
     return render(request, 'edit-post.html', {'user': userobj, 'post': pos, 'form': form})
 
 def save_collab(request):
-    username=request.user.username
 
     if request.method == "POST":
-        post_id = request.POST.get("post_id")
-        post = get_object_or_404(postdb, pid=post_id)
+        post_id = request.POST.get("post_id_pass")
+        post=postdb.objects.get(pid=post_id)
+        post_user=profiledatadb.objects.get(username=post.username)
         base_plan = request.POST.get("base-plan")
-        
-        collab = Collab_Information.objects.create(
-            base_post_id=post,
-            base_plan=base_plan,
-            collab_requestor=username
-            )
-        print(f"Collaboration Created: {collab.collaboration_Id}")
+        username = request.user.username
+        post_name = postdb.objects.get(pid=post_id).caption
 
+        if post_id and base_plan:
+            post = get_object_or_404(postdb, pid=post_id)
+
+            # Create collaboration record
+            collab = Collab_Information.objects.create(
+                base_post_id=post,
+                base_plan=base_plan,
+                collab_requestor=username
+            )
+            
+            post_owner_user = User.objects.get(username=post_user.username)
+
+            Member_Information.objects.create(
+                collaboration=collab,
+                post_owner=post_owner_user
+            )
+
+            print(f"Collaboration Created: {collab.collaboration_Id}")
+
+            # Send email
+            receiver_email = "appus8403@gmail.com" 
+            print(post_user.email)
+            requester_username = username
+            requester_users_name = request.user.first_name
+            decision_link = request.build_absolute_uri(reverse("collab_request", args=[collab.collaboration_Id]))
+            print(decision_link)
+            receiver_username = post_user.firstname
+            send_collab_email(receiver_email, receiver_username, requester_username, decision_link, post_name, requester_users_name)
+
+            return JsonResponse({"message": "Collaboration created and email sent successfully."})
         
+        return JsonResponse({"error": "Missing post ID or base plan."})
+
+    return JsonResponse({"error": "Invalid request method."})
+
+def send_collab_email(receiver_email, receiver_username, requester_username, decision_link, post_name,requester_users_name):
+    subject = "New Collaboration Request"
+    print("Initializing automated mail.")
+    html_message = f"""
+    
+      <html>
+        <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+          <style>
+            body {{
+              font-family: "Inter", sans-serif;
+              font-optical-sizing: auto;
+              font-weight: normal;
+              font-style: normal;
+              font-variation-settings:"slnt" 0;
+              font-size:16px;
+              color:#3e3e3e;
+              background-color:#eee;
+            }}
+            .main-container{{
+              margin:auto;
+              padding:20px;
+              max-width:80%;
+              background-color:#fff
+            }}
+            #heading{{
+              font-size:24px;
+              font-weight:600;
+              color:#969696;
+            }}
+            #link_button{{
+              padding: 15px 25px; 
+              background-color: #000; 
+              color: #fff; 
+              font-weight:400;
+              border-radius:5px;
+              text-decoration: none;
+              margin:20px 0px;
+            }}
+            #hr_line{{
+              color:#d6d6d6;
+              width:75%;
+              margin-top:70px;
+            }}
+          </style>
+        </head>
+        <body>
+        <div class="main-container">
+            <br>
+                <img src="cid:sounz_logo" alt="Sounz Logo" style="height: 40px;">
+            <br><br>
+            <h1 id="heading">New Collaboration Request!</h1><br>
+            <p>Hello { receiver_username },</p>
+            <p><strong>{requester_users_name} (@{requester_username})</strong> would like to collaborate with your post <strong>"{ post_name  }"</strong> by incorporating their ideas. To know more details, approve or reject this request, click the review button below.
+            </p><br><br>
+            <a id="link_button" href="{decision_link}">Review Collaboration</a><br><br><br>
+            <p>The Sounz Team</p>
+            <hr id="hr_line">
+            <div style="text-align: center;">
+                <img src="cid:sounz_footer" alt="Sounz Footer" style="height: 30px; margin:20px 0;">
+                <p style="font-size: 12px; color: #a6a6a6;">Create, Collaborate, Connect</p>
+            </div>
+          </div>
+      </body>
+      </html>
+ 
+    """
+    print("Contents fetched.")
+    # Create EmailMessage object
+    def send_email():
+        email = EmailMessage(subject, html_message, "sounz@gmail.com", [receiver_email])
+        email.content_subtype = "html"
+        print("Contents inserted.")
+        # Attach logo and footer as CID
+        with open("static/images/main_mail_logo.png", "rb") as logo:
+            logo_image = MIMEImage(logo.read(), _subtype="png")
+            logo_image.add_header("Content-ID", "<sounz_logo>")
+            logo_image.add_header("Content-Disposition", "inline")
+            email.attach(logo_image)
+        
+        with open("static/images/main_footer_logo.png", "rb") as footer:
+            footer_image = MIMEImage(footer.read(), _subtype="png")
+            footer_image.add_header("Content-ID", "<sounz_footer>")
+            footer_image.add_header("Content-Disposition", "inline")
+            email.attach(footer_image)
+        print("All files attached.") 
+        # Send email
+        email.send()
+    email_thread = threading.Thread(target=send_email)
+    email_thread.start()
+    print("Mail Sent!") 
+
+def collaboration_request(request, collab_id):
+    collab = get_object_or_404(Collab_Information, collaboration_Id=collab_id)
+    post_name = postdb.objects.get(pid=collab.base_post_id.pid).caption
+    requestor = profiledatadb.objects.get(username=collab.collab_requestor).firstname
+    if profiledatadb.objects.get(username=collab.collab_requestor).firstname:
+        requestor_l = profiledatadb.objects.get(username=collab.collab_requestor).lastname
+        requestor = requestor + " " +requestor_l
+    context = {
+        "post_name": post_name,
+        "base_plan": collab.base_plan,
+        "requestor": requestor,
+        "requestor_usern": collab.collab_requestor,
+        "request_date": collab.timestamp.strftime("%B %d, %Y"),
+        "status": collab.request_status,
+        "collaboration_id": collab.collaboration_Id,
+    }
+    return render(request, "collab-request-review.html", context)
+
+@csrf_exempt
+def update_collab_status(request, collab_id):
+    collab_id = str(collab_id).replace("-", "")
+    try:
+        data = json.loads(request.body)
+        decision = data.get("decision")
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+        print("data fetched")
+        collab.request_status = decision
+        collab.save()
+        print("collab status updated")
+
+        reciever_data = profiledatadb.objects.get(username = collab.collab_requestor)
+        reciever_mail = "appus8403@gmail.com"
+        print(reciever_data.email)
+        reciever_name = reciever_data.firstname
+        post_name = postdb.objects.get(pid=collab.base_post_id.pid).caption
+        send_decision_email(reciever_mail,reciever_name,post_name,decision)
+    except Collab_Information.DoesNotExist:
+        print("Collab does not exist")
+    return JsonResponse({"message": "Status Updated."})
+
+def send_decision_email(receiver_email, receiver_username, post_name,decision):
+    subject = "Collaboration request accepted!" if decision == "accepted" else f"Collaboration Request Update for '{post_name}'"
+    print("Initializing automated mail.")
+    html_message = f"""
+    
+      <html>
+        <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+          <style>
+            body {{
+              font-family: "Inter", sans-serif;
+              font-optical-sizing: auto;
+              font-weight: normal;
+              font-style: normal;
+              font-variation-settings:"slnt" 0;
+              font-size:16px;
+              color:#3e3e3e;
+              background-color:#eee;
+            }}
+            .main-container{{
+              margin:auto;
+              padding:20px;
+              max-width:80%;
+              background-color:#fff
+            }}
+            #heading{{
+              font-size:24px;
+              font-weight:600;
+              color:#969696;
+            }}
+            #link_button{{
+              padding: 15px 25px; 
+              background-color: #000; 
+              color: #fff; 
+              font-weight:400;
+              border-radius:5px;
+              text-decoration: none;
+              margin:20px 0px;
+            }}
+            #hr_line{{
+              color:#d6d6d6;
+              width:75%;
+              margin-top:70px;
+            }}
+          </style>
+        </head>
+        <body>
+        <div class="main-container">
+            <br>
+                <img src="cid:sounz_logo" alt="Sounz Logo" style="height: 40px;">
+            <br><br>
+            <h1 id="heading">{"Collaboration Accepted!" if decision == "accepted" else "Collaboration Request Update"}</h1><br>
+            <p>Hello { receiver_username },</p>
+            <p>We wanted to inform you that your collaboration request for the post titled <strong>"{post_name}"</strong> has been reviewed.</p>
+            { "🎉 Congratulations! The post owner has accepted your request. You can now proceed with the collaboration in the collaborations tab." 
+             if decision == "accepted" 
+             else "Unfortunately, the post owner has declined the request. Feel free to explore other projects and collaborations." }
+
+            <p>The Sounz Team</p>
+            <hr id="hr_line">
+            <div style="text-align: center;">
+                <img src="cid:sounz_footer" alt="Sounz Footer" style="height: 30px; margin:20px 0;">
+                <p style="font-size: 12px; color: #a6a6a6;">Create, Collaborate, Connect</p>
+            </div>
+          </div>
+      </body>
+      </html>
+ 
+    """
+    print("Contents fetched.")
+    # Create EmailMessage object
+    def send_email():
+        email = EmailMessage(subject, html_message, "sounz@gmail.com", [receiver_email])
+        email.content_subtype = "html"
+        print("Contents inserted.")
+        # Attach logo and footer as CID
+        with open("static/images/main_mail_logo.png", "rb") as logo:
+            logo_image = MIMEImage(logo.read(), _subtype="png")
+            logo_image.add_header("Content-ID", "<sounz_logo>")
+            logo_image.add_header("Content-Disposition", "inline")
+            email.attach(logo_image)
+        
+        with open("static/images/main_footer_logo.png", "rb") as footer:
+            footer_image = MIMEImage(footer.read(), _subtype="png")
+            footer_image.add_header("Content-ID", "<sounz_footer>")
+            footer_image.add_header("Content-Disposition", "inline")
+            email.attach(footer_image)
+        print("All files attached.") 
+        # Send email
+        email.send()
+    email_thread = threading.Thread(target=send_email)
+    email_thread.start()
+    print("Mail Sent!") 
 #delete post
 def delete_post(request, post_id):
     if request.method == "POST":
