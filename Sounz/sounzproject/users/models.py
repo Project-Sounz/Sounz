@@ -5,6 +5,7 @@ from django.utils import timezone
 
 
 
+
 # Create your models here.
 class profiledatadb(models.Model):
     username=models.CharField(primary_key=True,max_length=15,unique=True)
