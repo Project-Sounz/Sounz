@@ -253,9 +253,10 @@
 }
 .artists > a > figcaption{
     padding: 5px;
+    font-size: 14px;
     text-transform: capitalize;
-    color: #000;
-    font-weight: 300;
+    color: #969696;
+    font-weight: 400;
 }
 
 .ta-h4{
@@ -297,6 +298,7 @@
     color: #969696;
     text-transform: lowercase;
     font-weight: 300;
+    flex-wrap: wrap;
 }
 .suggestion-post-caption{
     white-space: nowrap;
@@ -305,9 +307,7 @@
     color: #000;
     font-weight: 400;
     font-size: 18px;
-    text-transform: capitalize;white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-transform: capitalize;
 }
 
 @media screen and (max-width: 1050px){

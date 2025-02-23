@@ -11,65 +11,57 @@
 {% endblock %}
 
 {% block content %}
-<div class="header">
+<div class="header" style="height: 270px;">
     {% if user %}
     {% if pname %}
     <img src= '{{pname.profile_picture.url}}' alt="{{.firstname}}'s profile picture" class="imgcenter"/>
     <p id="profile-name">{{ pname.firstname }}<span>  </span>{{ pname.lastname }}</p>
     <p id="user-name-id"><span class="username"></span>{{pname.username}}</p>
-<div class="socials">
-    <a href=""><img src="{% static 'images/instagram.svg' %}" alt="" height="20px" width="20px"></a>
-    <a href=""><img src="{% static 'images/twitter.svg' %}" alt="" height="20px" width="20px"></a>
-    <a href=""><img src="{% static 'images/youtube.svg' %}" alt="" height="20px" width="20px"></a>
-    <a href="mailto:{{ user.email }}"><img src="{% static 'images/mail.svg' %}" alt="" height="20px" width="20px"></a>
-</div>
+    <div class="socials">
+        <a href="{{ pname.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="" ></a>
+        <a href="{{ pname.twit }}"><img src="{% static 'images/x 64.png' %}" alt="" ></a>
+        <a href="{{ pname.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="" ></a>
+    </div>
 </div>
 <div class="body">
-<p id="desc">
-    {{pname.user_bio}}
-</p>
-<a href="" class="mailbio">{{pname.email}}</a>
-<hr style="margin: 30px;">
+    <div class="profile-info">
+        <p id="desc">{{ pname.user_bio }}</p>
+        <a href="mailto:{{ pname.email }}" class="mailbio">{{ pname.email }}</a>
+        
+    </div>
+    <hr style="border: 0.5px solid; margin: 30px; border-color: #e2e2e2;">
 
 
     <div class="posts">
         {% if posters %}
-            {% for p in posters %}
-    
-            <a style="margin: 20px 10px;" href="{% url 'sh-media' %}?pid={{p.pid}}">
-                <div class="thumbnail-container">
-                    {% if p.media_thumbnail %}
-                                    
-                                    <img src="{{ p.media_thumbnail.url }}" alt="" class="post-thumbnail">
-                                
-                                {% else %}
-                                    {% if p.media_format == "Audio" %}
-                                        <img src="{% static 'images/9_16 Audio.png' %}" alt="" class="post-thumbnail" >
-                                    {% elif p.media_format == "Video" %}
-                                        <img src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
-                                    {% endif %}
-                                {% endif %}
-                    <!-- <img class="thumbnail-image" src="media/Media/20240312_222036.jpg" alt="" srcset=""> -->
-                    <video><source src="{{ p.media }}"></video>
-                    <div class="gradient-overlay">
-                        <div class="padding-controll">
-                            <h2 class="video-caption">{{ p.caption}}</h2>
-                            <p class="video-description">{{ p.descr }}</p>
-                            <p class="instrument-used">{{ p.mediatype }}</p>
+            {% for media in posters %}
+                {% if forloop.counter0|divisibleby:"4" %}
+                    <div class="post-row">
+                {% endif %}
+                <a id="post-wrapper" href="{% url 'media' %}?pid={{media.pid}}">
+                    <div class="thumbnail-container">
+                        {% if media.media_thumbnail %}
+                            <img loading="lazy" src="{{ media.media_thumbnail.url }}" alt="" class="post-thumbnail">
+                        {% else %}
+                            {% if media.media_format == "Audio" %}
+                                <img loading="lazy" src="{% static 'images/9_16 Audio.png' %}" alt="" class="post-thumbnail" >
+                            {% elif media.media_format == "Video" %}
+                                <img loading="lazy" src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
+                            {% endif %}
+                        {% endif %}
+                        <div class="gradient-overlay">
+                            <div class="padding-controll">
+                                <h2 class="video-caption">{{ media.caption}}</h2>
+                                <p class="video-description">{{ media.descr }}</p>
+                                <p class="instrument-used">{{ media.mediatype }}</p>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- <h4>{{ p.caption}}</h4>
-                    <p>{{p.descr}}
-                    </p>
-                    <div class="postfooter">
-                        <h3>{{p.mediatype}}</h3>
-                        <img src="{% static 'images/collab-small-icon.svg' %}" alt="" width="25px" height="25px">
-                    </div> -->
-                </div>
-            </a>
-            
-            {% endfor %}
+                </a>
+                {% if forloop.counter0|add:"1"|divisibleby:"4" or forloop.last %}
+                    </div>
+                {% endif %}
+        {% endfor %}
         {% else %}
         <div id="profile-content-controller-nomedia" style="display: none;">{% include 'content-404.html'  %}</div>
         {% endif %}
