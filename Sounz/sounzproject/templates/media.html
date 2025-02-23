@@ -126,6 +126,28 @@ function showPopUp() {
         var popup = document.getElementById("popup");
         popup.classList.toggle("show");
     }
+function submitCollabForm() {
+    const formData = new FormData(document.getElementById("collabForm"));
+
+    fetch("{% url 'save-collab' %}", {
+        method: "POST",
+        body: formData,
+        headers: { "X-CSRFToken": "{{ csrf_token }}" }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            console.log(data.message);  // Show success message
+            showPopUp();          // Close the form
+        } else {
+            console.log("Failed to create collaboration.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        console.log("An error occurred. Please try again.");
+    });
+}
 </script>
 {% endblock %}
 
@@ -187,7 +209,7 @@ function showPopUp() {
                                 {% csrf_token %}
                                 <input type="hidden" name="post_id_pass" value="{{ post.pid }}">
                                 <input type="text" required maxlength="150" name="base-plan" id="base-plan" placeholder="Please provide a base plan on how you would like to collab."><br>
-                                <button type="submit" class="collab-pop-up-button" id="collab-confirmed">Confirm</button>
+                                <button type="submit" class="collab-pop-up-button" onclick="submitCollabForm()" id="collab-confirmed">Confirm</button>
                                 <button class="collab-pop-up-button" onclick="showPopUp()" id="collab-cancelled">Cancel</button>
                             </form>
                             
@@ -235,7 +257,7 @@ function showPopUp() {
                             
                         </div>
                         {% if user.username != puser.username %}
-                            <button onclick="showPopUp()" class="collab"><img style="width: 160px;" src="{% static 'images/Collab-long-logo.svg' %}" alt=""></button>
+                            <button onclick="showPopUp()" class="collab" style="border: none; background: transparent; cursor: pointer;"><img style="width: 160px;" src="{% static 'images/Collab-long-logo.svg' %}" alt=""></button>
                         {% endif %}
                         </div>
                     <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>

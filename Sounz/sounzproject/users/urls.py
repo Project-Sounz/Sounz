@@ -30,12 +30,14 @@ urlpatterns = [
     path('watch-profile', views.profile_tpv, name='watch-profile'),
     path('media', views.media, name='media'),
     path('watch-profile#ed-media', views.media_controll, name='sh-media'),
-    path('e-mail',views.mailtemplate, name='email'),
+    
     # path('404-not-found',views.notfound, name='404-not-found'),
-    path('send-mail',views.sendemail, name='send-email'),
+    path("save-collab", views.save_collab, name="save-collab"),
     path('toggle-like/', views.toggle_like, name='toggle_like'),
     path('toggle-save/', views.toggle_save, name='toggle_save'),
     path('search',views.search,name='search'),
     path('edit-post', views.editpost, name='edit-post'),
+    path('collab-request/<uuid:collab_id>/', views.collaboration_request, name='collab_request'),
+    path('update-collab-status/<uuid:collab_id>/', views.update_collab_status, name='update-collab-status'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

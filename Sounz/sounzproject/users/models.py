@@ -96,10 +96,10 @@ class Collab_Information(models.Model):
     
 class Member_Information(models.Model):
     collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('collaboration', 'user')
+        unique_together = ('collaboration', 'post_owner')
 
     def __str__(self):
         return f"{self.user.username} in {self.collaboration.collaboration_title}"
