@@ -16,6 +16,7 @@ from django.db.models import Q
 import json
 import os
 from .utils import compare_audio
+from django.utils.timezone import now
 
 # Create your views here.
 def log(request):
@@ -219,7 +220,7 @@ def homepage(request):
     topart=profiledatadb.objects.all()
     random_profiles = random.sample(list(topart), min(len(topart), 4))
     # Fetch posts of the current user
-    user_posts = postdb.objects.all().order_by('-timestamp')
+    user_posts = postdb.objects.filter(flagged=0).order_by('-timestamp')
     context = {
         'all_users': all_users,
         'user': user,
@@ -492,7 +493,7 @@ def media(request):
     pid = request.GET.get('pid')
     post = postdb.objects.get(pid=pid)
     
-    post_list = list(postdb.objects.all().order_by('-timestamp'))
+    post_list = list(postdb.objects.filter(flagged=0).order_by('-timestamp'))
     post_index = next((i for i, p in enumerate(post_list) if p.pid == post.pid), None)
     # Get the next post (loops back to first if at the end)
     next_post = post_list[post_index + 1] if post_index is not None and post_index + 1 < len(post_list) else None
@@ -647,19 +648,48 @@ def report_copyright(request):
     # Compare the two posts
     result = compare_audio(user_post.media.path, reported_post.media.path)
 
-    if result:  # If a match is found, compare timestamps
+    if result:
         reported_timestamp = reported_post.timestamp
         user_timestamp = user_post.timestamp
         print(f"🕒 User Post Timestamp: {user_timestamp}, Reported Post Timestamp: {reported_timestamp}")
 
         if reported_timestamp > user_timestamp:
-            print(f"🗑️ Deleting Reported Post ID: {reported_post_id}")
-            reported_post.delete()
-            return JsonResponse({"match": True, "deleted": True, "redirect": True, "message": "Copyright violation detected. Redirecting to homepage."})
+            print(f"🚩 Flagging Reported Post ID: {reported_post_id}")
+            reported_post.flagged = 1  # Set flagged bit to 1
+            reported_post.save()
 
-        return JsonResponse({"match": True, "deleted": False, "redirect": False, "message": "Match found, but original post is newer."})
+            try:
+                recipient_user = User.objects.get(username=reported_post.username.username) 
+                # Create a notification for the flagged post
+                Notification.objects.create(
+                    recipient=recipient_user,
+                    sender=request.user,
+                    post=reported_post,
+                    message="Your post has been flagged for copyright infringement.",
+                    notification_type="flagged",
+                    timestamp=now()
+                )
+                print("✅ Notification created successfully.")
+            except Exception as e:
+                print(f"⚠️ Error creating notification: {e}")
 
-    return JsonResponse({"match": False, "deleted": False, "redirect": False, "message": "No copyright violation detected."})
+            return JsonResponse({
+                "match": True,
+                "flagged": True,
+                "message": "✅ Copyright violation detected! The post has been flagged."
+            })
+
+        return JsonResponse({
+            "match": True,
+            "flagged": False,
+            "message": "⚠️ Match found, but original post is newer."
+        })
+
+    return JsonResponse({
+        "match": False,
+        "flagged": False,
+        "message": "❌ No copyright violation detected."
+    })
 
 
 @login_required
@@ -672,3 +702,5 @@ def get_user_posts(request):
     print(f"📋 User Posts: {list(user_posts)}")
 
     return JsonResponse({"posts": list(user_posts)})
+
+

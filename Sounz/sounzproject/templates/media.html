@@ -169,26 +169,34 @@
 {% block additional_js %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("✅ Page fully loaded. JavaScript is running.");
+    console.log("✅ Page fully loaded. JavaScript is running.");
 
-        // Function to open the Report Modal and fetch user posts
-        window.openReportModal = async function(postId) {
-            console.log("🔍 OpenReportModal triggered for post:", postId);
-            
-            let modal = document.getElementById("reportModal");
-            if (!modal) {
-                console.warn("⚠️ openReportModal() called but #reportModal does not exist.");
-                return;
-            }
+    // Function to open the Report Modal and fetch user posts
+    window.openReportModal = async function(postId, reportType) {
+        console.log(`🔍 OpenReportModal triggered for post: ${postId}, Report Type: ${reportType}`);
 
-            // Make sure it's hidden first (prevents forced visibility issues)
-            modal.style.display = "none";
+        let modal = document.getElementById("reportModal");
+        if (!modal) {
+            console.warn("⚠️ openReportModal() called but #reportModal does not exist.");
+            return;
+        }
 
-            // Store the post ID globally
-            window.postToReport = postId;
+        window.postToReport = postId;
+        window.reportType = reportType; // Store report type globally
 
-            let userPostsDropdown = document.getElementById("userPosts");
-            userPostsDropdown.innerHTML = ""; // Clear previous options
+        let userPostsDropdown = document.getElementById("userPosts");
+        let reportText = document.getElementById("reportText");
+
+        if (!userPostsDropdown || !reportText) {
+            console.warn("⚠️ Dropdown #userPosts or report text not found.");
+            return;
+        }
+
+        // Adjust modal content dynamically based on report type
+        if (reportType === "copyright") {
+            reportText.innerText = "Select one of your own posts for comparison:";
+            userPostsDropdown.style.display = "block";
+            userPostsDropdown.innerHTML = "<option>Loading...</option>"; // Temporary loading message
 
             try {
                 let response = await fetch("/get-user-posts/");
@@ -198,6 +206,8 @@
 
                 let data = await response.json();
                 console.log("📥 Received user posts:", data);
+
+                userPostsDropdown.innerHTML = ""; // Clear previous options
 
                 if (data.posts.length === 0) {
                     userPostsDropdown.innerHTML = "<option disabled>No posts available</option>";
@@ -209,83 +219,96 @@
                         userPostsDropdown.appendChild(option);
                     });
                 }
-
-                // 🚀 Show modal only after data is loaded
-                modal.style.display = "flex";
-
             } catch (error) {
                 console.error("⚠️ Error fetching user posts:", error);
                 alert("Failed to load your posts. Please try again.");
             }
-        };
-
-        // Function to close the modal safely
-        window.closeModal = function () {
-            let modal = document.getElementById("reportModal");
-            if (!modal) {
-                console.warn("⚠️ closeModal() called but #reportModal does not exist.");
-                return;
-            }
-            modal.style.display = "none";
-            console.log("✅ Modal closed successfully.");
-        };
-
-        // Function to handle the report submission
-        window.submitReport = async function () {
-            let userPostId = document.getElementById("userPosts").value;
-            if (!userPostId) {
-                alert("⚠️ Please select one of your own posts.");
-                return;
-            }
-
-            try {
-                let response = await fetch(`/report-copyright/?reported_pid=${window.postToReport}&user_pid=${userPostId}`, {
-                    method: "POST",
-                    headers: { "X-CSRFToken": getCookie("csrftoken") }
-                });
-
-                if (!response.ok) {
-                    let errorText = await response.text();
-                    throw new Error(`🚨 Server Error: ${response.status} - ${errorText}`);
-                }
-
-                let data = await response.json();
-                console.log("📥 Received report response:", data);
-
-                if (data.match) {
-                    if (data.deleted) {
-                        alert("✅ Copyright violation detected! The post has been removed.");
-                        window.location.href = "{% url 'home' %}";  // Redirect to homepage
-                    } else {
-                        alert(data.message);
-                    }
-                } else {
-                    alert("⚠️ No copyright violation detected.");
-                }
-
-                closeModal();
-            } catch (error) {
-                console.error("🚨 Upload Error:", error);
-                alert("Something went wrong. Please try again.");
-            }
-        };
-
-        // Function to get CSRF token for security
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
+        } else {
+            reportText.innerText = "Are you sure you want to report this post for explicit/offensive content?";
+            userPostsDropdown.style.display = "none";
         }
-    });
+
+        // 🚀 Show modal after data is loaded
+        modal.style.display = "flex";
+        console.log("✅ Report modal displayed successfully.");
+    };
+
+    // Function to close the modal safely
+    window.closeModal = function () {
+        let modal = document.getElementById("reportModal");
+        if (!modal) {
+            console.warn("⚠️ closeModal() called but #reportModal does not exist.");
+            return;
+        }
+        modal.style.display = "none";
+        console.log("✅ Modal closed successfully.");
+    };
+
+    // Function to handle the report submission
+    window.submitReport = async function () {
+    if (!window.postToReport || !window.reportType) {
+        alert("⚠️ Something went wrong. Please try again.");
+        return;
+    }
+
+    let requestUrl = "";
+    if (window.reportType === "copyright") {
+        let userPostId = document.getElementById("userPosts").value;
+        if (!userPostId) {
+            alert("⚠️ Please select one of your own posts.");
+            return;
+        }
+        requestUrl = `/report-copyright/?reported_pid=${window.postToReport}&user_pid=${userPostId}`;
+    } else {
+        requestUrl = `/report-offensive/?post_id=${window.postToReport}`;
+    }
+
+    try {
+        let response = await fetch(requestUrl, {
+            method: "POST",
+            headers: { "X-CSRFToken": getCookie("csrftoken") }
+        });
+
+        let data = await response.json();  // Read response as JSON
+        console.log("📥 Received response:", data);
+
+        if (!response.ok) {
+            throw new Error(data.error || `Server error: ${response.status}`);
+        }
+
+        alert(data.message);
+
+        if (data.flagged) {
+            alert("✅ The post has been flagged.");
+            window.location.href="{% url 'home' %}"
+        }
+
+        closeModal();
+    } catch (error) {
+        console.error("🚨 Report Error:", error);
+        alert(`Something went wrong: ${error.message}`);
+    }
+   };
+
+
+    // Function to get CSRF token for security
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+
+
 </script>
 
 
@@ -450,6 +473,7 @@
             {% if puser %}
                 <div class="media">
                     <div class="media-header">
+                        
                         <a href="{% url 'watch-profile' %}?uname={{post.username}}">
                             <img src="{{puser.profile_picture.url}}" class="media-owner-pp" alt="">
                             <p class="media-owner-un">{{puser.firstname}} <span>
@@ -458,6 +482,11 @@
                                 {% endif %}
                             </span></p>
                         </a>
+                        {% if post.flagged %}
+                        <div style="color: red; font-weight: bold; margin-top: 10px;">
+                            ⚠️ This post has been flagged for copyright infringement or offensive content.
+                        </div>
+                        {% endif %}
                         {% if user.username == puser.username %}
                             <div class="editdelete">
                                 <button>
@@ -487,6 +516,7 @@
                         {% endif %}
                     </div>
                     <div class="actual-media">
+                        
                         <video class="media-container" width="640" height="360" controls autoplay controlsList="nodownload">
                             <source src="{{post.media.url}}" type="video/mp4" >
                             Your browser does not support the audio element
@@ -534,24 +564,27 @@
                                 </svg>
                                <span class="span-controller">Share</span> 
                               </button>
+                              {% if user.username != puser.username %}
+                                    <button onclick="openReportModal('{{ post.pid }}', 'copyright')">Report Copyright</button>
+                                    <button onclick="openReportModal('{{ post.pid }}', 'offensive')">Report Explicit/Offensive Content</button>
 
-                              <button onclick="openReportModal('{{ post.pid }}')">Report Copyright</button>
-
-                                <!-- Report Copyright Modal -->
-                               <!-- Report Copyright Modal -->
-                                <div id="reportModal" class="report-modal" style="display: none;">
-                                    <div class="report-modal-content">
-                                        <h2 class="report-title">Report Copyright Infringement</h2>
-                                        <p class="report-text">Select one of your own posts for comparison:</p>
-                                        <select id="userPosts" class="report-dropdown">
-                                            <!-- User's posts will be dynamically added here -->
-                                        </select>
-                                        <div class="report-buttons">
-                                            <button onclick="submitReport()" class="report-btn-orange">Submit</button>
-                                            <button onclick="closeModal()" class="report-btn-gray">Cancel</button>
+                                    <!-- Report Modal -->
+                                    <div id="reportModal" class="report-modal" style="display: none;">
+                                        <div class="report-modal-content">
+                                            <h2 class="report-title">Report Post</h2>
+                                            <p id="reportText" class="report-text">Select one of your own posts for comparison:</p>
+                                            <select id="userPosts" class="report-dropdown">
+                                                <!-- User's posts will be dynamically added here -->
+                                            </select>
+                                            <div class="report-buttons">
+                                                <button onclick="submitReport()" class="report-btn-orange">Submit</button>
+                                                <button onclick="closeModal()" class="report-btn-gray">Cancel</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endif %}
+
+                              
                            
                                 
 

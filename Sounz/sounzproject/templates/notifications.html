@@ -7,10 +7,15 @@
         <ul class="notification-list">
             {% for notification in notifications %}
                 <li class="notification">
-                    <strong>{{ notification.sender.username }}</strong>
+                    
+
                     {% if notification.notification_type == "like" %}
+                        <strong>{{ notification.sender.username }}</strong>
                         liked your post: <strong>{{ notification.post.caption }}</strong>
+                    {% elif notification.notification_type == "flagged" %}
+                        ⚠️ Your post <strong>{{ notification.post.caption }}</strong> has been flagged.
                     {% endif %}
+
                     <span class="timestamp">{{ notification.timestamp|date:"F j, Y, g:i a" }}</span>
                 </li>
             {% endfor %}

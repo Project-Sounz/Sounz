@@ -37,6 +37,9 @@ class postdb(models.Model):
     likes=models.IntegerField(default=0)
     media_format=models.CharField(max_length=20, blank=True)
     timestamp = models.DateTimeField(auto_now=True  )
+    # New fields for flagging system
+    flagged = models.BooleanField(default=False)  # 0 = Not Flagged, 1 = Flagged
+    flag_counter = models.IntegerField(default=0)  # Tracks offensive/explicit content reports
     
     def __str__(self):
         return str(self.pid)
@@ -86,6 +89,7 @@ class Notification(models.Model):
     NOTIFICATION_TYPES = (
         ('like', 'Like'),
         ('collab', 'Collaboration Request'),
+        ('flagged', 'Post Flagged'),
     )
     STATUS_CHOICES = [
         ('unread', 'Unread'),
