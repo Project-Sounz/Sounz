@@ -47,6 +47,120 @@
 
 {% block additional_js %}
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("✅ Page fully loaded. JavaScript is running.");
+
+        // Function to open the Report Modal and fetch user posts
+        window.openReportModal = async function(postId) {
+            let modal = document.getElementById("reportModal");
+            if (!modal) {
+                console.warn("⚠️ openReportModal() called but #reportModal does not exist.");
+                return;
+            }
+            modal.style.display = "block";
+            window.postToReport = postId;
+
+            let userPostsDropdown = document.getElementById("userPosts");
+            userPostsDropdown.innerHTML = ""; // Clear previous options
+
+            try {
+                let response = await fetch("/get-user-posts/");
+                if (!response.ok) {
+                    throw new Error(`Server Error: ${response.status}`);
+                }
+
+                let data = await response.json();
+                console.log("📥 Received user posts:", data);
+
+                if (data.posts.length === 0) {
+                    userPostsDropdown.innerHTML = "<option disabled>No posts available</option>";
+                } else {
+                    data.posts.forEach(post => {
+                        let option = document.createElement("option");
+                        option.value = post.pid;
+                        option.textContent = `${post.caption || "Untitled Post"} (${post.timestamp})`;
+                        userPostsDropdown.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error("⚠️ Error fetching user posts:", error);
+                alert("Failed to load your posts. Please try again.");
+            }
+        };
+
+        // Function to close the modal safely
+        window.closeModal = function () {
+            let modal = document.getElementById("reportModal");
+            if (!modal) {
+                console.warn("⚠️ closeModal() called but #reportModal does not exist.");
+                return;
+            }
+            modal.style.display = "none";
+            console.log("✅ Modal closed successfully.");
+        };
+
+        // Function to handle the report submission
+        window.submitReport = async function () {
+            let userPostId = document.getElementById("userPosts").value;
+            if (!userPostId) {
+                alert("⚠️ Please select one of your own posts.");
+                return;
+            }
+
+            try {
+                let response = await fetch(`/report-copyright/?reported_pid=${window.postToReport}&user_pid=${userPostId}`, {
+                    method: "POST",
+                    headers: { "X-CSRFToken": getCookie("csrftoken") }
+                });
+
+                if (!response.ok) {
+                    let errorText = await response.text();
+                    throw new Error(`🚨 Server Error: ${response.status} - ${errorText}`);
+                }
+
+                let data = await response.json();
+                console.log("📥 Received report response:", data);
+
+                if (data.match) {
+                    if (data.deleted) {
+                        alert("✅ Copyright violation detected! The post has been removed.");
+                        window.location.href = "{% url 'home' %}";  // Redirect to home page
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    alert("⚠️ No copyright violation detected.");
+                }
+
+                closeModal();
+            } catch (error) {
+                console.error("🚨 Upload Error:", error);
+                alert("Something went wrong. Please try again.");
+            }
+        };
+
+        // Function to get CSRF token for security
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+
+
+
+
+<script>
     // Function to delete post
     function confirmDelete(postId) {
         document.getElementById("deleteModal").style.display = "block";
@@ -68,7 +182,7 @@
         .then(data => {
             if (data.success) {
                 alert("Post deleted successfully");
-                location.reload();
+                window.location.href = "{% url 'my-profile' %}";
             } else {
                 alert("Error deleting post");
             }
@@ -237,6 +351,7 @@
                                 </div>
                                 
                                 
+                                
                             </div>
                         {% endif %}
                     </div>
@@ -288,6 +403,21 @@
                                 </svg>
                                <span class="span-controller">Share</span> 
                               </button>
+
+                              <button onclick="openReportModal('{{ post.pid }}')">Report Copyright</button>
+
+                                <!-- Report Modal -->
+                                <div id="reportModal" class="modal" style="display: none;">
+                                    <div class="modal-content">
+                                        <p>Select one of your own posts for comparison:</p>
+                                        <select id="userPosts">
+                                            <!-- User's posts will be dynamically added here -->
+                                        </select>
+                                        <button onclick="submitReport()">Submit</button>
+                                        <button onclick="closeModal()">Cancel</button>
+                                    </div>
+                                </div>
+
 
                             
                         </div>

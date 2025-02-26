@@ -14,6 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import json
+import os
+from .utils import compare_audio
 
 # Create your views here.
 def log(request):
@@ -605,3 +607,48 @@ def delete_post(request, post_id):
         post.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@csrf_exempt
+def report_copyright(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    reported_post_id = request.GET.get("reported_pid")
+    user_post_id = request.GET.get("user_pid")
+
+    if not reported_post_id or not user_post_id:
+        return JsonResponse({"error": "Missing post IDs"}, status=400)
+
+    reported_post = get_object_or_404(postdb, pid=reported_post_id)
+    user_post = get_object_or_404(postdb, pid=user_post_id)
+
+    print(f"🔍 Comparing User Post {user_post_id} with Reported Post {reported_post_id}")
+
+    # Compare the two posts
+    result = compare_audio(user_post.media.path, reported_post.media.path)
+
+    if result:  # If a match is found, compare timestamps
+        reported_timestamp = reported_post.timestamp
+        user_timestamp = user_post.timestamp
+        print(f"🕒 User Post Timestamp: {user_timestamp}, Reported Post Timestamp: {reported_timestamp}")
+
+        if reported_timestamp > user_timestamp:
+            print(f"🗑️ Deleting Reported Post ID: {reported_post_id}")
+            reported_post.delete()
+            return JsonResponse({"match": True, "deleted": True, "redirect": True, "message": "Copyright violation detected. Redirecting to homepage."})
+
+        return JsonResponse({"match": True, "deleted": False, "redirect": False, "message": "Match found, but original post is newer."})
+
+    return JsonResponse({"match": False, "deleted": False, "redirect": False, "message": "No copyright violation detected."})
+
+
+@login_required
+def get_user_posts(request):
+    """Fetch all posts by the logged-in user for copyright reporting."""
+    user_posts = postdb.objects.filter(username=request.user.username).values("pid", "caption", "timestamp")
+
+    # Debugging log
+    print(f"📥 Fetching posts for user: {request.user.username}")
+    print(f"📋 User Posts: {list(user_posts)}")
+
+    return JsonResponse({"posts": list(user_posts)})

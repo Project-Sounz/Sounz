@@ -39,5 +39,7 @@ urlpatterns = [
     path('search',views.search,name='search'),
     path('edit-post', views.editpost, name='edit-post'),
     path('delete-post/<uuid:post_id>/', views.delete_post, name='delete-post'),
+    path("report-copyright/", views.report_copyright, name="report_copyright"),
+    path("get-user-posts/", views.get_user_posts, name="get_user_posts"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
