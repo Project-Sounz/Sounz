@@ -6,6 +6,27 @@
 {% block additional_css %}
 <style>
 /* Report Modal Background */
+.post-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 20px;  /* Spacing between buttons */
+    margin-top: 20px;
+}
+
+.nav-button {
+    background-color:  rgb(241, 67, 43);
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.nav-button:hover {
+    background-color: rgba(248, 73, 27, 1); 
+}
+
 .report-modal {
     display: none; /* Initially hidden */
     position: fixed;
@@ -531,6 +552,8 @@
                                         </div>
                                     </div>
                                 </div>
+                           
+                                
 
 
                             
@@ -543,6 +566,23 @@
                         
                     <p class="media-desc">{{post.descr}}</p>
                     <p class="media-date">{{ post.timestamp|date }}</p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    {% if previous_post %}
+                        <a href="?pid={{ previous_post.pid }}" 
+                           style="background: rgba(248, 73, 27, 1); color: white; padding: 10px 15px;
+                                  text-decoration: none; border-radius: 5px; font-weight: bold; margin-right: 10px;">
+                            Previous Post
+                        </a>
+                    {% endif %}
+                    
+                    {% if next_post %}
+                        <a href="?pid={{ next_post.pid }}" 
+                           style="background: rgba(248, 73, 27, 1); color: white; padding: 10px 15px;
+                                  text-decoration: none; border-radius: 5px; font-weight: bold;">
+                            Next Post
+                        </a>
+                    {% endif %}
                 </div>
 
             {% endif %}

@@ -491,6 +491,23 @@ def media(request):
     user = profiledatadb.objects.get(username=username)
     pid = request.GET.get('pid')
     post = postdb.objects.get(pid=pid)
+    
+    post_list = list(postdb.objects.all().order_by('-timestamp'))
+    post_index = next((i for i, p in enumerate(post_list) if p.pid == post.pid), None)
+    # Get the next post (loops back to first if at the end)
+    next_post = post_list[post_index + 1] if post_index is not None and post_index + 1 < len(post_list) else None
+
+# Get the previous post (loops back to last if at the beginning)
+    previous_post = post_list[post_index - 1] if post_index is not None and post_index > 0 else None
+
+
+
+    
+
+
+    
+    
+    
 
     user_liked = Like.objects.filter(user=request.user, post=post).exists()
     user_saved = Save.objects.filter(user=request.user, post=post).exists()
@@ -502,7 +519,10 @@ def media(request):
         "post": post,
         "user": user,
         "user_liked": user_liked,
-        "user_saved": user_saved
+        "user_saved": user_saved,
+        "next_post": next_post,
+        "previous_post": previous_post,
+        
 
     }
 
