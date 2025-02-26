@@ -5,6 +5,106 @@
 
 {% block additional_css %}
 <style>
+/* Report Modal Background */
+.report-modal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Report Modal Box */
+.report-modal-content {
+    background: white;
+    width: 350px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: reportFadeIn 0.3s ease-in-out;
+}
+
+/* Report Title */
+.report-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Report Text */
+.report-text {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Dropdown */
+.report-dropdown {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Report Button Container */
+.report-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* Orange Submit Button */
+.report-btn-orange {
+    background-color: rgba(248, 73, 27, 1);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.report-btn-orange:hover {
+    background-color: #e65c00;
+}
+
+/* Gray Cancel Button */
+.report-btn-gray {
+    background-color: #bbb;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.report-btn-gray:hover {
+    background-color: #999;
+}
+
+/* Fade In Animation */
+@keyframes reportFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -52,12 +152,18 @@
 
         // Function to open the Report Modal and fetch user posts
         window.openReportModal = async function(postId) {
+            console.log("🔍 OpenReportModal triggered for post:", postId);
+            
             let modal = document.getElementById("reportModal");
             if (!modal) {
                 console.warn("⚠️ openReportModal() called but #reportModal does not exist.");
                 return;
             }
-            modal.style.display = "block";
+
+            // Make sure it's hidden first (prevents forced visibility issues)
+            modal.style.display = "none";
+
+            // Store the post ID globally
             window.postToReport = postId;
 
             let userPostsDropdown = document.getElementById("userPosts");
@@ -82,6 +188,10 @@
                         userPostsDropdown.appendChild(option);
                     });
                 }
+
+                // 🚀 Show modal only after data is loaded
+                modal.style.display = "flex";
+
             } catch (error) {
                 console.error("⚠️ Error fetching user posts:", error);
                 alert("Failed to load your posts. Please try again.");
@@ -124,7 +234,7 @@
                 if (data.match) {
                     if (data.deleted) {
                         alert("✅ Copyright violation detected! The post has been removed.");
-                        window.location.href = "{% url 'home' %}";  // Redirect to home page
+                        window.location.href = "{% url 'home' %}";  // Redirect to homepage
                     } else {
                         alert(data.message);
                     }
@@ -356,10 +466,10 @@
                         {% endif %}
                     </div>
                     <div class="actual-media">
-                        <video class="media-container" width="640" height="360" controls autoplay>
+                        <video class="media-container" width="640" height="360" controls autoplay controlsList="nodownload">
                             <source src="{{post.media.url}}" type="video/mp4" >
                             Your browser does not support the audio element
-                            <audio controls>
+                            <audio controls controlsList="nodownload">
                                 <source src="{{post.media.url}}" type="audio/mpeg" >
                                 Your browser does not support the audio element
                             </audio>
@@ -406,15 +516,19 @@
 
                               <button onclick="openReportModal('{{ post.pid }}')">Report Copyright</button>
 
-                                <!-- Report Modal -->
-                                <div id="reportModal" class="modal" style="display: none;">
-                                    <div class="modal-content">
-                                        <p>Select one of your own posts for comparison:</p>
-                                        <select id="userPosts">
+                                <!-- Report Copyright Modal -->
+                               <!-- Report Copyright Modal -->
+                                <div id="reportModal" class="report-modal" style="display: none;">
+                                    <div class="report-modal-content">
+                                        <h2 class="report-title">Report Copyright Infringement</h2>
+                                        <p class="report-text">Select one of your own posts for comparison:</p>
+                                        <select id="userPosts" class="report-dropdown">
                                             <!-- User's posts will be dynamically added here -->
                                         </select>
-                                        <button onclick="submitReport()">Submit</button>
-                                        <button onclick="closeModal()">Cancel</button>
+                                        <div class="report-buttons">
+                                            <button onclick="submitReport()" class="report-btn-orange">Submit</button>
+                                            <button onclick="closeModal()" class="report-btn-gray">Cancel</button>
+                                        </div>
                                     </div>
                                 </div>
 
