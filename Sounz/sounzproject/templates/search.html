@@ -39,6 +39,7 @@
         
             
             {% for post in user_posts %}
+               {% if not post.flagged %}
                 <div class="homefeed"><!-- media each-main container -->
 
                         
@@ -98,6 +99,7 @@
 
 
                 </div>
+               {% endif %}
             {% endfor %}
             
     </div>

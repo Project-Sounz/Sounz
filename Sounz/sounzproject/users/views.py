@@ -440,11 +440,13 @@ def notifications(request):
     """ Display all notifications for the logged-in user """
     user_notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')
 
+    reported_posts = {notif.post for notif in user_notifications if notif.post}
+
     # ✅ Only update if the `status` field exists
     if hasattr(Notification, 'status'):
         user_notifications.update(status="read")
 
-    return render(request, 'notifications.html', {'notifications': user_notifications})
+    return render(request, 'notifications.html', {'notifications': user_notifications,'reported_posts': reported_posts})
 
 
 
@@ -538,7 +540,7 @@ def search(request):
             input_value = request.POST.get("search-input1")
             posts = postdb.objects.filter(
             Q(mediatype__icontains=input_value) | Q(username=input_value) | Q(caption__icontains=input_value)
-            )   
+            ).filter(flagged=0)   
             all_users = profiledatadb.objects.all()
             username = request.user.username
             user = profiledatadb.objects.get(username=username)
@@ -630,6 +632,7 @@ def delete_post(request, post_id):
     return JsonResponse({'success': False, 'error': 'Invalid request'})
 
 @csrf_exempt
+@login_required
 def report_copyright(request):
     if request.method != "POST":
         return JsonResponse({"error": "Invalid request method"}, status=405)
@@ -695,12 +698,52 @@ def report_copyright(request):
 @login_required
 def get_user_posts(request):
     """Fetch all posts by the logged-in user for copyright reporting."""
-    user_posts = postdb.objects.filter(username=request.user.username).values("pid", "caption", "timestamp")
+    user_posts = postdb.objects.filter(username=request.user.username,flagged=0).values("pid", "caption", "timestamp")
 
     # Debugging log
     print(f"📥 Fetching posts for user: {request.user.username}")
     print(f"📋 User Posts: {list(user_posts)}")
 
     return JsonResponse({"posts": list(user_posts)})
+
+@csrf_exempt
+@login_required
+def report_offensive(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    post_id = request.GET.get("post_id")
+    if not post_id:
+        return JsonResponse({"error": "Missing post ID"}, status=400)
+
+    post = get_object_or_404(postdb, pid=post_id)
+
+    # Check if the user has already reported this post
+    if post.reported_users.filter(id=request.user.id).exists():
+        return JsonResponse({"error": "You have already reported this post."}, status=400)
+
+    # Increment the flag counter and add user to reported_users
+    post.flag_counter += 1
+    post.reported_users.add(request.user)
+
+    # Flag the post if it has been reported more than 5 times
+    if post.flag_counter >= 5:
+        post.flagged = True
+        post.save()
+        recipient_user = User.objects.get(username=post.username.username) 
+        # Create a notification for the flagged post
+        Notification.objects.create(
+            recipient=recipient_user,  # Ensure `username` links to `User`
+            sender=request.user,
+            post=post,
+            message="Your post has been flagged for offensive/explicit content.",
+            notification_type="flagged",
+            timestamp=now()
+        )
+        return JsonResponse({"success": True, "flagged": True, "message": "Post has been flagged for offensive content."})
+
+    post.save()
+    return JsonResponse({"success": True, "flagged": False, "message": "Report submitted. "})
+
 
 

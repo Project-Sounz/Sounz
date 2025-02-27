@@ -41,6 +41,7 @@ urlpatterns = [
     path('delete-post/<uuid:post_id>/', views.delete_post, name='delete-post'),
     path("report-copyright/", views.report_copyright, name="report_copyright"),
     path("get-user-posts/", views.get_user_posts, name="get_user_posts"),
+    path("report-offensive/", views.report_offensive, name='report_offensive'),
     
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -483,9 +483,15 @@
                             </span></p>
                         </a>
                         {% if post.flagged %}
-                        <div style="color: red; font-weight: bold; margin-top: 10px;">
-                            ⚠️ This post has been flagged for copyright infringement or offensive content.
-                        </div>
+                          {% if post.flag_counter >= 5 %}
+                            <div style="color: red; font-weight: bold; margin-top: 10px;">
+                                ⚠️ This post has been flagged for offensive/explicit content.
+                            </div>
+                          {% else %}
+                            <div style="color: red; font-weight: bold; margin-top: 10px;">
+                                ⚠️ This post has been flagged for copyright infringement.
+                            </div>
+                          {% endif %}  
                         {% endif %}
                         {% if user.username == puser.username %}
                             <div class="editdelete">

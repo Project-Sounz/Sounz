@@ -40,6 +40,7 @@ class postdb(models.Model):
     # New fields for flagging system
     flagged = models.BooleanField(default=False)  # 0 = Not Flagged, 1 = Flagged
     flag_counter = models.IntegerField(default=0)  # Tracks offensive/explicit content reports
+    reported_users = models.ManyToManyField(User, blank=True, related_name="reported_posts")
     
     def __str__(self):
         return str(self.pid)
