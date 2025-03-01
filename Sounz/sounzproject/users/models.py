@@ -20,6 +20,7 @@ class profiledatadb(models.Model):
     insta=models.URLField(max_length=200,blank=True,null=True)
     yout=models.URLField(max_length=200,blank=True,null=True)
     twit=models.URLField(max_length=200, blank=True,null=True)
+    followers = models.ManyToManyField(User, related_name="following", blank=True)
 
     def __str__(self):
         return str(self.username) 

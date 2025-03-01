@@ -8,6 +8,40 @@
 {% endblock %}
 {% block additional_js %}
 <script src="{% static 'js/profilepage-content.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const followBtn = document.getElementById("follow-btn");
+    
+        if (followBtn) {
+            followBtn.addEventListener("click", function () {
+                const username = this.getAttribute("data-username");
+    
+                fetch("{% url 'toggle-follow' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({ "username": username })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.followed) {
+                        followBtn.textContent = "Unfollow";
+                        followBtn.classList.remove("follow");
+                        followBtn.classList.add("unfollow");
+                    } else {
+                        followBtn.textContent = "Follow";
+                        followBtn.classList.remove("unfollow");
+                        followBtn.classList.add("follow");
+                    }
+                    document.getElementById("follower-count").textContent = data.follower_count;
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        }
+    });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -17,6 +51,14 @@
     <img src= '{{pname.profile_picture.url}}' alt="{{.firstname}}'s profile picture" class="imgcenter"/>
     <p id="profile-name">{{ pname.firstname }}<span>  </span>{{ pname.lastname }}</p>
     <p id="user-name-id"><span class="username"></span>{{pname.username}}</p>
+    <button id="follow-btn" data-username="{{ pname.username }}" 
+    class="{% if is_following %}unfollow{% else %}follow{% endif %}">
+    {% if is_following %}Unfollow{% else %}Follow{% endif %}
+</button>
+
+<span id="follower-count">{{ pname.followers.count }}</span>
+
+
     <div class="socials">
         <a href="{{ pname.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="" ></a>
         <a href="{{ pname.twit }}"><img src="{% static 'images/x 64.png' %}" alt="" ></a>

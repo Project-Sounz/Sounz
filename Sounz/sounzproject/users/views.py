@@ -195,22 +195,29 @@ def profile_new(request):
 def profile_tpv(request):
     try:
         current_user = request.user.username
-        uname=request.GET.get('uname')
-        if uname == current_user :
+        uname = request.GET.get('uname')
+
+        if uname == current_user:
             return redirect('my-profile')
-        else:
-            pname=profiledatadb.objects.get(username=uname)
-            user=request.user.username
-            userBioCollect = profiledatadb.objects.get(username=user)
-            post=postdb.objects.filter(username=pname)
-            context={
-                'pname':pname,
-                'user':userBioCollect,
-                'posters':post,
-            }
-            return render(request, 'profile-tpv.html',context)
+
+        pname = profiledatadb.objects.get(username=uname)
+        userBioCollect = profiledatadb.objects.get(username=current_user)
+        post = postdb.objects.filter(username=pname)
+
+        # Correct way to check if the user is a follower
+        is_following = pname.followers.filter(id=request.user.id).exists()
+
+        context = {
+            'pname': pname,
+            'user': userBioCollect,
+            'posters': post,
+            'is_following': is_following,  # Pass this correctly
+        }
+        return render(request, 'profile-tpv.html', context)
+
     except profiledatadb.DoesNotExist:
         return render(request, '404.html', status=404)
+
 
 def homepage(request):
     all_users = profiledatadb.objects.all()
@@ -747,3 +754,23 @@ def report_offensive(request):
 
 
 
+@login_required
+def toggle_follow(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        profile = get_object_or_404(profiledatadb, username=username)
+
+        # Ensure the user is retrieved correctly
+        user = request.user
+
+        if profile.followers.filter(id=user.id).exists():
+            profile.followers.remove(user)  # Remove follower
+            followed = False
+        else:
+            profile.followers.add(user)  # Add follower
+            followed = True
+        
+        # Save changes explicitly
+        profile.save()
+
+        return JsonResponse({"followed": followed, "follower_count": profile.followers.count()})

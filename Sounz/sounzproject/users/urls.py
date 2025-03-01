@@ -42,6 +42,6 @@ urlpatterns = [
     path("report-copyright/", views.report_copyright, name="report_copyright"),
     path("get-user-posts/", views.get_user_posts, name="get_user_posts"),
     path("report-offensive/", views.report_offensive, name='report_offensive'),
-    
+    path("toggle-follow/", views.toggle_follow, name="toggle-follow"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
