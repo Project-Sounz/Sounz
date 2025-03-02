@@ -588,12 +588,13 @@ def editpost(request):
     username = request.user.username
     userobj = profiledatadb.objects.get(username=username)
     post_id = request.GET.get('post_id')
+
     try:
         pos = postdb.objects.get(pid=post_id)
     except postdb.DoesNotExist:
         prompt_message = "Post not found."
         return render(request, 'edit-post.html', {'user': userobj, 'prompt_message': prompt_message})
-    
+
     if request.method == 'POST':
         caption = request.POST.get('title')
         desc = request.POST.get('post_description')
@@ -602,10 +603,10 @@ def editpost(request):
         lan = request.POST.get('language')
         loc = request.POST.get('location')        
         is_private = request.POST.get('media_visibility_control') == 'on'
-        form = Uploadform(request.POST, request.GET)
+        
+        form = Uploadform(request.POST, request.FILES, instance=pos)  # Pre-fill form
 
         if form.is_valid():
-            # Update only the specified post fields
             pos.caption = caption
             pos.descr = desc
             pos.langu = lan
@@ -620,18 +621,22 @@ def editpost(request):
             puser = profiledatadb.objects.get(username=ps)
             user_liked = Like.objects.filter(user=request.user, post=pos).exists()
             user_saved = Save.objects.filter(user=request.user, post=pos).exists()
+            
             context = {
                 "puser": puser,
                 "post": pos,
                 "user": userobj,
                 "user_liked": user_liked,
                 "user_saved": user_saved
-
             }
-
             return render(request, 'media.html', context)
-    
-    return render(request, 'edit-post.html', {'user': userobj, 'post': pos})
+
+    else:
+        # Pre-fill the form with existing post details
+        form = Uploadform(instance=pos)
+
+    return render(request, 'edit-post.html', {'user': userobj, 'post': pos, 'form': form})
+
 
 #delete post
 def delete_post(request, post_id):
