@@ -248,6 +248,7 @@ def upload(request):
         media_type = request.POST.get('media_type')
         lan = request.POST.get('language')
         loc = request.POST.get('location')
+        is_private = request.POST.get('media_visibility_control') == 'on'
         form = Uploadform(request.POST, request.GET)
 
         if form.is_valid(): 
@@ -259,7 +260,7 @@ def upload(request):
                 prompt_message = "Invalid file type. Only video and audio files are allowed."
                 return render(request, 'upload_form.html', {'user': userobj, 'prompt_message': prompt_message})
 
-            pos = postdb(username=userobj, caption=caption, descr=desc, langu=lan, mediatype=typ, location=loc, media=file, media_format=media_type, media_thumbnail=gotthumbnail)
+            pos = postdb(username=userobj, caption=caption, descr=desc, langu=lan, mediatype=typ, location=loc, media=file, media_format=media_type, media_thumbnail=gotthumbnail, is_private=is_private)
             pos.save()
 
             prompt_message = "Post successfully uploaded!"
