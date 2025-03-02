@@ -469,7 +469,7 @@
 {% block content %}
     <div class="header-for-home">{% include 'header-base-sub.html' %}</div>
     {% if user %}
-        {% if not post.is_private %}
+        {% if user.username == puser.username or not post.is_private %}
             {% if puser %}
                 <div class="media">
                     <div class="media-header">

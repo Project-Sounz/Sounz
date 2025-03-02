@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import json
 import os
-from .utils import compare_audio
+# from .utils import compare_audio
 from django.utils.timezone import now
 
 # Create your views here.
@@ -600,7 +600,8 @@ def editpost(request):
         typ = request.POST.get('tags')
         media_type = request.POST.get('media_type')
         lan = request.POST.get('language')
-        loc = request.POST.get('location')
+        loc = request.POST.get('location')        
+        is_private = request.POST.get('media_visibility_control') == 'on'
         form = Uploadform(request.POST, request.GET)
 
         if form.is_valid():
@@ -611,6 +612,7 @@ def editpost(request):
             pos.mediatype = typ
             pos.location = loc
             pos.media_format = media_type
+            pos.is_private = is_private
             pos.save()
 
             prompt_message = "Post successfully updated!"
