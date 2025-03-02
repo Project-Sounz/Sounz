@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import json
 import os
-# from .utils import compare_audio
+from .utils import compare_audio
 from django.utils.timezone import now
 
 # Create your views here.
