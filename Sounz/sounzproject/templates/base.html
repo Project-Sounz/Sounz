@@ -44,6 +44,7 @@
                 <a href="{% url 'my-profile' %}?section=saved"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"></a>
                 <a onclick="toggleCollabMenu('web')"><img class="navbar-control-icons" src="{% static 'images/collab_nav.svg' %}" alt="Collab icon"></a>
                 <a href="{% url 'notifications' %}"><img class="navbar-control-icons" src="{% static 'images/notifications.svg' %}" alt="notification icon"></a>
+                <a onclick="toggleCollabMenu('web')"><img class="navbar-control-icons" src="{% static 'images/collab_nav.svg' %}" alt="Collab icon"></a>
             </nav>
         </div>
 
@@ -66,6 +67,23 @@
                 
         </div>
 
+    <div class="web-collab-list" id="collabMenu">
+        <div class="back-arrow">
+            <button id="back-arrow" onclick="toggleCollabMenu('mob')"><img src="{% static 'images/back_arrow.svg' %}" alt="back-arrow"></button>
+        </div>
+        <h1 class="your-collab-head">Your Collaborations</h1>
+        <hr class="your-collab-hr">
+        <div class="w-main-container">
+            {% if collab_list %}
+                {% for collabs in collab_list %}
+                    <a class="collab-list-element" href="{% url 'collab-workspace' %}?collab-id={{collabs.collaboration_Id}}">{{ collabs.collaboration_title }}</a>
+                    <hr class="collab-list-hr">
+                {% endfor %}
+            {% else %}
+                <a class="collab-list-element">No Collaborations</a>
+            {% endif %}
+        </div>
+        </div>
         <!-- mobile navigation -->
          
         <div class="menu-toggle" onclick="toggleMenu()">
@@ -100,7 +118,7 @@
                 <a href="{% url 'upload' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/upload-white.svg' %}" alt="Upload icon"><span class="nav-tooltip">Upload</span></a>
                 <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'my-profile' %}?section=saved" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/save.svg' %}" alt="Save icon"><span class="nav-tooltip">Saved</span></a>
-                <a href="{% url 'my-profile' %}?section=saved" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/collab_nav.svg' %}" alt="collab tab icon"><span class="nav-tooltip">Collabs</span></a>
+                <a onclick="toggleCollabMenu('mob')" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/collab_nav.svg' %}" alt="collab tab icon"><span class="nav-tooltip">Collabs</span></a>
                 <!-- <hr class="navbar-line"> -->
                 <a href="{% url 'notifications' %}" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/notifications.svg' %}" alt="notification icon"><span class="nav-tooltip">Upload</span></a>
                 <a onclick="toggleCollabMenu('mob')" class="navbar-links"><img class="navbar-control-icons" src="{% static 'images/collab_nav.svg' %}" alt="collab tab icon"><span class="nav-tooltip">Collabs</span></a>

@@ -953,6 +953,73 @@ def send_decision_email(receiver_email, receiver_username, post_name,decision):
     email_thread = threading.Thread(target=send_email)
     email_thread.start()
     print("Mail Sent!") 
+
+def collab_workspace(request):
+    collab_Id = request.GET.get('collab-id')
+    if not collab_Id:
+        return JsonResponse({'error': 'Missing collab-id'}, status=400) 
+    print("collab Id:",collab_Id)
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_Id)
+        collab_base_owners = Member_Information.objects.filter(collaboration_id=collab_Id)
+        base_post = postdb.objects.get(pid=collab.base_post_id.pid)
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({'error': 'Collaboration not found'}, status=404)
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        sync_audio_list = syncAudios.objects.filter(collaboration_id=collab_Id)
+
+        # Convert queryset to list of dictionaries
+        audio_data = list(sync_audio_list.values("syncId", "timestamp", "syncMedia"))
+
+        return JsonResponse({'audio_list': audio_data})
+
+    context = {
+        'collab': collab,
+        'post_owners': collab_base_owners,
+        'post_base': base_post,
+    }
+    return render(request, "collab.html", context)
+
+@csrf_exempt
+def upload_sync_audio(request):
+    if request.method == "POST":
+        if "syncMedia" not in request.FILES:
+            return JsonResponse({"error": "No file uploaded"}, status=400)
+
+        if "syncMedia" in request.FILES:
+            file = request.FILES["syncMedia"]
+            print("Uploaded file size:", file.size)
+        file = request.FILES["syncMedia"]
+        collab_id = request.POST.get("collaboration_id")
+
+        if not collab_id:
+            return JsonResponse({"error": "Missing collaboration ID"}, status=400)
+
+        try:
+            collaboration = Collab_Information.objects.get(collaboration_Id=collab_id)
+            instance = syncAudios(collaboration=collaboration, syncMedia=file)
+            instance.save()
+            
+            return JsonResponse({"message": "File uploaded successfully!", "file_url": instance.syncMedia.url})
+
+        except Collab_Information.DoesNotExist:
+            return JsonResponse({"error": "Invalid collaboration ID"}, status=404)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+@csrf_protect 
+@require_http_methods(["DELETE"])
+def delete_audio(request):
+    if request.method == "DELETE":
+        syncId = request.GET.get('syncId')
+        print(syncId)
+        fetchedAudio = syncAudios.objects.get(syncId = syncId)
+        fetchedAudio.delete()
+    return JsonResponse({"success": True})  
 #delete post
 def delete_post(request, post_id):
     if request.method == "POST":

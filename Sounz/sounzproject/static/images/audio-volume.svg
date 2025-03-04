@@ -1,4 +1,9 @@
 <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+<<<<<<< HEAD
 <path d="M29 6L15.6667 19.1429H5V38.8571H15.6667L29 52V6Z" stroke="#7A7A7A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M47.4539 9.91417C52.389 14.9538 55.1614 21.7881 55.1614 28.9142C55.1614 36.0402 52.389 42.8745 47.4539 47.9142M38.1614 19.4007C40.6289 21.9206 42.0151 25.3377 42.0151 28.9007C42.0151 32.4638 40.6289 35.8809 38.1614 38.4007" stroke="#7A7A7A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+=======
+<path d="M26.5833 12.0833L14.4999 21.75H4.83325V36.25H14.4999L26.5833 45.9167V12.0833Z" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M46.0858 11.9142C50.6163 16.4461 53.1614 22.5919 53.1614 29C53.1614 35.4081 50.6163 41.5539 46.0858 46.0858M37.5549 20.445C39.8202 22.711 41.0928 25.7839 41.0928 28.9879C41.0928 32.192 39.8202 35.2649 37.5549 37.5308" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+>>>>>>> 96ddb47f (all elements included)
 </svg>
