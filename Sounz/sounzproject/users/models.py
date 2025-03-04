@@ -12,7 +12,7 @@ class profiledatadb(models.Model):
     firstname=models.CharField(max_length=30)
     lastname=models.CharField(max_length=30)
     email = models.EmailField()
-    profile_picture = models.ImageField(upload_to='Media/')
+    profile_picture = models.ImageField(upload_to='media/Profiles')
     user_bio=models.TextField()
     phone=models.IntegerField(null=True)
     timestamp=models.DateTimeField(auto_now_add=True,null=True)
@@ -86,10 +86,13 @@ class Collab_Information(models.Model):
     base_post_id = models.ForeignKey(postdb, on_delete=models.CASCADE)
     request_status = models.CharField(max_length=20, default="pending")
     timestamp = models.DateTimeField(auto_now_add=True)
-    collaboration_title = models.CharField(max_length=50, default="Untitled collaboration")
+    collaboration_title = models.CharField(max_length=50, default="Untitled collaboration test")
     collaborated_members = models.ManyToManyField(User, through="Member_Information")
     base_plan = models.CharField(max_length=200,default=None)
     collab_requestor = models.CharField(max_length=25,default=None)
+    collab_end = models.BooleanField(default=False)
+    owner_count = models.IntegerField(default=1)
+    accept_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.collaboration_title
@@ -102,4 +105,13 @@ class Member_Information(models.Model):
         unique_together = ('collaboration', 'post_owner')
 
     def __str__(self):
-        return f"{self.user.username} in {self.collaboration.collaboration_title}"
+        return f"{self.post_owner.username} in {self.collaboration.collaboration_title}"
+
+class syncAudios(models.Model):
+    collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
+    syncId=models.UUIDField(primary_key=True,max_length=10,default=uuid.uuid4)
+    syncMedia=models.FileField(upload_to='media/syncAudios')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.collaboration.collaboration_Id} in {self.syncId}"

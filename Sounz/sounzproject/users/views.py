@@ -11,7 +11,8 @@ from django.core.mail import EmailMessage
 from email.mime.image import MIMEImage
 import random
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import json
@@ -180,10 +181,17 @@ def profile_new(request):
         post = postdb.objects.filter(username=user)
         saved = Save.objects.filter(user=request.user).values_list('post', flat=True)
         savedposts = postdb.objects.filter(pid__in=saved)
+        all_collab_list = Collab_Information.objects.filter(collab_requestor=request.user.username, collab_end = False, request_status = "accepted")
+        collab_member_list = Member_Information.objects.filter(post_owner=request.user).select_related('collaboration').filter(
+            collaboration__collab_end=False,
+            collaboration__request_status="accepted"
+        )
+        combined_collab_list = list(all_collab_list) + [member.collaboration for member in collab_member_list]
         context = {
             'user': userBioCollect,
             'post': post,
             'saved': savedposts,
+            'collab_list': combined_collab_list,
         }
 
     except profiledatadb.DoesNotExist:
@@ -205,13 +213,22 @@ def profile_tpv(request):
     }
     return render(request, 'profile-tpv.html',context)
 
+@login_required
 def homepage(request):
+    print(request.user.id)
     all_users = profiledatadb.objects.all()
     username = request.user.username
     user = profiledatadb.objects.get(username=username)
     sliced= profiledatadb.objects.all()[:4]
     topart=profiledatadb.objects.all()
     random_profiles = random.sample(list(topart), min(len(topart), 4))
+    print(username)
+    all_collab_list = Collab_Information.objects.filter(collab_requestor=username, collab_end = False, request_status = "accepted")
+    collab_member_list = Member_Information.objects.filter(post_owner=request.user).select_related('collaboration').filter(
+        collaboration__collab_end=False,
+        collaboration__request_status="accepted"
+    )
+    combined_collab_list = list(all_collab_list) + [member.collaboration for member in collab_member_list]
     # Fetch posts of the current user
     user_posts = postdb.objects.all().order_by('-timestamp')
     context = {
@@ -219,14 +236,24 @@ def homepage(request):
         'user': user,
         'user_posts': user_posts,
         'sliced':sliced,
-        'topart':random_profiles
+        'topart':random_profiles,
+        'collab_list': combined_collab_list,
     }
     return render(request, 'home.html',context)
 
 def upload(request):
     username = request.user.username
     userobj = profiledatadb.objects.get(username=username)
-
+    all_collab_list = Collab_Information.objects.filter(collab_requestor=request.user.username, collab_end = False, request_status = "accepted")
+    collab_member_list = Member_Information.objects.filter(post_owner=request.user).select_related('collaboration').filter(
+    collaboration__collab_end=False,
+    collaboration__request_status="accepted"
+    )
+    combined_collab_list = list(all_collab_list) + [member.collaboration for member in collab_member_list]   
+    context = {
+            "user": userobj,
+            'collab_list': combined_collab_list,
+        }
     if request.method == 'POST':
         caption = request.POST.get('title')
         desc = request.POST.get('post_description')
@@ -251,7 +278,7 @@ def upload(request):
             prompt_message = "Post successfully uploaded!"
             return render(request, 'upload_form.html', {'user': userobj, 'prompt_message': prompt_message})
 
-    return render(request, 'upload_form.html', {'user': userobj})
+    return render(request, 'upload_form.html', context)
 
 
 def editprofile(request):
@@ -259,7 +286,16 @@ def editprofile(request):
         username=request.user.username
         user = profiledatadb.objects.get(username=username)
         userauth=User.objects.get(username=username)
-
+        all_collab_list = Collab_Information.objects.filter(collab_requestor=request.user.username, collab_end = False, request_status = "accepted")
+        collab_member_list = Member_Information.objects.filter(post_owner=request.user).select_related('collaboration').filter(
+        collaboration__collab_end=False,
+        collaboration__request_status="accepted"
+        )
+        combined_collab_list = list(all_collab_list) + [member.collaboration for member in collab_member_list]   
+        context = {
+            "user": user,
+            'collab_list': combined_collab_list,
+        }
 
 
 
@@ -292,7 +328,7 @@ def editprofile(request):
 
         else:
             form = EditProfileForm(instance=user)
-        return render(request,'editprofile.html',{'user':user}) 
+        return render(request,'editprofile.html',context) 
 
 def signout(request):
     logout(request)
@@ -424,13 +460,19 @@ def media(request):
 
     ps = post.username
     puser = profiledatadb.objects.get(username=ps)
+    all_collab_list = Collab_Information.objects.filter(collab_requestor=request.user.username, collab_end = False, request_status = "accepted")
+    collab_member_list = Member_Information.objects.filter(post_owner=request.user).select_related('collaboration').filter(
+        collaboration__collab_end=False,
+        collaboration__request_status="accepted"
+    )
+    combined_collab_list = list(all_collab_list) + [member.collaboration for member in collab_member_list]   
     context = {
         "puser": puser,
         "post": post,
         "user": user,
         "user_liked": user_liked,
-        "user_saved": user_saved
-
+        "user_saved": user_saved,
+        'collab_list': combined_collab_list,
     }
 
     return render(request, 'media.html', context)
@@ -468,13 +510,20 @@ def search(request):
     topart=profiledatadb.objects.all()
     random_profiles = random.sample(list(topart), min(len(topart), 4))
     # Fetch posts of the current user
+    all_collab_list = Collab_Information.objects.filter(collab_requestor=request.user.username, collab_end = False, request_status = "accepted")
+    collab_member_list = Member_Information.objects.filter(post_owner=request.user).select_related('collaboration').filter(
+        collaboration__collab_end=False,
+        collaboration__request_status="accepted"
+    )
+    combined_collab_list = list(all_collab_list) + [member.collaboration for member in collab_member_list]    
     user_posts = postdb.objects.all().order_by('-timestamp')
     context = {
         'all_users': all_users,
         'user': user,
         'user_posts': user_posts,
         'sliced':sliced,
-        'topart':random_profiles
+        'topart':random_profiles,
+        'collab_list': combined_collab_list,
     }
 
     return render(request,'search.html',context)
@@ -484,6 +533,12 @@ def editpost(request):
     username = request.user.username
     userobj = profiledatadb.objects.get(username=username)
     post_id = request.GET.get('post_id')
+    all_collab_list = Collab_Information.objects.filter(collab_requestor=request.user.username, collab_end = False, request_status = "accepted")
+    collab_member_list = Member_Information.objects.filter(post_owner=request.user).select_related('collaboration').filter(
+        collaboration__collab_end=False,
+        collaboration__request_status="accepted"
+    )
+    combined_collab_list = list(all_collab_list) + [member.collaboration for member in collab_member_list]
     try:
         pos = postdb.objects.get(pid=post_id)
     except postdb.DoesNotExist:
@@ -519,8 +574,8 @@ def editpost(request):
                 "post": pos,
                 "user": userobj,
                 "user_liked": user_liked,
-                "user_saved": user_saved
-
+                "user_saved": user_saved,
+                'collab_list': combined_collab_list,
             }
 
             return render(request, 'media.html', context)
@@ -801,3 +856,70 @@ def send_decision_email(receiver_email, receiver_username, post_name,decision):
     email_thread = threading.Thread(target=send_email)
     email_thread.start()
     print("Mail Sent!") 
+
+def collab_workspace(request):
+    collab_Id = request.GET.get('collab-id')
+    if not collab_Id:
+        return JsonResponse({'error': 'Missing collab-id'}, status=400) 
+    print("collab Id:",collab_Id)
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_Id)
+        collab_base_owners = Member_Information.objects.filter(collaboration_id=collab_Id)
+        base_post = postdb.objects.get(pid=collab.base_post_id.pid)
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({'error': 'Collaboration not found'}, status=404)
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        sync_audio_list = syncAudios.objects.filter(collaboration_id=collab_Id)
+
+        # Convert queryset to list of dictionaries
+        audio_data = list(sync_audio_list.values("syncId", "timestamp", "syncMedia"))
+
+        return JsonResponse({'audio_list': audio_data})
+
+    context = {
+        'collab': collab,
+        'post_owners': collab_base_owners,
+        'post_base': base_post,
+    }
+    return render(request, "collab.html", context)
+
+@csrf_exempt
+def upload_sync_audio(request):
+    if request.method == "POST":
+        if "syncMedia" not in request.FILES:
+            return JsonResponse({"error": "No file uploaded"}, status=400)
+
+        if "syncMedia" in request.FILES:
+            file = request.FILES["syncMedia"]
+            print("Uploaded file size:", file.size)
+        file = request.FILES["syncMedia"]
+        collab_id = request.POST.get("collaboration_id")
+
+        if not collab_id:
+            return JsonResponse({"error": "Missing collaboration ID"}, status=400)
+
+        try:
+            collaboration = Collab_Information.objects.get(collaboration_Id=collab_id)
+            instance = syncAudios(collaboration=collaboration, syncMedia=file)
+            instance.save()
+            
+            return JsonResponse({"message": "File uploaded successfully!", "file_url": instance.syncMedia.url})
+
+        except Collab_Information.DoesNotExist:
+            return JsonResponse({"error": "Invalid collaboration ID"}, status=404)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+@csrf_protect 
+@require_http_methods(["DELETE"])
+def delete_audio(request):
+    if request.method == "DELETE":
+        syncId = request.GET.get('syncId')
+        print(syncId)
+        fetchedAudio = syncAudios.objects.get(syncId = syncId)
+        fetchedAudio.delete()
+    return JsonResponse({"success": True})  

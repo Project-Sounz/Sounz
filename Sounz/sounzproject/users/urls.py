@@ -39,5 +39,8 @@ urlpatterns = [
     path('edit-post', views.editpost, name='edit-post'),
     path('collab-request/<uuid:collab_id>/', views.collaboration_request, name='collab_request'),
     path('update-collab-status/<uuid:collab_id>/', views.update_collab_status, name='update-collab-status'),
+    path('workspace',views.collab_workspace,name='collab-workspace'),
+    path("upload-sync-audio/", views.upload_sync_audio, name="upload_sync_audio"),
+    path("delete-audio", views.delete_audio, name="delete-audio"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

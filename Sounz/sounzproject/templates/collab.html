@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sounz{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+{% block content %}
+<!-- <div class="header-for-home">{% include 'header-base-sub.html' %}</div> -->
+<input type="hidden" id="collabId" value="{{ collab.collaboration_Id }}">
+<div class="main-collab-container">
+    <div class="header-button">
+        <button id="refresh">Refresh</button>
+    </div>
+    <div class="collab-and-chat">
+        <div class="collab-tool">
+            <div class="audio-lists">
+                <div class="base-audio-container">
+                    <div class="base-audio-graph b-s-Allaudio" id="base-audio-graph"><input type="hidden" id="base-audio-storage" value="{{ post_base.media.url }}"></div>
+                    <div class="base-audio-controls">
+                        <div class="base-audio-contents">
+                            <p id="base-contents"><span id="audio-title">{{ post_base.caption }}</span><span id="divider">•</span><span id="main-show-button">Main Audio</span></p>
+                        </div>
+                        <div id="base-audio-control-panel">
+                            <div class="control-base">
+                                <img class="single-audio-play" src="{% static 'images/audio-play.svg' %}" data-container="base-audio-graph" alt="play-button">
+                                <img class="single-audio-pause" src="{% static 'images/audio-pause.svg' %}" data-container="base-audio-graph" alt="pause-button">
+                                <img class="single-audio-stop" src="{% static 'images/audio-stop.svg' %}" data-container="base-audio-graph" alt="stop-button">    
+                            </div>
+                            <div class="volume-base">
+                                <label for="volume"><img class="single-volume" src="{% static 'images/audio-volume.svg' %}" data-container="base-audio-graph" alt="volume-button"></label>
+                                <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="main-sync-container">
+                    
+                </div>
+            </div>
+            <div class="g-rSync-container" id="g-rSync-container" style="display: none;">
+                <div class="g-rSync-audio-graph b-s-Allaudio" id="g-rSync-audio-graph"></div>
+                <div class="sync-audio-controls">
+                    <div class="g-rSync-buttons">
+                        <button id="g-rSync-sync">Sync</button>
+                        <button id="g-rSync-redo">Redo</button>
+                    </div>
+                    <div id="g-rSync-control-panel">
+                        <div class="control-rSync">
+                            <img class="single-audio-play" src="{% static 'images/audio-play.svg' %}" data-container="g-rSync-audio-graph" alt="play-button">
+                            <img class="single-audio-pause" src="{% static 'images/audio-pause.svg' %}" data-container="g-rSync-audio-graph" alt="pause-button">
+                            <img class="single-audio-stop" src="{% static 'images/audio-stop.svg' %}" data-container="g-rSync-audio-graph" alt="stop-button">    
+                        </div>
+                        <div class="volume-sync">
+                            <label for="volume"><img class="single-volume-icon" src="{% static 'images/audio-volume.svg' %}" data-container="g-rSync-audio-graph" alt="volume-button"></label>
+                            <input type="range" class="single-volume" id="volume" min="0" max="1" step="0.1" value="0.5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="master-control-container">
+                <div class="master-controls">
+                    <label>Mic Volume:</label>
+                    <input type="range" id="micVolume" min="0" max="1" step="0.1" value="0.5">
+                
+                    <button id="masterPlayRecord">Record & Play</button>
+                    <button id="pauseRecording" disabled>Pause Recording</button>
+                    <button id="masterStopRecord">Stop Record</button>
+                    <button id="masterPlay">Play</button>
+                    <button id="masterPause">Pause</button>
+                    <button id="masterStop">Stop</button>
+                
+                    <label>Master Speaker Volume:</label>
+                    <input type="range" id="masterVolume" min="0" max="1" step="0.1" value="0.5">
+                
+                    <label>Upload Audio:</label>
+                    <input type="file" id="audioUpload" accept="audio/*">
+                </div>
+            </div>
+        </div>
+        <div class="collab-chat">
+            
+        </div>
+    </div>
+    <div class="footer-control">
+        <div class="button_ofAcceptance">
+            <button id="acceptButton" class="acceptButton">{{collab.accept_count}}/{{collab.owner_count}}</button>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/wavesurfer.js"></script>
+<script src="{% static 'js/collab-tool.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.0/lame.min.js"></script>
+{% endblock %}
