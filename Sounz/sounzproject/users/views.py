@@ -202,7 +202,7 @@ def profile_tpv(request):
 
         pname = profiledatadb.objects.get(username=uname)
         userBioCollect = profiledatadb.objects.get(username=current_user)
-        post = postdb.objects.filter(username=pname)
+        post = postdb.objects.filter(username=pname,is_private=0,flagged=0)
 
         # Correct way to check if the user is a follower
         is_following = pname.followers.filter(id=request.user.id).exists()
@@ -227,7 +227,7 @@ def homepage(request):
     topart=profiledatadb.objects.all()
     random_profiles = random.sample(list(topart), min(len(topart), 4))
     # Fetch posts of the current user
-    user_posts = postdb.objects.filter(flagged=0).order_by('-timestamp')
+    user_posts = postdb.objects.filter(flagged=0,is_private=0).order_by('-timestamp')
     context = {
         'all_users': all_users,
         'user': user,
@@ -548,7 +548,7 @@ def search(request):
             input_value = request.POST.get("search-input1")
             posts = postdb.objects.filter(
             Q(mediatype__icontains=input_value) | Q(username=input_value) | Q(caption__icontains=input_value)
-            ).filter(flagged=0)   
+            ).filter(flagged=0,is_private=0)   
             all_users = profiledatadb.objects.all()
             username = request.user.username
             user = profiledatadb.objects.get(username=username)
