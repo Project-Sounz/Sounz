@@ -13,22 +13,35 @@
     <h1 class="upload-head">Edit post</h1>
     <form method="post" enctype="multipart/form-data" id="upload_form">
         {% csrf_token %}
-        {{ form.as_p }}
         <div id="prompt-message" data-message="{% if prompt_message %}{{ prompt_message }}{% endif %}" style="display: none;"></div>
-        
-         <div class="upload-postDetails">
-            <input required type="text" id="title" name="title" placeholder="Caption">
-            <input required type="text" id="post_description" name="post_description" placeholder="Description"></input>
+    
+        <div class="upload-postDetails">
+            <!-- Pre-fill input fields with existing post details -->
+            <input required type="text" id="title" name="title" placeholder="Caption" value="{{ post.caption }}">
+            <input required type="text" id="post_description" name="post_description" placeholder="Description" value="{{ post.descr }}">
+    
+            <!-- Set the correct media type dynamically -->
             <select id="media_type" name="media_type">
-                <option selected value="Audio">Audio</option>
-                <option value="Video">Video</option>
+                <option value="Audio" {% if post.media_format == "Audio" %}selected{% endif %}>Audio</option>
+                <option value="Video" {% if post.media_format == "Video" %}selected{% endif %}>Video</option>
             </select>
-            <input required type="text" id="tags" name="tags" placeholder="Media type ('vocals' 'guitar' 'piano' etc..)">
-            <input type="text" id="language" name="language" placeholder="Language (optional)">
-            <input type="text" name="location" id="location" placeholder="Location (optional)">
-            <button onclick="editPost()" class="btn" id="upload-publishBtn">Edit</button>
+    
+            <input required type="text" id="tags" name="tags" placeholder="Media type ('vocals' 'guitar' 'piano' etc..)" value="{{ post.mediatype }}">
+    
+            <!-- Ensure checkbox is checked if the post is private -->
+            <label>
+                <input type="checkbox" id="media_visibility_control" name="media_visibility_control" {% if post.is_private %}checked{% endif %}>
+                Make media private?
+            </label>
+    
+            <input type="text" id="language" name="language" placeholder="Language (optional)" value="{{ post.langu }}">
+            <input type="text" name="location" id="location" placeholder="Location (optional)" value="{{ post.location }}">
+    
+            <!-- Ensure the button submits the form instead of using JavaScript -->
+            <button type="submit" class="btn" id="upload-publishBtn">Edit</button>
         </div>
     </form>
+    
     
 </div>
 <script></script>

@@ -42,6 +42,8 @@ class postdb(models.Model):
     flagged = models.BooleanField(default=False)  # 0 = Not Flagged, 1 = Flagged
     flag_counter = models.IntegerField(default=0)  # Tracks offensive/explicit content reports
     reported_users = models.ManyToManyField(User, blank=True, related_name="reported_posts")
+    #media visibility
+    is_private = models.BooleanField(default=False)
     
     def __str__(self):
         return str(self.pid)

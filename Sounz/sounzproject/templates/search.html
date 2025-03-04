@@ -161,7 +161,7 @@
             <h4 class="mv-h4">Top Artists</h4>
             <div class="artists">
                 {% for art in topart %}
-                    <a href="{% url 'watch-profile' %}?uname={{topart.username}}" class="artist-details">
+                    <a href="{% url 'watch-profile' %}?uname={{art.username}}" class="artist-details">
                         <img src="{{ art.profile_picture.url }}" alt="" width="60px" height="60px" style="border-radius: 50%;">
                         <figcaption>{{art.username}}</figcaption>
                     </a>

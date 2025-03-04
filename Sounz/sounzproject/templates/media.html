@@ -469,7 +469,7 @@
 {% block content %}
     <div class="header-for-home">{% include 'header-base-sub.html' %}</div>
     {% if user %}
-        {% if post %}
+        {% if user.username == puser.username or not post.is_private %}
             {% if puser %}
                 <div class="media">
                     <div class="media-header">
@@ -625,6 +625,10 @@
                 </div>
 
             {% endif %}
+        {% else %}
+        <div style="text-align: center; color: red; font-weight: bold;">
+            🚫 This post is private.
+        </div>
         {% endif %}
     {% endif %}
 {% endblock %}
