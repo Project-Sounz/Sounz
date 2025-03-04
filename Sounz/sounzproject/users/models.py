@@ -93,6 +93,12 @@ class Collab_Information(models.Model):
     collab_end = models.BooleanField(default=False)
     owner_count = models.IntegerField(default=1)
     accept_count = models.IntegerField(default=0)
+    chat_history = models.JSONField(default=list)  
+
+    def add_message(self, username, message):
+        """ Append a new message to chat history and save """
+        self.chat_history.append({"username": username, "message": message})
+        self.save()
 
     def __str__(self):
         return self.collaboration_title

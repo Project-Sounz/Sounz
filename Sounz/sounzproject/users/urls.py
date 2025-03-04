@@ -42,5 +42,7 @@ urlpatterns = [
     path('workspace',views.collab_workspace,name='collab-workspace'),
     path("upload-sync-audio/", views.upload_sync_audio, name="upload_sync_audio"),
     path("delete-audio", views.delete_audio, name="delete-audio"),
+     path('chat/send/<uuid:collab_id>/', views.send_chat_message, name='send_chat_message'),
+     path('chat/history/<uuid:collab_id>/', views.get_chat_history, name='get_chat_history'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

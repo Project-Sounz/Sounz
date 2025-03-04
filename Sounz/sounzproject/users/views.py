@@ -881,6 +881,8 @@ def collab_workspace(request):
         'collab': collab,
         'post_owners': collab_base_owners,
         'post_base': base_post,
+        'collab_id': collab_Id
+
     }
     return render(request, "collab.html", context)
 
@@ -923,3 +925,43 @@ def delete_audio(request):
         fetchedAudio = syncAudios.objects.get(syncId = syncId)
         fetchedAudio.delete()
     return JsonResponse({"success": True})  
+
+@login_required
+@csrf_exempt  # Remove this if you handle CSRF properly
+def send_chat_message(request, collab_id):
+    if request.method == "POST":
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+        data = json.loads(request.body)
+        message = data.get("message")
+        
+        if message:
+            collab.add_message(request.user.username, message)
+            return JsonResponse({"status": "success", "message": message})
+
+    return JsonResponse({"status": "error"}, status=400)
+
+def get_chat_history(request, collab_id):
+    """Fetch chat history along with user profile details"""
+    collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+    chat_history = collab.chat_history
+
+    chat_data = []
+    
+    for chat in chat_history:
+        username = chat.get("username", "")
+        message = chat.get("message", "")
+        
+        # Fetch user profile details
+        try:
+            user_profile = profiledatadb.objects.get(username=username)
+            profile_pic = user_profile.profile_picture.url if user_profile.profile_picture else "/static/default_profile.png"
+        except profiledatadb.DoesNotExist:
+            profile_pic = "/static/default_profile.png"  # Default pic if profile not found
+
+        chat_data.append({
+            "username": username,
+            "message": message,
+            "profile_pic": profile_pic
+        })
+
+    return JsonResponse({"chat_history": chat_data})
