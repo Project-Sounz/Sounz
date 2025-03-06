@@ -6,6 +6,7 @@ function getCSRFToken() {
 
 let baseAudioUrl = document.getElementById('base-audio-storage').value;
 let collabId = document.getElementById('collabId').value;
+let userId = document.getElementById('userId').value;
 let waveSurfers = {};
 let isRecording = false;
 let mediaRecorder;
@@ -13,9 +14,13 @@ let audioChunks = [];
 let micStream = null;
 let audioFile;
 let audioURL;
+let UploadAudioURL;
 let audioBlob;
+let UploadBlob;
+let control_flag = 'ready';
 
 initWaveSurfer("base-audio-graph",baseAudioUrl);
+updateApprovalStatus();
 const recordButton = document.getElementById("masterPlayRecord");
 const stopRecordingButton = document.getElementById("masterStopRecord");
 const pauseRecordingButton = document.getElementById("pauseRecording");
@@ -29,6 +34,7 @@ const gSyncContainer = document.getElementById('main-sync-container');
 const refreshButton = document.getElementById('refresh');    
 const g_rSyncContainer = "g-rSync-audio-graph";    
 const deleteaudio = document.getElementById('audio-delete');
+const audioUpload = document.getElementById('audioUpload');
 
 
 function initWaveSurfer(containerId, audioFile) {
@@ -55,25 +61,27 @@ function initWaveSurfer(containerId, audioFile) {
 
     return waveSurfer;
 }
-document.querySelectorAll(".single-audio-play").forEach(button => {
-    button.addEventListener("click", () => {
-        let containerId = button.getAttribute("data-container");
+
+console.log("1");
+console.log(Object.keys(waveSurfers).length);
+console.log("2");
+
+
+document.addEventListener("click", function(event) {
+    if (event.target.classList.contains("single-audio-play")) {
+        let containerId = event.target.getAttribute("data-container");
         if (waveSurfers[containerId]) waveSurfers[containerId].play();
-    });
-});
+    }
 
-document.querySelectorAll(".single-audio-pause").forEach(button => {
-    button.addEventListener("click", () => {
-        let containerId = button.getAttribute("data-container");
+    if (event.target.classList.contains("single-audio-pause")) {
+        let containerId = event.target.getAttribute("data-container");
         if (waveSurfers[containerId]) waveSurfers[containerId].pause();
-    });
-});
+    }
 
-document.querySelectorAll(".single-audio-stop").forEach(button => {
-    button.addEventListener("click", () => {
-        let containerId = button.getAttribute("data-container");
+    if (event.target.classList.contains("single-audio-stop")) {
+        let containerId = event.target.getAttribute("data-container");
         if (waveSurfers[containerId]) waveSurfers[containerId].stop();
-    });
+    }
 });
 document.querySelectorAll(".single-volume").forEach(slider => {
     slider.addEventListener("input", (event) => {
@@ -93,6 +101,7 @@ async function isHeadphonePlugged() {
     }
 }
 recordButton.addEventListener("click", async () => {
+    control_flag = 'rec';
     if (!isRecording) {
         try {
             const headphonePlugged = await isHeadphonePlugged();
@@ -205,11 +214,18 @@ async function blobToFile(blob, filenamePrefix) {
     });
 }
 gSyncButton.addEventListener("click", async() =>{
-    const uniqueFileName = `recorded_${crypto.randomUUID()}`;
-    audioFile = await blobToFile(audioBlob, uniqueFileName);
+    if (control_flag == 'rec'){
+        const uniqueFileName = `recorded_${crypto.randomUUID()}`;
+        audioFile = await blobToFile(audioBlob, uniqueFileName);
+    }
+    else if (control_flag == 'upl'){
+        const uniqueFileName = `uploaded_${crypto.randomUUID()}`;
+        audioFile = await blobToFile(UploadBlob, uniqueFileName);
+    }
+    console.log(audioFile);
     const formData = new FormData();
     formData.append("syncMedia", audioFile);
-    formData.append("collaboration_id", collabId);  // Replace with actual collaboration ID
+    formData.append("collaboration_id", collabId);  
     try {
         const response = await fetch("/upload-sync-audio/", {
             method: "POST",
@@ -246,7 +262,7 @@ function refreshContent() {
                         <div class="sync-audio-graph-${audioDT.syncId} b-s-Allaudio" data-value="${audioDT.syncId}" id="sync-audio-graph-${audioDT.syncId}"></div>
                         <div class="sync-audio-controls">
                             <div class="sync-audio-data">
-                                <p id="audio-content"><span id="audio-name">${audioDT.syncId}</span><span id="divider">•</span><span id="timestamp">${audioDT.timestamp}</span></p>
+                                <p id="audio-content"><span id="username">${userId}</span><span id="divider">•</span><span id="audio-name">${audioDT.syncId}</span></p>
                             </div>
                             <div id="sync-audio-control-panel">
                                 <div class="control-sync">
@@ -311,3 +327,69 @@ function deleteAudio(syncId) {
     console.log(theContainer);
     deleteWaveSurfer(theContainer);
 }
+function approveButton(button, status) {
+    fetch(`/approval-update?cId=${collabId}&status=${status}&userId=${userId}`, {
+        method: "PATCH",
+        headers: {
+            "X-CSRFToken": getCSRFToken(),
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            buttonA = document.getElementById('approval-button');
+            // Toggle button text and status
+            if (status === "approve") {
+                buttonA.textContent = "Revoke";
+                buttonA.setAttribute("onclick", "approveButton(this, 'revoke')");
+            } else {
+                buttonA.textContent = "Approve";
+                buttonA.setAttribute("onclick", "approveButton(this, 'approve')");
+            }
+
+            // Update approval count dynamically
+            updateApprovalStatus();
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+function updateApprovalStatus() {
+    fetch(`/get-approval-status?cId=${collabId}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("accept-count").innerText = data.accept_count;
+        if (data.accept_count >= data.owner_count) {
+            document.getElementById("upload-warning-button").style.display = "block";
+        } else {
+            document.getElementById("upload-warning-button").style.display = "none";
+        }
+        buttonA = document.getElementById('approval-button');
+            // Toggle button text and status
+            if (data.isApproved == true) {
+                buttonA.textContent = "Revoke";
+                buttonA.setAttribute("onclick", "approveButton(this, 'revoke')");
+            } else {
+                buttonA.textContent = "Approve";
+                buttonA.setAttribute("onclick", "approveButton(this, 'approve')");
+            }
+    })
+    .catch(error => console.error("Error fetching approval status:", error));
+}
+setInterval(updateApprovalStatus, 5000);
+
+audioUpload.addEventListener("change", (event) => {
+    control_flag = 'upl';
+    const file = event.target.files[0];
+    if (!file) {
+        console.error("No file selected.");
+        return;
+    }
+    UploadBlob=file;
+    UploadAudioURL = URL.createObjectURL(UploadBlob);
+    console.log(UploadAudioURL);
+    initWaveSurfer(g_rSyncContainer,UploadAudioURL);
+    gRSync.style.display="block";
+});

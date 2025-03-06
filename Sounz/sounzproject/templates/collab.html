@@ -110,6 +110,8 @@ button:hover {
 {% block content %}
 <!-- <div class="header-for-home">{% include 'header-base-sub.html' %}</div> -->
 <input type="hidden" id="collabId" value="{{ collab.collaboration_Id }}">
+<input type="hidden" id="userId" value="{{ user_id }}">
+<input type="hidden" id="csrf-token" value="{{ csrf_token }}">
 <div class="main-collab-container">
     <div class="header-button">
         <button id="refresh">Refresh</button>
@@ -201,11 +203,14 @@ button:hover {
     </div>
     <div class="footer-control">
         <div class="button_ofAcceptance">
-            <button id="acceptButton" class="acceptButton">{{collab.accept_count}}/{{collab.owner_count}}</button>
+            <button id="approval-button" onclick="approveButton(this,'approve')">Approve</button>
+            <p id="approval-status"><span id="accept-count">{{collab.accept_count}}</span> / {{collab.owner_count}} Approved</p>
+            <button id="upload-warning-button" style="display: none;">Mix and Upload</button>
         </div>
     </div>
 </div>
 <script src="https://unpkg.com/wavesurfer.js"></script>
 <script src="{% static 'js/collab-tool.js' %}"></script>
+<script src="{% static 'js/audio-mixing.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.0/lame.min.js"></script>
 {% endblock %}

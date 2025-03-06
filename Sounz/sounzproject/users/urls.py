@@ -44,5 +44,9 @@ urlpatterns = [
     path("delete-audio", views.delete_audio, name="delete-audio"),
      path('chat/send/<uuid:collab_id>/', views.send_chat_message, name='send_chat_message'),
      path('chat/history/<uuid:collab_id>/', views.get_chat_history, name='get_chat_history'),
+    path("approval-update", views.approve_button, name="approval-update"),
+    path("get-approval-status", views.get_approval_status, name="get-approval-status"),
+    path('get-audio-files/', views.get_audio_files, name='get-audio-files'),
+    path("upload-mixed-audio/", views.upload_mixed_audio, name="upload-mixed-audio"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

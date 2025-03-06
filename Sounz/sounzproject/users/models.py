@@ -30,15 +30,28 @@ class postdb(models.Model):
     media_thumbnail=models.FileField(upload_to='media/Thumbnails',default=None,blank=True,null=True)
     caption=models.CharField(max_length=30)
     descr=models.TextField()
-    langu=models.CharField(max_length=15)
+    langu=models.CharField(max_length=15,default="English")
     mediatype=models.CharField(max_length=15)
     location=models.CharField(max_length=15)
     likes=models.IntegerField(default=0)
     media_format=models.CharField(max_length=20, blank=True)
-    timestamp = models.DateTimeField(auto_now=True  )
+    timestamp = models.DateTimeField(auto_now=True)
+    collaborated_owners = models.ManyToManyField(User, through="collaborators")
+    isCollaborated = models.BooleanField(default=False)
+    collaboration = models.UUIDField(default=None,blank=True,null=True)
     
     def __str__(self):
         return str(self.pid)
+    
+class collaborators(models.Model):
+    post_id = models.ForeignKey(postdb, on_delete=models.CASCADE)
+    collab_members = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('post_id', 'collab_members')
+
+    def __str__(self):
+        return f"{self.collab_members.username} in {self.post_id.caption}"
     
 
 class Like(models.Model):
@@ -93,6 +106,10 @@ class Collab_Information(models.Model):
     collab_end = models.BooleanField(default=False)
     owner_count = models.IntegerField(default=1)
     accept_count = models.IntegerField(default=0)
+    temp_thumbnail = models.FileField(upload_to='media/Thumbnails',default=None,blank=True,null=True)
+    temp_caption = models.CharField(max_length=30,default=None,blank=True,null=True)
+    temp_descr = models.TextField(default=None,blank=True,null=True)
+    temp_mediaType = models.CharField(max_length=15,default=None,blank=True,null=True)
     chat_history = models.JSONField(default=list)  
 
     def add_message(self, username, message):
@@ -105,13 +122,15 @@ class Collab_Information(models.Model):
     
 class Member_Information(models.Model):
     collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
-    post_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_member = models.ForeignKey(User, on_delete=models.CASCADE)
+    isOwner = models.BooleanField(default=False)
+    isApproved = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('collaboration', 'post_owner')
+        unique_together = ('collaboration', 'post_member')
 
     def __str__(self):
-        return f"{self.post_owner.username} in {self.collaboration.collaboration_title}"
+        return f"{self.post_member.username} in {self.collaboration.collaboration_title}"
 
 class syncAudios(models.Model):
     collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
