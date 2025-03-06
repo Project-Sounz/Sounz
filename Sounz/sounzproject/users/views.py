@@ -688,6 +688,13 @@ def save_collab(request):
         base_plan = request.POST.get("base-plan")
         username = request.user.username
         post_name = postdb.objects.get(pid=post_id).caption
+        collab_owners = collaborators.objects.filter(post_id=post_id)
+        collab_members_list = collab_owners.values_list('collab_members', flat=True)
+        collab_owners_mails = profiledatadb.objects.filter(username__in=collab_members_list)
+        print(collab_owners_mails)
+        owner_count = 0
+        for x in collab_owners:
+            owner_count+=1
 
         if post_id and base_plan:
             post = get_object_or_404(postdb, pid=post_id)
@@ -696,27 +703,43 @@ def save_collab(request):
             collab = Collab_Information.objects.create(
                 base_post_id=post,
                 base_plan=base_plan,
-                collab_requestor=username
+                collab_requestor=username,
+                owner_count=owner_count,
             )
             
-            post_owner_user = User.objects.get(username=post_user.username)
-
+            post_member_user = User.objects.get(username=post_user.username)
             Member_Information.objects.create(
-                collaboration=collab,
-                post_owner=post_owner_user
-            )
+                    collaboration=collab,
+                    post_member=post_member_user,
+                    isOwner=True
+                )
+            Member_Information.objects.create(
+                    collaboration=collab,
+                    post_member=request.user,
+                    isOwner=False
+                )
+
+            for each_owner in collab_owners:
+                Member_Information.objects.create(
+                    collaboration=collab,
+                    post_member=each_owner,
+                    isOwner=False
+                )
 
             print(f"Collaboration Created: {collab.collaboration_Id}")
 
+            receivers = [['appus8403@gmail.com',post_user.firstname]]                       #change_final
+            for each_email in collab_owners_mails:
+                receivers.append([each_email.email,each_email.firstname])
             # Send email
-            receiver_email = "appus8403@gmail.com" 
             print(post_user.email)
+            print(receivers)
             requester_username = username
             requester_users_name = request.user.first_name
             decision_link = request.build_absolute_uri(reverse("collab_request", args=[collab.collaboration_Id]))
             print(decision_link)
-            receiver_username = post_user.firstname
-            send_collab_email(receiver_email, receiver_username, requester_username, decision_link, post_name, requester_users_name)
+            for receiver in receivers:
+                send_collab_email(receiver[0], receiver[1], requester_username, decision_link, post_name, requester_users_name)
 
             return JsonResponse({"message": "Collaboration created and email sent successfully."})
         
@@ -849,7 +872,7 @@ def update_collab_status(request, collab_id):
         print("collab status updated")
 
         reciever_data = profiledatadb.objects.get(username = collab.collab_requestor)
-        reciever_mail = "appus8403@gmail.com"
+        reciever_mail = "appus8403@gmail.com"                                                   #change_final
         print(reciever_data.email)
         reciever_name = reciever_data.firstname
         post_name = postdb.objects.get(pid=collab.base_post_id.pid).caption
@@ -976,10 +999,11 @@ def collab_workspace(request):
 
     context = {
         'collab': collab,
-        'post_owners': collab_base_owners,
+        'post_members': collab_base_owners,
         'post_base': base_post,
-        'collab_id': collab_Id
+        'collab_id': collab_Id,
 
+        'user_id':request.user.username,
     }
     return render(request, "collab.html", context)
 
@@ -1062,6 +1086,268 @@ def get_chat_history(request, collab_id):
         })
 
     return JsonResponse({"chat_history": chat_data})
+
+
+@require_http_methods(["PATCH"])
+def approve_button(request):
+    status = request.GET.get('status')
+    collab_id = request.GET.get('cId')
+
+    if not collab_id or not status:
+        return JsonResponse({"error": "Missing required parameters"}, status=400)
+
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({"error": "Invalid collaboration ID"}, status=404)
+
+    try:
+        memIn = Member_Information.objects.get(post_member=request.user, collaboration=collab)
+    except Member_Information.DoesNotExist:
+        return JsonResponse({"error": "Member not found"}, status=404)
+
+    if status == "approve":
+        collab.accept_count += 1
+        memIn.isApproved = True
+        print(collab.accept_count)
+    elif status == "revoke":
+        collab.accept_count -= 1
+        memIn.isApproved = False
+        print(collab.accept_count)
+    else:
+        return JsonResponse({"error": "Invalid status"}, status=400)
+
+    collab.save()
+    memIn.save()
+
+    return JsonResponse({"message": f"Collaboration {status}d!"})
+
+def get_approval_status(request):
+    collab_id = request.GET.get("cId")
+    # print(Member_Information.objects.get(post_member_id=request.user).isApproved)
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+        return JsonResponse({
+            "accept_count": collab.accept_count,
+            "owner_count": collab.owner_count,
+            "isApproved" : Member_Information.objects.get(post_member_id=request.user).isApproved,
+        })
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({"error": "Collaboration not found"}, status=404)
+    
+
+def get_audio_files(request):
+    collab_id = request.GET.get('collabId')
+
+    if not collab_id:
+        return JsonResponse({"error": "Missing collaboration ID"}, status=400)
+
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)  # Fetch collaboration info
+        print(collab)
+
+        # Get base audio file URL
+        base_audio_url = request.build_absolute_uri(collab.base_post_id.media.url)
+        print(base_audio_url)
+
+        # Get synced audio files (ensure absolute URLs)
+        synced_audio_files = syncAudios.objects.filter(collaboration=collab).values_list('syncMedia', flat=True)
+        print(synced_audio_files)
+
+        user_audio_urls = [request.build_absolute_uri(settings.MEDIA_URL + str(audio)) for audio in synced_audio_files]
+
+        return JsonResponse({
+            "base_audio": base_audio_url,
+            "audio_urls": user_audio_urls
+        })
+
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({"error": "Collaboration not found"}, status=404)
+@csrf_exempt
+def upload_mixed_audio(request):
+    if request.method == "POST":
+        collab_id = request.POST.get("collaboration_id")
+        audio_file = request.FILES.get("mixed_audio")
+         
+        if not collab_id or not audio_file:
+            return JsonResponse({"error": "Missing data"}, status=400)
+
+        try:
+            collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+            print(collab)
+            collaboratedMembers = Member_Information.objects.filter(collaboration=collab)
+            print(collaboratedMembers)
+
+            username=Member_Information.objects.get(collaboration=collab,isOwner=True).post_member
+            print(username)
+            userobj = profiledatadb.objects.get(username=username)
+            print(userobj)
+            # Create a new MixedAudio entry
+            thePost = postdb.objects.create(
+                username=userobj,
+                # username=Member_Information.objects.get(collaboration=collab,isOwner=True),
+                media=audio_file,
+                # media_thumbnail=collab.temp_thumbnail,
+                caption="test Caption",
+                # caption=collab.temp_caption,
+                descr="test description",
+                # descr=collab.temp_descr,
+                mediatype="Violin Test",
+                # mediatype=collab.temp_mediaType,
+                location="India",
+                media_format="Audio",
+                isCollaborated = True,
+                collaboration=collab.collaboration_Id
+            )
+            print("post set")
+            for member in collaboratedMembers:
+                collaborators.objects.create(
+                    post_id=thePost,
+                    collab_members=member.post_member
+                )
+                
+
+            return JsonResponse({
+                "message": "Mixed audio uploaded successfully!",
+                "post_id": thePost.pid,
+                "media_url": thePost.media.url
+            })
+
+        except Collab_Information.DoesNotExist:
+            return JsonResponse({"error": "Collaboration not found"}, status=404)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+@require_http_methods(["PATCH"])
+def approve_button(request):
+    status = request.GET.get('status')
+    collab_id = request.GET.get('cId')
+
+    if not collab_id or not status:
+        return JsonResponse({"error": "Missing required parameters"}, status=400)
+
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({"error": "Invalid collaboration ID"}, status=404)
+
+    try:
+        memIn = Member_Information.objects.get(post_member=request.user, collaboration=collab)
+    except Member_Information.DoesNotExist:
+        return JsonResponse({"error": "Member not found"}, status=404)
+
+    if status == "approve":
+        collab.accept_count += 1
+        memIn.isApproved = True
+        print(collab.accept_count)
+    elif status == "revoke":
+        collab.accept_count -= 1
+        memIn.isApproved = False
+        print(collab.accept_count)
+    else:
+        return JsonResponse({"error": "Invalid status"}, status=400)
+
+    collab.save()
+    memIn.save()
+
+    return JsonResponse({"message": f"Collaboration {status}d!"})
+
+def get_approval_status(request):
+    collab_id = request.GET.get("cId")
+    # print(Member_Information.objects.get(post_member_id=request.user).isApproved)
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+        return JsonResponse({
+            "accept_count": collab.accept_count,
+            "owner_count": collab.owner_count,
+            "isApproved" : Member_Information.objects.get(post_member_id=request.user).isApproved,
+        })
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({"error": "Collaboration not found"}, status=404)
+    
+
+def get_audio_files(request):
+    collab_id = request.GET.get('collabId')
+
+    if not collab_id:
+        return JsonResponse({"error": "Missing collaboration ID"}, status=400)
+
+    try:
+        collab = Collab_Information.objects.get(collaboration_Id=collab_id)  # Fetch collaboration info
+        print(collab)
+
+        # Get base audio file URL
+        base_audio_url = request.build_absolute_uri(collab.base_post_id.media.url)
+        print(base_audio_url)
+
+        # Get synced audio files (ensure absolute URLs)
+        synced_audio_files = syncAudios.objects.filter(collaboration=collab).values_list('syncMedia', flat=True)
+        print(synced_audio_files)
+
+        user_audio_urls = [request.build_absolute_uri(settings.MEDIA_URL + str(audio)) for audio in synced_audio_files]
+
+        return JsonResponse({
+            "base_audio": base_audio_url,
+            "audio_urls": user_audio_urls
+        })
+
+    except Collab_Information.DoesNotExist:
+        return JsonResponse({"error": "Collaboration not found"}, status=404)
+@csrf_exempt
+def upload_mixed_audio(request):
+    if request.method == "POST":
+        collab_id = request.POST.get("collaboration_id")
+        audio_file = request.FILES.get("mixed_audio")
+         
+        if not collab_id or not audio_file:
+            return JsonResponse({"error": "Missing data"}, status=400)
+
+        try:
+            collab = Collab_Information.objects.get(collaboration_Id=collab_id)
+            print(collab)
+            collaboratedMembers = Member_Information.objects.filter(collaboration=collab)
+            print(collaboratedMembers)
+
+            username=Member_Information.objects.get(collaboration=collab,isOwner=True).post_member
+            print(username)
+            userobj = profiledatadb.objects.get(username=username)
+            print(userobj)
+            # Create a new MixedAudio entry
+            thePost = postdb.objects.create(
+                username=userobj,
+                # username=Member_Information.objects.get(collaboration=collab,isOwner=True),
+                media=audio_file,
+                # media_thumbnail=collab.temp_thumbnail,
+                caption="test Caption",
+                # caption=collab.temp_caption,
+                descr="test description",
+                # descr=collab.temp_descr,
+                mediatype="Violin Test",
+                # mediatype=collab.temp_mediaType,
+                location="India",
+                media_format="Audio",
+                isCollaborated = True,
+                collaboration=collab.collaboration_Id
+            )
+            print("post set")
+            for member in collaboratedMembers:
+                collaborators.objects.create(
+                    post_id=thePost,
+                    collab_members=member.post_member
+                )
+                
+
+            return JsonResponse({
+                "message": "Mixed audio uploaded successfully!",
+                "post_id": thePost.pid,
+                "media_url": thePost.media.url
+            })
+
+        except Collab_Information.DoesNotExist:
+            return JsonResponse({"error": "Collaboration not found"}, status=404)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 #delete post
 def delete_post(request, post_id):
