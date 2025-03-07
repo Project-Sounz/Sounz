@@ -96,7 +96,7 @@ class saveddb(models.Model):
     
 class Collab_Information(models.Model):
     collaboration_Id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    base_post_id = models.ForeignKey(postdb, on_delete=models.CASCADE)
+    base_post_id = models.ForeignKey(postdb, on_delete=models.CASCADE, related_name="collab_base_posts")
     request_status = models.CharField(max_length=20, default="pending")
     timestamp = models.DateTimeField(auto_now_add=True)
     collaboration_title = models.CharField(max_length=50, default="Untitled collaboration test")
@@ -106,6 +106,7 @@ class Collab_Information(models.Model):
     collab_end = models.BooleanField(default=False)
     owner_count = models.IntegerField(default=1)
     accept_count = models.IntegerField(default=0)
+    endPost = models.ForeignKey(postdb, on_delete=models.CASCADE,null=True, related_name="collab_end_posts")
     temp_thumbnail = models.FileField(upload_to='media/Thumbnails',default=None,blank=True,null=True)
     temp_caption = models.CharField(max_length=30,default=None,blank=True,null=True)
     temp_descr = models.TextField(default=None,blank=True,null=True)
@@ -137,6 +138,7 @@ class syncAudios(models.Model):
     syncId=models.UUIDField(primary_key=True,max_length=10,default=uuid.uuid4)
     syncMedia=models.FileField(upload_to='media/syncAudios')
     timestamp = models.DateTimeField(auto_now_add=True)
+    syncedBy = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     
     def __str__(self):
         return f"{self.collaboration.collaboration_Id} in {self.syncId}"

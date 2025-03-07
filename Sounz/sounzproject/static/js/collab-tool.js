@@ -61,12 +61,6 @@ function initWaveSurfer(containerId, audioFile) {
 
     return waveSurfer;
 }
-
-console.log("1");
-console.log(Object.keys(waveSurfers).length);
-console.log("2");
-
-
 document.addEventListener("click", function(event) {
     if (event.target.classList.contains("single-audio-play")) {
         let containerId = event.target.getAttribute("data-container");
@@ -262,7 +256,11 @@ function refreshContent() {
                         <div class="sync-audio-graph-${audioDT.syncId} b-s-Allaudio" data-value="${audioDT.syncId}" id="sync-audio-graph-${audioDT.syncId}"></div>
                         <div class="sync-audio-controls">
                             <div class="sync-audio-data">
-                                <p id="audio-content"><span id="username">${userId}</span><span id="divider">•</span><span id="audio-name">${audioDT.syncId}</span></p>
+                                <p id="audio-content">
+                                <span id="username">${audioDT.syncedBy__username}</span>
+                                <span id="divider">•</span>
+                                <span id="audio-name">${audioDT.syncId}</span>
+                                </p>
                             </div>
                             <div id="sync-audio-control-panel">
                                 <div class="control-sync">
