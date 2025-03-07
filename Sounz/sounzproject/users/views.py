@@ -680,61 +680,74 @@ def editpost(request):
     return render(request, 'edit-post.html', {'user': userobj, 'post': pos, 'form': form})
 
 def save_collab(request):
-
+    controlFlag_owners = False
     if request.method == "POST":
         post_id = request.POST.get("post_id_pass")
         post=postdb.objects.get(pid=post_id)
         post_user=profiledatadb.objects.get(username=post.username)
+        print("Response:post and user fetched")
         base_plan = request.POST.get("base-plan")
-        username = request.user.username
+        print("Response:base plan fetched")
+        cUsername = request.user
+        print("Response:Username fetched")
         post_name = postdb.objects.get(pid=post_id).caption
-        collab_owners = collaborators.objects.filter(post_id=post_id)
-        collab_members_list = collab_owners.values_list('collab_members', flat=True)
-        collab_owners_mails = profiledatadb.objects.filter(username__in=collab_members_list)
-        print(collab_owners_mails)
-        owner_count = 0
-        for x in collab_owners:
-            owner_count+=1
-
+        print("Response:postname fetched")
+        if (post.isCollaborated):
+            controlFlag_owners = True
+            collab_owners = collaborators.objects.filter(post_id=post_id)
+            collab_owners_user = User.objects.filter(id__in=collab_owners.values_list('collab_members', flat=True))
+            print("Response:collab owners:", collab_owners)
+            collab_members_list = list(collab_owners.values_list('collab_members__username', flat=True))
+            print("Response: collab member list:", collab_members_list)
+            collab_owners_mails = profiledatadb.objects.filter(username__in=collab_members_list)
+            print("Response: collab owner mails:", collab_owners_mails)
+            for x in collab_owners_user:
+                owner_count+=1
+        print("Response:everything fetched")
         if post_id and base_plan:
-            post = get_object_or_404(postdb, pid=post_id)
-
-            # Create collaboration record
             collab = Collab_Information.objects.create(
                 base_post_id=post,
                 base_plan=base_plan,
-                collab_requestor=username,
+                collab_requestor=cUsername,
                 owner_count=owner_count,
             )
-            
-            post_member_user = User.objects.get(username=post_user.username)
-            Member_Information.objects.create(
-                    collaboration=collab,
-                    post_member=post_member_user,
-                    isOwner=True
-                )
-            Member_Information.objects.create(
-                    collaboration=collab,
-                    post_member=request.user,
-                    isOwner=False
-                )
 
-            for each_owner in collab_owners:
-                Member_Information.objects.create(
-                    collaboration=collab,
-                    post_member=each_owner,
-                    isOwner=False
-                )
+            post_member_user, _ = User.objects.get_or_create(username=post_user.username)
 
-            print(f"Collaboration Created: {collab.collaboration_Id}")
+            # Add only if the user does not already exist
+            Member_Information.objects.get_or_create(
+                collaboration=collab,
+                post_member=post_member_user,
+                defaults={"isOwner": True}
+            )
+            Member_Information.objects.get_or_create(
+                collaboration=collab,
+                post_member=request.user,
+                defaults={"isOwner": False}
+            )
+
+            if controlFlag_owners:
+                member_objects = []
+                for each_owner in collab_owners_user:
+                    # Prevent duplicates
+                    if not Member_Information.objects.filter(collaboration=collab, post_member=each_owner).exists():
+                        member_objects.append(
+                            Member_Information(collaboration=collab, post_member=each_owner, isOwner=False)
+                        )
+
+                if member_objects:
+                    Member_Information.objects.bulk_create(member_objects)
+
+            print(f"Response:Collaboration Created: {collab.collaboration_Id}")
 
             receivers = [['appus8403@gmail.com',post_user.firstname]]                       #change_final
-            for each_email in collab_owners_mails:
-                receivers.append([each_email.email,each_email.firstname])
+            if(controlFlag_owners):
+                for each_email in collab_owners_mails:
+                    receivers.append([each_email.email,each_email.firstname])
             # Send email
             print(post_user.email)
             print(receivers)
-            requester_username = username
+            requester_username = cUsername
             requester_users_name = request.user.first_name
             decision_link = request.build_absolute_uri(reverse("collab_request", args=[collab.collaboration_Id]))
             print(decision_link)
@@ -1174,15 +1187,10 @@ def upload_mixed_audio(request):
 
         try:
             collab = Collab_Information.objects.get(collaboration_Id=collab_id)
-            print(collab)
             collaboratedMembers = Member_Information.objects.filter(collaboration=collab)
-            print(collaboratedMembers)
-
             username=Member_Information.objects.get(collaboration=collab,isOwner=True).post_member
-            print(username)
             userobj = profiledatadb.objects.get(username=username)
-            print(userobj)
-            # Create a new MixedAudio entry
+            
             thePost = postdb.objects.create(
                 username=userobj,
                 # username=Member_Information.objects.get(collaboration=collab,isOwner=True),
@@ -1206,7 +1214,12 @@ def upload_mixed_audio(request):
                     collab_members=member.post_member
                 )
                 
-
+            delete_sync_audios(collab_id)
+            print("sync files deleted")
+            collab.collab_end=True
+            collab.save()
+            print("collab ended")
+            print(collab.collab_end)
             return JsonResponse({
                 "message": "Mixed audio uploaded successfully!",
                 "post_id": thePost.pid,
@@ -1218,6 +1231,17 @@ def upload_mixed_audio(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+def delete_sync_audios(collab_id):
+    audios = syncAudios.objects.filter(collaboration_id=collab_id)
+    
+    for audio in audios:
+        file_path = os.path.join(settings.MEDIA_ROOT, str(audio.syncMedia))
+        
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f"Deleted file: {file_path}") 
+    audios.delete()
+    print("Database entries deleted.")
 
 @require_http_methods(["PATCH"])
 def approve_button(request):
