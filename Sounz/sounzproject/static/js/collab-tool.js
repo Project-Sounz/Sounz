@@ -35,6 +35,7 @@ const refreshButton = document.getElementById('refresh');
 const g_rSyncContainer = "g-rSync-audio-graph";    
 const deleteaudio = document.getElementById('audio-delete');
 const audioUpload = document.getElementById('audioUpload');
+const masterVolume = document.getElementById('master-volume');
 
 
 function initWaveSurfer(containerId, audioFile) {
@@ -77,14 +78,24 @@ document.addEventListener("click", function(event) {
         if (waveSurfers[containerId]) waveSurfers[containerId].stop();
     }
 });
-document.querySelectorAll(".single-volume").forEach(slider => {
-    slider.addEventListener("input", (event) => {
+
+document.addEventListener("input", function(event) {
+    if (event.target.classList.contains("single-volume")) {
         let containerId = event.target.getAttribute("data-container");
         if (waveSurfers[containerId]) {
             waveSurfers[containerId].setVolume(event.target.value);
         }
-    });
+    } 
 });
+if (masterVolume) {
+    masterVolume.addEventListener("input", function() {
+        let volumeValue = masterVolume.value;
+        Object.values(waveSurfers).forEach(ws => ws.setVolume(volumeValue));
+        document.querySelectorAll(".single-volume").forEach(slider => {
+            slider.value = volumeValue;
+        });
+    });
+}
 async function isHeadphonePlugged() {
     try {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -257,9 +268,9 @@ function refreshContent() {
                         <div class="sync-audio-controls">
                             <div class="sync-audio-data">
                                 <p id="audio-content">
-                                <span id="username">${audioDT.syncedBy__username}</span>
-                                <span id="divider">•</span>
-                                <span id="audio-name">${audioDT.syncId}</span>
+                                    <span id="username">${audioDT.syncedBy__username}</span>
+                                    <span id="divider">•</span>
+                                    <span id="audio-name-${audioDT.syncId}">${audioDT.audioName || "Audio_XXX"}</span>
                                 </p>
                             </div>
                             <div id="sync-audio-control-panel">
@@ -269,8 +280,8 @@ function refreshContent() {
                                     <img class="single-audio-stop" src="/static/images/audio-stop.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="stop-button">    
                                 </div>
                                 <div class="volume-sync">
-                                    <label for="volume"><img class="single-volume-icon" src="/static/images/audio-volume.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="volume-button"></label>
-                                    <input type="range" class="single-volume" id="volume" min="0" max="1" step="0.1" value="0.5">
+                                    <label for="volume"><img class="single-volume-icon" src="/static/images/audio-volume.svg" alt="volume-button"></label>
+                                    <input type="range" data-container="sync-audio-graph-${audioDT.syncId}" class="single-volume" id="volume" min="0" max="1" step="0.01" value="1">
                                 </div>
                                 <button class="audio-delete" id="audio-delete" data-container="sync-audio-graph-${audioDT.syncId}" onclick=deleteAudio("${audioDT.syncId}") data-value="${audioDT.syncId}"><img class="single-audio-delete" src="/static/images/audio-delete.svg" alt="delete-button"></button>
                             </div>
@@ -391,3 +402,32 @@ audioUpload.addEventListener("change", (event) => {
     initWaveSurfer(g_rSyncContainer,UploadAudioURL);
     gRSync.style.display="block";
 });
+function renameAudio(syncId) {
+    const inputField = document.getElementById(`rename-audio-${syncId}`);
+    const newName = inputField.value.trim(); // Get new name
+    
+    if (!newName) {
+        alert("Name cannot be empty!");
+        return;
+    }
+
+    fetch("/rename_audio/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken() // Ensure CSRF token is included
+        },
+        body: JSON.stringify({ syncId: syncId, newName: newName })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the displayed name
+            document.querySelector(`#audio-name-${syncId}`).textContent = newName;
+            console.log(`Renamed to: ${newName}`);
+        } else {
+            alert("Failed to rename: " + data.error);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}

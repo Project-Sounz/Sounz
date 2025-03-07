@@ -132,8 +132,8 @@ button:hover {
                                 <img class="single-audio-stop" src="{% static 'images/audio-stop.svg' %}" data-container="base-audio-graph" alt="stop-button">    
                             </div>
                             <div class="volume-base">
-                                <label for="volume"><img class="single-volume" src="{% static 'images/audio-volume.svg' %}" data-container="base-audio-graph" alt="volume-button"></label>
-                                <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+                                <label for="base-volume"><img class="single-volume-icon" src="{% static 'images/audio-volume.svg' %}" alt="volume-button"></label>
+                                <input class="single-volume" data-container="base-audio-graph" type="range" id="base-volume" min="0" max="1" step="0.01" value="1">
                             </div>
                         </div>
                     </div>
@@ -156,16 +156,16 @@ button:hover {
                             <img class="single-audio-stop" src="{% static 'images/audio-stop.svg' %}" data-container="g-rSync-audio-graph" alt="stop-button">    
                         </div>
                         <div class="volume-sync">
-                            <label for="volume"><img class="single-volume-icon" src="{% static 'images/audio-volume.svg' %}" data-container="g-rSync-audio-graph" alt="volume-button"></label>
-                            <input type="range" class="single-volume" id="volume" min="0" max="1" step="0.1" value="0.5">
+                            <label for="volume"><img class="single-volume-icon" src="{% static 'images/audio-volume.svg' %}"  alt="volume-button"></label>
+                            <input type="range" data-container="g-rSync-audio-graph" class="single-volume" id="g-rSy-volume" min="0" max="1" step="0.01" value="1">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="master-control-container">
                 <div class="master-controls">
-                    <label>Mic Volume:</label>
-                    <input type="range" id="micVolume" min="0" max="1" step="0.1" value="0.5">
+                    <!-- <label>Mic Volume:</label>
+                    <input type="range" class="mic-volume" id="mic-volume" min="0" max="1" step="0.01" value="1"> -->
                 
                     <button id="masterPlayRecord">Record & Play</button>
                     <button id="pauseRecording" disabled>Pause Recording</button>
@@ -175,10 +175,10 @@ button:hover {
                     <button id="masterStop">Stop</button>
                 
                     <label>Master Speaker Volume:</label>
-                    <input type="range" id="masterVolume" min="0" max="1" step="0.1" value="0.5">
+                    <input type="range" class="master-volume" id="master-volume" min="0" max="1" step="0.01" value="1">
                 
-                    <label>Upload Audio:</label>
-                    <input type="file" id="audioUpload" accept="audio/*">
+                    <label id="uploadLabel" for="audioUpload">Choose File</label>
+                    <input type="file" id="audioUpload" accept="audio/*" hidden>
                 </div>
             </div>
         </div>

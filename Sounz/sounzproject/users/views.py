@@ -910,7 +910,7 @@ def collab_workspace(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         sync_audio_list = syncAudios.objects.filter(collaboration_id=collab_Id)
         # Convert queryset to list of dictionaries
-        audio_data = list(sync_audio_list.values("syncId", "timestamp", "syncMedia","syncedBy__username"))
+        audio_data = list(sync_audio_list.values("syncId", "timestamp", "syncMedia","syncedBy__username","audioName"))
 
         return JsonResponse({'audio_list': audio_data})
 
@@ -961,6 +961,10 @@ def delete_audio(request):
         syncId = request.GET.get('syncId')
         print(syncId)
         fetchedAudio = syncAudios.objects.get(syncId = syncId)
+        file_path = os.path.join(settings.MEDIA_ROOT, str(fetchedAudio.syncMedia))
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f"Deleted file: {file_path}") 
         fetchedAudio.delete()
     return JsonResponse({"success": True})  
 

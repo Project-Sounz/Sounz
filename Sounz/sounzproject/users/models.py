@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+import random
+import string
 from django.utils import timezone
 
 
@@ -132,13 +134,18 @@ class Member_Information(models.Model):
 
     def __str__(self):
         return f"{self.post_member.username} in {self.collaboration.collaboration_title}"
+    
+def generate_audio_name():
+    random_letters = ''.join(random.choices(string.ascii_uppercase, k=3))  # Generates 3 uppercase letters
+    return f"Audio_{random_letters}"
 
 class syncAudios(models.Model):
     collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
-    syncId=models.UUIDField(primary_key=True,max_length=10,default=uuid.uuid4)
-    syncMedia=models.FileField(upload_to='media/syncAudios')
+    syncId = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    syncMedia = models.FileField(upload_to='media/syncAudios')
     timestamp = models.DateTimeField(auto_now_add=True)
-    syncedBy = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    syncedBy = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    audioName = models.CharField(max_length=50, default=generate_audio_name)
     
     def __str__(self):
         return f"{self.collaboration.collaboration_Id} in {self.syncId}"
