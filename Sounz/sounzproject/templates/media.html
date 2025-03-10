@@ -209,8 +209,8 @@ function submitCollabForm() {
                                 {% csrf_token %}
                                 <input type="hidden" name="post_id_pass" value="{{ post.pid }}">
                                 <input type="text" required maxlength="150" name="base-plan" id="base-plan" placeholder="Please provide a base plan on how you would like to collab."><br>
-                                <button type="submit" class="collab-pop-up-button" onclick="submitCollabForm()" id="collab-confirmed">Confirm</button>
                                 <button class="collab-pop-up-button" onclick="showPopUp()" id="collab-cancelled">Cancel</button>
+                                <button type="submit" class="collab-pop-up-button" onclick="submitCollabForm()" id="collab-confirmed">Confirm</button>
                             </form>
                             
                         </div>

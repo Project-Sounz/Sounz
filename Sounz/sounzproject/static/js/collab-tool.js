@@ -19,7 +19,7 @@ let audioBlob;
 let UploadBlob;
 let control_flag = 'ready';
 
-initWaveSurfer("base-audio-graph",baseAudioUrl);
+initWaveSurfer("base-audio-graph",baseAudioUrl, 'rgb(219, 175, 255)');
 updateApprovalStatus();
 const recordButton = document.getElementById("masterPlayRecord");
 const stopRecordingButton = document.getElementById("masterStopRecord");
@@ -36,21 +36,27 @@ const g_rSyncContainer = "g-rSync-audio-graph";
 const deleteaudio = document.getElementById('audio-delete');
 const audioUpload = document.getElementById('audioUpload');
 const masterVolume = document.getElementById('master-volume');
+const recordBar = document.getElementById('bars-recording');
+const uploadButton = document.getElementById('uploadLabel');
+const resumeRec = document.getElementById('resume-rec');
 
 
-function initWaveSurfer(containerId, audioFile) {
+function initWaveSurfer(containerId, audioFile, color) {
     let waveSurfer = WaveSurfer.create({
         container: `#${containerId}`,
-        waveColor: 'violet',
-        progressColor: 'purple',
-        cursorColor: 'red',
+        waveColor: color,
+        progressColor: 'rgb(0, 115, 255)',
+        // cursorColor: '#d9d9d9',
+        dragToSeek: true,
         height: 100,
-        barWidth: 3,
+        barWidth: 1,
         barRadius: 3,
-        barGap: 2,
+        barGap: 1,
         partialRender: true,
         responsive: true,
-        normalize: true,
+        normalize: true, 
+        barHeight: 1,  
+        amplitude: 0.5,
         fillParent: true,
         minPxPerSec: 0,
         autoScroll: false,
@@ -62,6 +68,7 @@ function initWaveSurfer(containerId, audioFile) {
 
     return waveSurfer;
 }
+
 document.addEventListener("click", function(event) {
     if (event.target.classList.contains("single-audio-play")) {
         let containerId = event.target.getAttribute("data-container");
@@ -142,12 +149,11 @@ recordButton.addEventListener("click", async () => {
             mediaRecorder.start();
             isRecording = true;
 
-            pauseRecordingButton.disabled = false;  
-
-            recordButton.style.display = "none";
-            stopRecordingButton.style.display = "inline-block";
-            pauseRecordingButton.style.display = "inline-block";
-            pauseRecordingButton.innerText = "Pause Recording"; 
+            pauseRecordingButton.disabled = false; 
+            stopRecordingButton.disabled = false; 
+            recordButton.style.display='none';
+            recordBar.style.display='flex';
+            uploadButton.disabled=true;
 
         } catch (err) {
             console.error("Microphone access denied or error occurred:", err);
@@ -160,21 +166,27 @@ stopRecordingButton.addEventListener("click", () => {
         isRecording = false;
 
         Object.values(waveSurfers).forEach(ws => ws.stop());
-        pauseRecordingButton.disabled = true;  
-
-        recordButton.style.display = "inline-block";
-        stopRecordingButton.style.display = "none";
-        pauseRecordingButton.style.display = "none";
+        
+        recordBar.style.display='none';
+        recordButton.style.display='flex';
+        recordButton.disabled=true;
+        stopRecordingButton.disabled=true;
+        pauseRecordingButton.disabled=true;
+        pauseRecordingButton.style.display='flex';
     }
 });
 pauseRecordingButton.addEventListener("click", () => {
     if (mediaRecorder.state === "recording") {
         mediaRecorder.pause();
-        pauseRecordingButton.innerText = "Resume Recording";
+        pauseRecordingButton.style.display='none';
+        resumeRec.style.display='flex';
         Object.values(waveSurfers).forEach(ws => ws.pause());
-    } else if (mediaRecorder.state === "paused") {
+    } });
+resumeRec.addEventListener("click", () => {
+    if (mediaRecorder.state === "paused") {
         mediaRecorder.resume();
-        pauseRecordingButton.innerText = "Pause Recording";
+        pauseRecordingButton.style.display='flex';
+        resumeRec.style.display='none';
         Object.values(waveSurfers).forEach(ws => ws.play());
     }
 });
@@ -263,27 +275,27 @@ function refreshContent() {
             gSyncContainer.innerHTML="";
             data.audio_list.forEach(audioDT => {
                 const newElement = `
-                    <div class="sync-audio-container">
+                    <div class="sync-audio-container main-each-container">
                         <div class="sync-audio-graph-${audioDT.syncId} b-s-Allaudio" data-value="${audioDT.syncId}" id="sync-audio-graph-${audioDT.syncId}"></div>
-                        <div class="sync-audio-controls">
+                        <div class="sync-audio-controls audio-control">
                             <div class="sync-audio-data">
-                                <p id="audio-content">
-                                    <span id="username">${audioDT.syncedBy__username}</span>
-                                    <span id="divider">•</span>
-                                    <span id="audio-name-${audioDT.syncId}">${audioDT.audioName || "Audio_XXX"}</span>
+                                <p id="audio-content" class="audio-contents-text">
+                                    <span id="username" class="content">${audioDT.syncedBy__username}</span>
+                                    <span id="divider" class="content">•</span>
+                                    <span id="audio-name-${audioDT.syncId}" class="content">${audioDT.audioName || "Audio_XXX"}</span>
                                 </p>
                             </div>
-                            <div id="sync-audio-control-panel">
-                                <div class="control-sync">
-                                    <img class="single-audio-play" src="/static/images/audio-play.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="play-button">
-                                    <img class="single-audio-pause" src="/static/images/audio-pause.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="pause-button">
-                                    <img class="single-audio-stop" src="/static/images/audio-stop.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="stop-button">    
+                            <div id="sync-audio-control-panel" class="controls">
+                                <div class="control-sync pps-c">
+                                    <img class="single-audio-play control-button-images" src="/static/images/audio-play.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="play-button">
+                                    <img class="single-audio-pause control-button-images" src="/static/images/audio-pause.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="pause-button">
+                                    <img class="single-audio-stop control-button-images" src="/static/images/audio-stop.svg" data-container="sync-audio-graph-${audioDT.syncId}" alt="stop-button">    
                                 </div>
-                                <div class="volume-sync">
-                                    <label for="volume"><img class="single-volume-icon" src="/static/images/audio-volume.svg" alt="volume-button"></label>
+                                <div class="volume-sync volume">
+                                    <label for="volume" class="volume-icon"><img class="single-volume-icon control-button-images" src="/static/images/audio-volume.svg" alt="volume-button"></label>
                                     <input type="range" data-container="sync-audio-graph-${audioDT.syncId}" class="single-volume" id="volume" min="0" max="1" step="0.01" value="1">
                                 </div>
-                                <button class="audio-delete" id="audio-delete" data-container="sync-audio-graph-${audioDT.syncId}" onclick=deleteAudio("${audioDT.syncId}") data-value="${audioDT.syncId}"><img class="single-audio-delete" src="/static/images/audio-delete.svg" alt="delete-button"></button>
+                                <button class="audio-delete" id="audio-delete" data-container="sync-audio-graph-${audioDT.syncId}" onclick=deleteAudio("${audioDT.syncId}") data-value="${audioDT.syncId}"><img class="single-audio-delete control-button-images" src="/static/images/audio-delete.svg" alt="delete-button"></button>
                             </div>
                         </div>
                     </div>
@@ -291,7 +303,7 @@ function refreshContent() {
 
                 gSyncContainer.insertAdjacentHTML("beforeend", newElement);
                 
-                initWaveSurfer(`sync-audio-graph-${audioDT.syncId}`,`/media/${audioDT.syncMedia}`);
+                initWaveSurfer(`sync-audio-graph-${audioDT.syncId}`,`/media/${audioDT.syncMedia}`, 'rgb(142, 206, 255)');
             });
         }
         else{
@@ -372,23 +384,30 @@ function updateApprovalStatus() {
         document.getElementById("accept-count").innerText = data.accept_count;
         if (data.accept_count >= data.owner_count) {
             document.getElementById("upload-warning-button").style.display = "block";
+            document.getElementById("upload-warning-button").classList.add("show");
+            document.getElementById("upload-warning-button").classList.remove("hide");
         } else {
-            document.getElementById("upload-warning-button").style.display = "none";
+            document.getElementById("upload-warning-button").classList.add("hide");
+            document.getElementById("upload-warning-button").classList.remove("show");
         }
         buttonA = document.getElementById('approval-button');
             // Toggle button text and status
             if (data.isApproved == true) {
                 buttonA.textContent = "Revoke";
+                buttonA.classList.remove('approve');
+                buttonA.classList.add('revoke');
                 buttonA.setAttribute("onclick", "approveButton(this, 'revoke')");
             } else {
                 buttonA.textContent = "Approve";
+                buttonA.classList.add('approve');
+                buttonA.classList.remove('revoke');
+
                 buttonA.setAttribute("onclick", "approveButton(this, 'approve')");
             }
     })
     .catch(error => console.error("Error fetching approval status:", error));
 }
 setInterval(updateApprovalStatus, 5000);
-
 audioUpload.addEventListener("change", (event) => {
     control_flag = 'upl';
     const file = event.target.files[0];
@@ -401,6 +420,8 @@ audioUpload.addEventListener("change", (event) => {
     console.log(UploadAudioURL);
     initWaveSurfer(g_rSyncContainer,UploadAudioURL);
     gRSync.style.display="block";
+    recordButton.disabled=true;
+    uploadButton.disabled=true;
 });
 function renameAudio(syncId) {
     const inputField = document.getElementById(`rename-audio-${syncId}`);
@@ -431,3 +452,16 @@ function renameAudio(syncId) {
     })
     .catch(error => console.error("Error:", error));
 }
+document.getElementById("messageInput").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        if (event.shiftKey) {
+            // Shift + Enter: Insert a new line
+            event.preventDefault(); // Prevents the default behavior (which might submit the form)
+            this.value += "\n"; // Adds a new line inside the input field
+        } else {
+            // Enter (without Shift): Send the message
+            event.preventDefault(); // Prevents accidental line breaks
+            document.getElementById("sendButton").click(); // Triggers the send button
+        }
+    }
+});

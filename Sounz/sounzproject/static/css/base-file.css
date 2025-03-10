@@ -62,7 +62,7 @@ img#navbar-user-profile-pic{
     height: 45px;
     border-radius: 50%;
     aspect-ratio: 8 / 8;
-    object-fit: cover;
+    object-fit: cover;  
 }
 #nav-separator{
     width: 80%;
@@ -73,7 +73,7 @@ img#navbar-user-profile-pic{
 }
 .export-htmls{
     flex: 1;
-    padding-left: 65px;
+    margin-left: 65px;
     width: 100%;
 }
 .menu-toggle{

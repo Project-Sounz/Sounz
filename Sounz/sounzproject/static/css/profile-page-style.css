@@ -268,7 +268,7 @@ p#desc{
     display: none;
     position: absolute;
     top: 45px;
-    right: 0;
+    right: 10px;
     background-color: #2f2f2fed;
     /* border: 1px solid #dcdcdc; */
     border-radius: 5px;

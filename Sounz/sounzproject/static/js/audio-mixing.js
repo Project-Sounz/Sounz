@@ -152,4 +152,76 @@ async function uploadMixedAudio(audioBlob) {
 }
 
 // Button event listener
-document.getElementById('upload-warning-button').addEventListener('click', mixMultipleAudioFiles);
+document.getElementById('collab-confirmed').addEventListener('click', mixMultipleAudioFiles);
+
+function showPopUp() {
+    var popup = document.getElementById("popup");
+    popup.classList.toggle("show");
+}
+function showEndpopup() {
+    var popup = document.getElementById("popup-end");
+    popup.classList.toggle("show");
+}
+
+function toggleDropdown(event) {
+    event.stopPropagation();
+    let dropdown = document.getElementById("dropdownMenu");
+
+    if (dropdown.style.display === "block") {
+        dropdown.style.display = "none";
+    } else {
+        dropdown.style.display = "block";
+
+        // Position dropdown near the button
+        let rect = event.target.getBoundingClientRect();
+        dropdown.style.top = 707 + "px";
+        dropdown.style.right = 10 + "px";
+    }
+}
+document.addEventListener("click", function () {
+    document.getElementById("dropdownMenu").style.display = "none";
+});
+function end_collab() {
+    console.log(`Deleting audio with Sync ID: ${collabIdOne}`);
+    fetch(`/end-collab?collabId=${collabIdOne}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRFToken": getCSRFToken(),
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.json())  // Parse JSON response
+    .then(data => {
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url;  // Redirect manually
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+function showEditpopup(){
+    var popup = document.getElementById("popup-edit");
+    popup.classList.toggle("show");
+}
+function save_finalpost() {
+    let formData = new FormData(document.getElementById("register-form"));
+    formData.append("collabId", collabIdOne);
+
+    fetch("/update-collab-post/", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "X-CSRFToken": getCSRFToken(),
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log("Collaboration details updated successfully!");
+            location.reload();
+        } else {
+            console.log("Failed to update collaboration details.");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
