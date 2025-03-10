@@ -223,27 +223,19 @@ def homepage(request):
     all_users = profiledatadb.objects.all()
     username = request.user.username
     user = profiledatadb.objects.get(username=username)
-    sliced = profiledatadb.objects.all()[:4]
-    topart = profiledatadb.objects.all()
+    sliced= profiledatadb.objects.all()[:4]
+    topart=profiledatadb.objects.all()
     random_profiles = random.sample(list(topart), min(len(topart), 4))
-
-    # Get the users the logged-in user follows
-    following_users = user.followers.all()  # These are User objects
-
-    # Get the corresponding profile usernames of the followed users
-    following_profiles = profiledatadb.objects.filter(username__in=[u.username for u in following_users])
-
-    # Fetch posts only from followed users
-    user_posts = postdb.objects.filter(username__in=following_profiles, flagged=0, is_private=0).order_by('-timestamp')
-
+    # Fetch posts of the current user
+    user_posts = postdb.objects.filter(flagged=0,is_private=0).order_by('-timestamp')
     context = {
         'all_users': all_users,
         'user': user,
         'user_posts': user_posts,
-        'sliced': sliced,
-        'topart': random_profiles
+        'sliced':sliced,
+        'topart':random_profiles
     }
-    return render(request, 'home.html', context)
+    return render(request, 'home.html',context)
 
 def upload(request):
     username = request.user.username
