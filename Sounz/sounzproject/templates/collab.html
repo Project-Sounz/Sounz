@@ -274,13 +274,34 @@ function updateProfilePicture(event) {
                 </button>
             </div>
         </div>
-        
-        
-        
-        
+    </div>
+    <div class="pop-up-container" id="popup">
+        <div class="pop-up">
+            <h2 class="pop-up-collab-request">
+                Confirm Upload?
+            </h2>
+            <p class="pop-up-collab-request-expl">
+                Upon uploading, all audio files will be merged into a single track. This collaboration will conclude after the upload, and there will be no further access to it.
+                <br>Please ensure to review and edit the final post details from the edit option available in the page footer.
+
+            </p>
+            <button class="collab-pop-up-button" onclick="showPopUp()" id="collab-cancelled">Cancel</button>
+            <button type="submit" class="collab-pop-up-button mixAndUpload-button" onclick="submitCollabForm()" id="collab-confirmed">Mix & Upload</button>
             
+        </div>
+    </div>
+    <div class="pop-up-container" id="popup-end">
+        <div class="pop-up">
+            <h2 class="pop-up-collab-request">
+                End Collaboration?
+            </h2>
+            <p class="pop-up-collab-request-expl">
+                Ending this collaboration will permanently revoke access to it for all collaborators of this collaboration. This action is irreversible. Are you certain you want to terminate this collaboration?
+            </p>
+            <button class="collab-pop-up-button" onclick="showEndpopup()" id="collab-cancelled">Cancel</button>
+            <button type="submit" class="collab-pop-up-button" onclick="end_collab()" id="end-collab">End Collaboration</button>
             
-       
+        </div>
     </div>
     <div class="footer-control">
         <div id="s-gapSet">

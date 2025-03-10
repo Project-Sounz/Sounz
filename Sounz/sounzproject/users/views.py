@@ -992,6 +992,14 @@ def send_decision_email(receiver_email, receiver_username, post_name,decision):
     print("Mail Sent!") 
 
 def collab_workspace(request):
+    username = request.user.username
+    userobj = profiledatadb.objects.get(username=username)
+
+    collab_member_list = Member_Information.objects.filter(post_member=request.user).select_related('collaboration').filter(
+    collaboration__collab_end=False,
+    collaboration__request_status="accepted"
+    )
+    combined_collab_list = [member.collaboration for member in collab_member_list]   
     collab_Id = request.GET.get('collab-id')
     if not collab_Id:
         return JsonResponse({'error': 'Missing collab-id'}, status=400) 
@@ -1000,12 +1008,17 @@ def collab_workspace(request):
         collab = Collab_Information.objects.get(collaboration_Id=collab_Id)
         collab_base_owners = Member_Information.objects.filter(collaboration_id=collab_Id)
         base_post = postdb.objects.get(pid=collab.base_post_id.pid)
+        collaborator_images = [
+        profiledatadb.objects.get(username=member.post_member).profile_picture.url
+        for member in collab_base_owners if profiledatadb.objects.filter(username=member.post_member).exists()
+    ]
+
+        # collaborator_profiles = profiledatadb.objects.get()for user in collab_base_owners
     except Collab_Information.DoesNotExist:
         return JsonResponse({'error': 'Collaboration not found'}, status=404)
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         sync_audio_list = syncAudios.objects.filter(collaboration_id=collab_Id)
-        # Convert queryset to list of dictionaries
         audio_data = list(sync_audio_list.values("syncId", "timestamp", "syncMedia","syncedBy__username","audioName"))
 
         return JsonResponse({'audio_list': audio_data})
@@ -1015,8 +1028,10 @@ def collab_workspace(request):
         'post_members': collab_base_owners,
         'post_base': base_post,
         'collab_id': collab_Id,
-
+        'collaborator_images': collaborator_images,
         'user_id':request.user.username,
+        "user": userobj,
+        'collab_list': combined_collab_list,
     }
     return render(request, "collab.html", context)
 
@@ -1188,7 +1203,7 @@ def upload_mixed_audio(request):
     if request.method == "POST":
         collab_id = request.POST.get("collaboration_id")
         audio_file = request.FILES.get("mixed_audio")
-         
+        
         if not collab_id or not audio_file:
             return JsonResponse({"error": "Missing data"}, status=400)
 
@@ -1197,24 +1212,34 @@ def upload_mixed_audio(request):
             collaboratedMembers = Member_Information.objects.filter(collaboration=collab)
             username=Member_Information.objects.get(collaboration=collab,isOwner=True).post_member
             userobj = profiledatadb.objects.get(username=username)
-            
+            thumbnail = collab.temp_thumbnail if collab.temp_thumbnail else None
+            caption = collab.temp_caption if collab.temp_caption else collab.collaboration_title
+            collab_members = Member_Information.objects.filter(collaboration=collab, isOwner=False).values_list('post_member__firstname', flat=True)
+            base_post_caption = Collab_Information.objects.get(collaboration_Id=collab.collaboration_Id).base_post_id.caption
+
+            description = (
+                collab.temp_descr 
+                if collab.temp_descr 
+                else f"A collaboration with {username}, x {' x '.join(collab_members)} on {base_post_caption}"
+            )
+            mType = collab.temp_mediaType if collab.temp_mediaType else None
             thePost = postdb.objects.create(
-                username=userobj,
-                # username=Member_Information.objects.get(collaboration=collab,isOwner=True),
+                # username=userobj,
+                username=Member_Information.objects.get(collaboration=collab,isOwner=True),
                 media=audio_file,
-                # media_thumbnail=collab.temp_thumbnail,
-                caption="test Caption",
-                # caption=collab.temp_caption,
-                descr="test description",
-                # descr=collab.temp_descr,
-                mediatype="Violin Test",
-                # mediatype=collab.temp_mediaType,
+                media_thumbnail=thumbnail,
+                # caption="test Caption",
+                caption=caption,
+                # descr="test description",
+                descr=description,
+                # mediatype="Violin Test",
+                mediatype=mType,
                 location="India",
                 media_format="Audio",
                 isCollaborated = True,
                 collaboration=collab.collaboration_Id
             )
-            print("post set")
+            print("post uploaded")
             for member in collaboratedMembers:
                 collaborators.objects.create(
                     post_id=thePost,
@@ -1246,6 +1271,40 @@ def delete_sync_audios(collab_id):
     audios.delete()
     print("Database entries deleted.")
 
+def end_collab(request):
+    if request.method == "DELETE":
+        collabId = request.GET.get('collabId')
+        print(collabId)
+        theCollab = Collab_Information.objects.get(collaboration_Id=collabId)
+        theCollab.collab_end=True
+        theCollab.save()
+        return JsonResponse({"redirect_url": reverse('home')})
+    
+def update_collab_post(request):
+    if request.method == "POST":
+        collab_id = request.POST.get("collabId")  # Ensure this ID is available in your form
+        caption = request.POST.get("caption")
+        media_type = request.POST.get("mType")
+        description = request.POST.get("description")
+        thumbnail = request.FILES.get("post_picture")
+
+        # Fetch the collab instance and update fields
+        collab = get_object_or_404(Collab_Information, collaboration_Id=collab_id)
+        if caption:
+            collab.temp_caption = caption
+            collab.collaboration_title = caption
+        if media_type:
+            collab.temp_mediaType = media_type
+        if description:
+            collab.temp_descr = description
+        if thumbnail:
+            collab.temp_thumbnail = thumbnail
+
+        collab.save()
+
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 @require_http_methods(["PATCH"])
 def approve_button(request):
     status = request.GET.get('status')
