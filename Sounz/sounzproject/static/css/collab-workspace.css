@@ -661,3 +661,42 @@ form > label{
 .edit_post_details{
     width: 20px;
 }
+.master-control-mobile{
+    display: none;
+}
+.master-controls{
+    display: flex;
+}
+@media screen and (max-width: 480px){
+    #chatContainer{
+        display: none;
+        width: 0;
+    }
+    .collab-tool{
+        width: 100%;
+        padding-left: 10px;
+    }
+    .main-each-container{
+        margin: 15px 10px
+    }
+    .master-control-container{
+        width: 100%;
+        padding: 20px;
+        max-width: none;
+    }
+    .master-control-mobile{
+        display: flex !important; 
+        flex-direction: column;
+        gap: 20px;
+    }
+    .master-controls{
+        display: none;
+    }
+    .upper-control, .bottom-control{
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}

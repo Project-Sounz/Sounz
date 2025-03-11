@@ -206,6 +206,56 @@ function updateProfilePicture(event) {
                         </label>
                         <input type="file" id="audioUpload" accept="audio/*" hidden>
                     </div>
+                    <div class="master-control-mobile" style="display: none;">
+                            <div class="upper-control">
+                                <div>
+                                    <button id="refresh">Refresh</button>
+                                    <div class="master-vol-div">
+                                        <label for="master-volume" class="master-volume-label">
+                                            <img class="master-volume-image control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button">
+                                        </label>
+                                        <input type="range" class="master-volume" id="master-volume" min="0" max="1" step="0.01" value="1">
+                                    </div>
+                                </div>
+                                <label id="uploadLabel" for="audioUpload">
+                                    <img class="master-upload control-button-images" src="{% static 'images/file-upload-collab.svg' %}" alt="upload button">
+                                </label>
+                                <input type="file" id="audioUpload" accept="audio/*" hidden>
+                            </div>
+                            <div class="bottom-control">
+                                <div class="master-rec-div">
+                                    <button id="masterPlayRecord">
+                                            <img class="record-n-play-p control-button-images" src="{% static 'images/recordnPlay-play.svg' %}" alt="record and play button">
+                                            <p class="and">&</p>
+                                            <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                                    </button>
+                                    <div class="rec-pause-stop">
+                                        <button id="resume-rec" class="rec-sub" style="display: none;">
+                                            <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                                        </button>
+                                        <button id="pauseRecording" class="rec-sub" disabled>
+                                            <img class="pause-recording-master" src="{% static 'images/record-pause.svg' %}" alt="pause recording">
+                                        </button>
+                                        <button id="masterStopRecord" class="rec-sub" disabled>
+                                            <img class="stop-recording-master" src="{% static 'images/record-stop.svg' %}" alt="pause recording">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="master-pps-div">
+                                    <button id="masterPlay" class="pps-button">
+                                        <img class="master-play control-button-images" src="{% static 'images/audio-play.svg' %}" alt=" master play button">
+                                    </button>
+                                    <button id="masterPause" class="pps-button">
+                                        <img class="master-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" alt=" master pause button">
+                                    </button>
+                                    <button id="masterStop" class="pps-button">
+                                        <img class="master-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" alt=" master stop button">
+                                    </button>
+                                </div>
+                            </div>
+ 
+                        </div>
+                    
                 </div>
         </div>
         </div>
