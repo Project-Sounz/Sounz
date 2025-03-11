@@ -268,4 +268,59 @@ button.e-d-button{
   border: 0;
   
 }
-/* Keyframes for the + symbol pulse effect 
+.pop-up-container{
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    background-color: #0000008a;
+    top: 0;
+    left: 0;
+    z-index: 995;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+.pop-up-container.show{
+    display: flex;
+}
+.pop-up{
+    border-radius: 10px;
+    background: #fff;
+    height: max-content;
+    max-width: 50%;
+    padding: 50px;
+
+}
+.pop-up-collab-request{
+    color: #646464;
+}
+.pop-up-collab-request-expl{
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 22px;
+    color: #6e6e6e;
+}
+.collab-pop-up-button{
+    padding: 10px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    margin-right: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+#collab-confirmed{
+    color: white;
+    background-image: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%)
+}
+#base-plan{
+    outline: none;
+    margin-bottom: 25px;
+    width: 100%;
+    padding: 5px;
+    border: 0;
+    border-bottom: 1px solid;
+    font-style: italic;
+}

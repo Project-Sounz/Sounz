@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sounz</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/collab-review.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <a href="{% url 'log-in' %}"><img class="sounz-logo" id="main-logo" src="{% static 'images/main_mail_logo.png' %}" alt="Sounz logo"></a>
+        </header>
+        <div class="content-body request-page" id="request-page">
+            <div class="part1">
+                <h2>Collaboration Request</h2>
+                <p>You have received a new collaboration request from <strong>{{ requestor }}</strong>. 
+                    Please find below an overview of the proposal for your consideration.</p>
+            </div>
+            <hr>
+            <div class="part2">
+                <h2>Summary</h2>
+                <p>Requested Media: <strong>{{ post_name }}</strong><br>
+                    Requested By: <strong>{{ requestor }} (@{{ requestor_usern }})</strong> <br>
+                    Request Date: <strong>{{ request_date }}</strong><br>
+                    Collaboration Scope: <strong>{{ base_plan }}</strong></p>
+            </div>
+            <hr>
+            <div class="part3">
+                <h2>Decision Matters</h2>
+                {% if status != "pending" %}
+                    <p id="request-done">No further action required. This request has been marked as <strong>{{ status }}</strong>.</p>
+                {% else %}
+                    <div class="d-buttons"><center>
+                        <button class="btn btn-primary" id="accept-btn" onclick="decided('accepted')">Accept Collaboration</button>
+                        <button class="btn btn-secondary" id="decline-btn" onclick="decided('declined')">Decline Collaboration</button>
+                    </center>
+                    </div>
+                {% endif %}
+                <p class="how-works">Upon approval of your collaboration request, the collaborator will be notified. It is important to note that the post owner(s) must approve the post prior to its upload after the collaboration. You can access the collaboration from the Collaborations tab.</p>
+            </div>
+        </div>
+        <div class="content-body thank-you-page" id="thank-you-page"><center>
+            <h1>Thank You for Confirming</h1>
+            <p class="cnf-msg">
+                Your response has been successfully recorded. {{ requestor }} will be notified about your decision
+            </p>
+            <a href="{% url 'log-in' %}"><button class="btn btn-secondary goto-btn" id="goto-btn" onclick="">Continue to Sounz</button></a>
+        </center>
+        </div>
+        <footer>
+            <center><span id="sp-1">Team </span><span id="sp-2"><a href="{% url 'log-in' %}"><img class="sounz-lettered-logo" id="footer-logo" src="{% static 'images/main_footer_logo.png' %}" alt="Sounz logo"></a></span></center>
+        </footer>
+    </div>
+    <script>
+        function decided(decision){
+            const collab_id = "{{ collaboration_id}}";
+            var page1 = document.getElementById("request-page");
+            var page2 = document.getElementById("thank-you-page");
+            page1.style.display="none";
+            page2.style.display="block";
+            page2.classList.add('addMargin')
+            fetch(`/update-collab-status/${collab_id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ decision: decision }) 
+            })
+            .then(response => response.json())
+        }
+    </script>
+</body>
+</html>

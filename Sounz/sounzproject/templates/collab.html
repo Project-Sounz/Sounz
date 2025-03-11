@@ -1,0 +1,393 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sounz{% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/collab-workspace.css' %}">
+<link rel="stylesheet" href="{% static 'css/media.css' %}">
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        loadChatHistory(); // Load messages on page load
+        setInterval(loadChatHistory, 1000);
+    });
+
+    function loadChatHistory() {
+        fetch("{% url 'get_chat_history' collab_id=collab_id %}")
+            .then(response => response.json())
+            .then(data => {
+                let chatBox = document.getElementById("allMessages");
+                chatBox.innerHTML = ""; // Clear previous messages
+
+                data.chat_history.forEach(chat => {
+                    let newMessage = document.createElement("div");
+                    let isUser = chat.username === "{{ request.user.username }}";
+
+                    newMessage.className = isUser ? "message user" : "message other";
+                    newMessage.innerHTML = `
+                        <span class="username">${chat.username}</span> <span class="message-content">${chat.message}</span>
+                    `;
+
+                    chatBox.appendChild(newMessage);
+                    // autoScroll()
+                });
+
+                chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+            })
+            .catch(error => console.error("Error fetching chat history:", error));
+    }
+
+    function sendMessage() {
+        let messageInput = document.getElementById("messageInput");
+        let messageText = messageInput.value.trim();
+        if (messageText === "") return;
+
+        fetch("{% url 'send_chat_message' collab_id=collab_id %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({ message: messageText }),
+        })
+        .then(() => {
+            loadChatHistory(); // Reload messages after sending
+        })
+        .catch(error => console.error("Error sending message:", error));
+
+        messageInput.value = "";
+    }
+
+    function getCSRFToken() {
+        return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];
+    }
+    function autoScroll() {
+    let chatMessages = document.getElementById("allMessages");
+
+    // Check if user is near the bottom
+    let isNearBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 10;
+
+    if (isNearBottom) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}
+function updateProfilePicture(event) {
+    const input = event.target;
+    const imgElement = document.getElementById('upload-tn-img');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        imgElement.setAttribute('data-loading', 'true');
+        reader.onload = function (e) {
+            setTimeout(() => {
+                imgElement.src = e.target.result;
+                imgElement.setAttribute('data-loading', 'false');
+            }, 500);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
+
+
+
+{% endblock %}
+{% block content %}
+<!-- <div class="header-for-home">{% include 'header-base-sub.html' %}</div> -->
+<input type="hidden" id="collabId" value="{{ collab.collaboration_Id }}">
+<input type="hidden" id="userId" value="{{ user_id }}">
+<input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+<div class="main-collab-container">
+    <div class="collab-and-chat">
+        <div class="collab-tool">
+            <div class="audio-lists">
+                <div class="base-audio-container main-each-container">
+                    <div class="base-audio-graph b-s-Allaudio" id="base-audio-graph"><input type="hidden" id="base-audio-storage" value="{{ post_base.media.url }}"></div>
+                    <div class="base-audio-controls audio-control">
+                        <div class="base-audio-contents">
+                            <p id="base-contents" class="audio-contents-text">
+                                <span id="audio-title" class="content">{{ post_base.caption }}</span>
+                                <span id="divider" class="content">•</span>
+                                <span id="main-show-button" style="background-color: #000;
+                                color: #fff;
+                                padding: 5px 10px;
+                                border-radius: 5px;" class="content">Main Audio</span>
+                            </p>
+                        </div>
+                        <div id="base-audio-control-panel" class="controls">
+                            <div class="control-base pps-c">
+                                <img class="single-audio-play control-button-images" src="{% static 'images/audio-play.svg' %}" data-container="base-audio-graph" alt="play-button">
+                                <img class="single-audio-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" data-container="base-audio-graph" alt="pause-button">
+                                <img class="single-audio-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" data-container="base-audio-graph" alt="stop-button">    
+                            </div>
+                            <div class="volume-base volume">
+                                <label for="base-volume" class="volume-icon"><img class="single-volume-icon control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button"></label>
+                                <input class="single-volume" data-container="base-audio-graph" type="range" id="base-volume" min="0" max="1" step="0.01" value="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="main-sync-container"></div>
+            </div>
+            <div class="control-wrapper">
+                <div class="g-rSync-container main-each-container" id="g-rSync-container" style="display: none;">
+                    <div class="g-rSync-audio-graph b-s-Allaudio" id="g-rSync-audio-graph"></div>
+                    <div class="sync-audio-controls audio-control">
+                        <div class="g-rSync-buttons">
+                            <button id="g-rSync-redo">Redo</button>
+                            <button id="g-rSync-sync">Sync</button>
+                        </div>
+                        <div id="g-rSync-control-panel" class="controls">
+                            <div class="control-rSync pps-c">
+                                <img class="single-audio-play control-button-images" src="{% static 'images/audio-play.svg' %}" data-container="g-rSync-audio-graph" alt="play-button">
+                                <img class="single-audio-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" data-container="g-rSync-audio-graph" alt="pause-button">
+                                <img class="single-audio-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" data-container="g-rSync-audio-graph" alt="stop-button">    
+                            </div>
+                            <div class="volume-sync volume">
+                                <label for="volume" class="volume-icon"><img class="single-volume-icon control-button-images" src="{% static 'images/audio-volume.svg' %}"  alt="volume-button"></label>
+                                <input type="range" data-container="g-rSync-audio-graph" class="single-volume" id="g-rSy-volume" min="0" max="1" step="0.01" value="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="master-control-container">
+                    <div class="master-controls">
+                        <button id="refresh">Refresh</button>
+                        <!-- <label>Mic Volume:</label>
+                        <input type="range" class="mic-volume" id="mic-volume" min="0" max="1" step="0.01" value="1"> -->
+                        <div class="master-vol-div">
+                            <label for="master-volume" class="master-volume-label">
+                                <img class="master-volume-image control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button">
+                            </label>
+                            <input type="range" class="master-volume" id="master-volume" min="0" max="1" step="0.01" value="1">
+                        </div>
+                        <div class="master-rec-div">
+                            <button id="masterPlayRecord">
+                                    <img class="record-n-play-p control-button-images" src="{% static 'images/recordnPlay-play.svg' %}" alt="record and play button">
+                                    <p class="and">&</p>
+                                    <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                            </button>
+                            <div id="bars-recording">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                              </div>
+                            <div class="rec-pause-stop">
+                                <button id="resume-rec" class="rec-sub" style="display: none;">
+                                    <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                                </button>
+                                <button id="pauseRecording" class="rec-sub" disabled>
+                                    <img class="pause-recording-master" src="{% static 'images/record-pause.svg' %}" alt="pause recording">
+                                </button>
+                                <button id="masterStopRecord" class="rec-sub" disabled>
+                                    <img class="stop-recording-master" src="{% static 'images/record-stop.svg' %}" alt="pause recording">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="master-pps-div">
+                            <button id="masterPlay" class="pps-button">
+                                <img class="master-play control-button-images" src="{% static 'images/audio-play.svg' %}" alt=" master play button">
+                            </button>
+                            <button id="masterPause" class="pps-button">
+                                <img class="master-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" alt=" master pause button">
+                            </button>
+                            <button id="masterStop" class="pps-button">
+                                <img class="master-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" alt=" master stop button">
+                            </button>
+                        </div>
+                        <label id="uploadLabel" for="audioUpload">
+                            <img class="master-upload control-button-images" src="{% static 'images/file-upload-collab.svg' %}" alt="upload button">
+                        </label>
+                        <input type="file" id="audioUpload" accept="audio/*" hidden>
+                    </div>
+                    <div class="master-control-mobile" style="display: none;">
+                            <div class="upper-control">
+                                <div>
+                                    <button id="refresh">Refresh</button>
+                                    <div class="master-vol-div">
+                                        <label for="master-volume" class="master-volume-label">
+                                            <img class="master-volume-image control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button">
+                                        </label>
+                                        <input type="range" class="master-volume" id="master-volume" min="0" max="1" step="0.01" value="1">
+                                    </div>
+                                </div>
+                                <label id="uploadLabel" for="audioUpload">
+                                    <img class="master-upload control-button-images" src="{% static 'images/file-upload-collab.svg' %}" alt="upload button">
+                                </label>
+                                <input type="file" id="audioUpload" accept="audio/*" hidden>
+                            </div>
+                            <div class="bottom-control">
+                                <div class="master-rec-div">
+                                    <button id="masterPlayRecord">
+                                            <img class="record-n-play-p control-button-images" src="{% static 'images/recordnPlay-play.svg' %}" alt="record and play button">
+                                            <p class="and">&</p>
+                                            <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                                    </button>
+                                    <div class="rec-pause-stop">
+                                        <button id="resume-rec" class="rec-sub" style="display: none;">
+                                            <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                                        </button>
+                                        <button id="pauseRecording" class="rec-sub" disabled>
+                                            <img class="pause-recording-master" src="{% static 'images/record-pause.svg' %}" alt="pause recording">
+                                        </button>
+                                        <button id="masterStopRecord" class="rec-sub" disabled>
+                                            <img class="stop-recording-master" src="{% static 'images/record-stop.svg' %}" alt="pause recording">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="master-pps-div">
+                                    <button id="masterPlay" class="pps-button">
+                                        <img class="master-play control-button-images" src="{% static 'images/audio-play.svg' %}" alt=" master play button">
+                                    </button>
+                                    <button id="masterPause" class="pps-button">
+                                        <img class="master-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" alt=" master pause button">
+                                    </button>
+                                    <button id="masterStop" class="pps-button">
+                                        <img class="master-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" alt=" master stop button">
+                                    </button>
+                                </div>
+                            </div>
+ 
+                        </div>
+                    
+                </div>
+        </div>
+        </div>
+        <div id="chatContainer">
+            <div class="chat-heading-div">
+                <h1 class="chat-heading">Chat</h1>
+            </div>
+            <div id="chatMessages">
+                <div class="allMessages" id="allMessages">
+                </div>
+            </div>
+            <div class="message-type">
+                <input id="messageInput" placeholder="Type a message...">
+                <button onclick="sendMessage()" class="sent-button" id="sendButton">
+                    <img class="message-sent-arrow" src="{% static 'images/mSent.svg' %}" alt="message send button">
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="footer-control">
+        <div id="s-gapSet">
+            <div class="collab-images">
+                {% for image in collaborator_images %}
+                    <img src="{{ image }}" alt="Collaborator Profile" class="profile-img">
+                {% endfor %}
+            </div>
+            <div class="c-title">
+                <p class="collab-title">{{collab.collaboration_title}}</p>
+                <button id="post-edits" onclick="showEditpopup()"><img class="edit_post_details" src="{% static 'images/collab-post-edits.svg' %}" alt="post details edit button"></button>
+            </div>
+        </div>
+        <div>
+            <div class="button_ofAcceptance">
+                <button id="upload-warning-button" onclick="showPopUp()" class="hide" style="display: none;">Mix & Upload</button>
+                <button id="approval-button" onclick="approveButton(this,'approve')">Approve</button>
+                <p id="approval-status"><span id="accept-count">{{collab.accept_count}}</span> / {{collab.owner_count}} Approved</p>
+            </div>
+            <button class="option-3-dots" onclick="toggleDropdown(event)">
+                <img class="t-dot-menu" src="{% static 'images/options-tDots.svg' %}" alt="3 dot menue">
+            </button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <ul>
+                    <li><a  onclick="showEditpopup()">Edit details</a></li>
+                    <li><a onclick="showEndpopup()" id="endCollab">End Collaboration</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="pop-up-container" id="popup">
+        <div class="pop-up">
+            <h2 class="pop-up-collab-request">
+                Confirm Upload?
+            </h2>
+            <p class="pop-up-collab-request-expl">
+                Upon uploading, all audio files will be merged into a single track. This collaboration will conclude after the upload, and there will be no further access to it.
+                <br>Please ensure to review and edit the final post details from the edit option available in the page footer.
+
+            </p>
+            <button class="collab-pop-up-button" onclick="showPopUp()" id="collab-cancelled">Cancel</button>
+            <button type="submit" class="collab-pop-up-button mixAndUpload-button" onclick="submitCollabForm()" id="collab-confirmed">Mix & Upload</button>
+            
+        </div>
+    </div>
+    <div class="pop-up-container" id="popup-end">
+        <div class="pop-up">
+            <h2 class="pop-up-collab-request">
+                End Collaboration?
+            </h2>
+            <p class="pop-up-collab-request-expl">
+                Ending this collaboration will permanently revoke access to it for all collaborators of this collaboration. This action is irreversible. Are you certain you want to terminate this collaboration?
+            </p>
+            <button class="collab-pop-up-button" onclick="showEndpopup()" id="collab-cancelled">Cancel</button>
+            <button type="submit" class="collab-pop-up-button" onclick="end_collab()" id="end-collab">End Collaboration</button>
+            
+        </div>
+    </div>
+    <div class="pop-up-container" id="popup-edit">
+        <div class="pop-up">
+            <h2 class="pop-up-collab-request">
+                Edit Post
+            </h2>
+            <p class="pop-up-collab-request-expl">
+                
+                <form id="register-form" method="post" class="register-main-form xpcovi34"  enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                        <input type="file" name="post_picture" 
+                            id="post-thumbnail-input" 
+                            accept="image/*" 
+                            style="display: none;" 
+                            onchange="updateProfilePicture(event)">
+                        <button 
+                            type="button" 
+                            onclick="document.getElementById('post-thumbnail-input').click();" 
+                            class="tn-btn" 
+                            id="tn-upload-btn">
+                            <span class="uploadLogo">
+                                <img 
+                                    id="upload-tn-img" 
+                                    class="change-img-thumbnail-picture" 
+                                    src="{% if collab.temp_thumbnail %}{{ collab.temp_thumbnail.url }}{% else %}{% static 'images/16_9 Audio.png' %}{% endif %}" 
+                                    alt="Current profile picture" 
+                                    data-loading="false">
+                            </span>
+                            <span class="dp-upload-label">Change Post Thumbnail</span>
+                        </button>
+
+                    {% if prompt_message %} 
+                        <div class="prompt-message">{{ prompt_message }}</div>
+                    {% endif %} 
+
+                    <label for="caption">Caption</label>
+                    <input id="caption" type="text"  placeholder="{% if collab.temp_caption %}{{ collab.temp_caption }}{% else %}{{ collab.collaboration_title }} {% endif %}" name="caption">
+                    
+                    <label for="mType">Media Type</label>
+                    <input id="mType" type="text"  placeholder="{% if collab.temp_mediaType %}{{ collab.temp_mediaType }}{% else %}Violin, Piano, Guitar etc.{% endif %}" name="mType">
+
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="1" cols="20" placeholder="{% if collab.temp_descr %}{{ collab.temp_descr }}{% else %}Post description{% endif %}"></textarea>
+                   
+                </form>
+            <span id="warning">Before clicking on save, please ensure that unsynced audio is synced.</span>
+            </p>
+            <button class="collab-pop-up-button" onclick="showEditpopup()" id="collab-cancelled">Cancel</button>
+            <button type="submit" class="collab-pop-up-button" onclick="save_finalpost()" id="save_finalpost">Save</button>
+            
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/wavesurfer.js"></script>
+<script src="{% static 'js/collab-tool.js' %}"></script>
+<script src="{% static 'js/audio-mixing.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.0/lame.min.js"></script>
+{% endblock %}

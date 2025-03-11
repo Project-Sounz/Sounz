@@ -462,7 +462,32 @@
     })
     .catch(error => console.error("Error:", error));
 }
+function showPopUp() {
+        var popup = document.getElementById("popup");
+        popup.classList.toggle("show");
+    }
+function submitCollabForm() {
+    const formData = new FormData(document.getElementById("collabForm"));
 
+    fetch("{% url 'save-collab' %}", {
+        method: "POST",
+        body: formData,
+        headers: { "X-CSRFToken": "{{ csrf_token }}" }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            console.log(data.message);  // Show success message
+            showPopUp();          // Close the form
+        } else {
+            console.log("Failed to create collaboration.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        console.log("An error occurred. Please try again.");
+    });
+}
 </script>
 {% endblock %}
 
@@ -532,6 +557,27 @@
                             </audio>
                         </video>
                     </div>
+
+                    <div class="pop-up-container" id="popup">
+                        <div class="pop-up">
+                            <h2 class="pop-up-collab-request">
+                                Confirm request?
+                            </h2>
+                            <p class="pop-up-collab-request-expl">
+                                Your collaboration request will be forwarded to the owner(s) of this media. Please wait until the owner(s) have either accepted or rejected your request.
+                                You will be notified of the owner’s decision via email.
+                            </p>
+                            <form id="collabForm" method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id_pass" value="{{ post.pid }}">
+                                <input type="text" required maxlength="150" name="base-plan" id="base-plan" placeholder="Please provide a base plan on how you would like to collab."><br>
+                                <button class="collab-pop-up-button" onclick="showPopUp()" id="collab-cancelled">Cancel</button>
+                                <button type="submit" class="collab-pop-up-button" onclick="submitCollabForm()" id="collab-confirmed">Confirm</button>
+                            </form>
+                            
+                        </div>
+                    </div>
+
                     <div class="media-footer">
                         
                         <div class="footer-btns">
@@ -598,7 +644,7 @@
                             
                         </div>
                         {% if user.username != puser.username %}
-                            <a href="{% url 'email' %}" class="collab"><img style="width: 160px;" src="{% static 'images/Collab-long-logo.svg' %}" alt=""></a>
+                            <button onclick="showPopUp()" class="collab" style="border: none; background: transparent; cursor: pointer;"><img style="width: 160px;" src="{% static 'images/Collab-long-logo.svg' %}" alt=""></button>
                         {% endif %}
                         </div>
                     <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
@@ -623,7 +669,9 @@
                         </a>
                     {% endif %}
                 </div>
-
+<script>
+    
+</script>
             {% endif %}
         {% else %}
         <div style="text-align: center; color: red; font-weight: bold;">

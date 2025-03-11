@@ -69,6 +69,9 @@
                                         <img loading="lazy" src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
                                     {% endif %}
                                 {% endif %}
+                                {% if media.isCollaborated %}
+                                <img id="iscollab" src="{% static 'images/collab-small-icon.svg' %}" alt="is collaborated icon">
+                                {% endif %}
                                 <div class="gradient-overlay">
                                     <div class="padding-controll">
                                         <h2 class="video-caption">{{ media.caption}}</h2>
@@ -113,6 +116,9 @@
                                 {% endif %}
                                 <!-- <img class="thumbnail-image" src="media/Media/20240312_222036.jpg" alt="" srcset=""> -->
                                 <!-- <video><source src="{{ media.media }}"></video> -->
+                                {% if media.isCollaborated %}
+                                <img id="iscollab" src="{% static 'images/collab-small-icon.svg' %}" alt="is collaborated icon">
+                                {% endif %}
                                 <div class="gradient-overlay">
                                     <div class="padding-controll">
                                         <h2 class="video-caption">{{ media.caption }}</h2>

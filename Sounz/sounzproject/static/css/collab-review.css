@@ -1,0 +1,136 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    font-variation-settings:
+        "slnt" 0;
+}
+.main-container{
+    width: 70%;
+    height:max-content;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    margin: 10px 0;
+    min-height: 50%;
+}
+header{
+    margin-bottom: 10px;
+}
+header > a > img{
+    max-width: 35px;
+    display: block;
+    margin-left: auto;
+}
+.content-body{
+    margin: 10px 50px;
+}
+.thank-you-page{
+    display: none;
+}
+.request-page{
+    display: block;
+}
+#request-done{
+    padding: 20px 10px;
+    background: #17c01717;
+    border-radius: 5px;
+    border: 1px solid #068206;
+}
+h2{
+    font-size: 26px;
+    width: max-content;
+    font-weight: 300;
+    letter-spacing: -1px;
+    background: linear-gradient(to right, rgba(248, 73, 27, 1), rgba(241, 47, 63, 1), rgba(220, 24, 96, 1));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    margin-bottom: 20px;
+}
+p{
+    color: #707070;
+    line-height: 24px;
+}
+hr{
+    margin: 30px 0;
+    height: 1px;
+    border: none;
+    background: #d6d6d6;
+}
+.btn{
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+.btn-primary{
+    background-color: #000;
+    color: #fff;
+    margin-right: 20px;
+}
+.btn-secondary{
+    background-color: #fff;
+    color: #000;
+    border: 1px solid black;
+}
+p.how-works, p.cnf-msg{
+    font-size: 12px;
+    color: #a6a6a6;
+    text-align: center;
+    line-height: normal;
+    margin-top: 20px;
+}
+h1{
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: -1px;
+}
+.goto-btn{
+    margin-top: 30px;
+}
+footer{
+    font-size: 14px;
+    color: #a6a6a6;
+}
+#footer-logo {
+    width: 42px;
+}
+
+@media screen and (max-width: 768px){
+    body{
+        height: auto;
+    }
+    .main-container{
+        width: 90%;
+        box-shadow: none;
+    }
+    .content-body{
+        margin: 0;
+    }
+    .btn{
+        font-size: 14px;
+    }
+    footer{
+        margin-top: 25px
+    }
+    .addMargin{
+        margin: 35px 0;
+    }
+}
