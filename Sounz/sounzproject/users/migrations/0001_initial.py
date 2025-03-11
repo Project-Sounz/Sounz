@@ -181,6 +181,33 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='syncAudios_table',
+            fields=[
+                ('syncId', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
+                ('syncMedia', models.FileField(upload_to='media/syncAudios')),
+                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                ('audioName', models.CharField(default=users.models.generate_audio_name, max_length=50)),
+                ('collaboration', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.collab_information_tabledb')),
+                ('syncedBy', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Notification',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('message', models.TextField()),
+                ('notification_type', models.CharField(choices=[('like', 'Like'), ('collab', 'Collaboration Request'), ('flagged', 'Post Flagged')], max_length=10)),
+                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                ('status', models.CharField(choices=[('unread', 'Unread'), ('read', 'Read')], default='unread', max_length=10)),
+                ('recipient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to=settings.AUTH_USER_MODEL)),
+                ('sender', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('post', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='users.postdb')),
+            ],
+            options={
+                'indexes': [models.Index(fields=['recipient'], name='users_notif_recipie_b8cb28_idx'), models.Index(fields=['timestamp'], name='users_notif_timesta_eaa4cf_idx')],
+            },
+        ),
+        migrations.CreateModel(
 <<<<<<< HEAD
             name='syncAudios_table',
             fields=[
