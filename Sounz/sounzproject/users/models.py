@@ -1,9 +1,9 @@
-from django.db import models
-from django.contrib.auth.models import User
+from django.db import models # type: ignore
+from django.contrib.auth.models import User # type: ignore
 import uuid
 import random
 import string
-from django.utils import timezone
+from django.utils import timezone # type: ignore
 
 
 
@@ -40,7 +40,7 @@ class postdb(models.Model):
     likes=models.IntegerField(default=0)
     media_format=models.CharField(max_length=20, blank=True)
     timestamp = models.DateTimeField(auto_now=True)
-    collaborated_owners = models.ManyToManyField(User, through="collaborators")
+    collaborated_owners = models.ManyToManyField(User, through="collaborators_table")
     isCollaborated = models.BooleanField(default=False)
     collaboration = models.UUIDField(default=None,blank=True,null=True)
     # New fields for flagging system
@@ -52,8 +52,8 @@ class postdb(models.Model):
     
     def __str__(self):
         return str(self.pid)
-    
-class collaborators(models.Model):
+     
+class collaborators_table(models.Model):
     post_id = models.ForeignKey(postdb, on_delete=models.CASCADE)
     collab_members = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -63,7 +63,6 @@ class collaborators(models.Model):
     def __str__(self):
         return f"{self.collab_members.username} in {self.post_id.caption}"
     
-
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(postdb, on_delete=models.CASCADE, related_name='likes_relation')
@@ -132,7 +131,7 @@ class Notification(models.Model):
     def __str__(self):
         return f"{self.sender} → {self.recipient}: {self.message}"          
     
-class Collab_Information(models.Model):
+class Collab_Information_tabledb(models.Model):
     collaboration_Id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     base_post_id = models.ForeignKey(postdb, on_delete=models.CASCADE, related_name="collab_base_posts")
     request_status = models.CharField(max_length=20, default="pending")
@@ -160,7 +159,7 @@ class Collab_Information(models.Model):
         return self.collaboration_title
     
 class Member_Information(models.Model):
-    collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
+    collaboration = models.ForeignKey(Collab_Information_tabledb, on_delete=models.CASCADE)
     post_member = models.ForeignKey(User, on_delete=models.CASCADE)
     isOwner = models.BooleanField(default=False)
     isApproved = models.BooleanField(default=False)
@@ -175,8 +174,8 @@ def generate_audio_name():
     random_letters = ''.join(random.choices(string.ascii_uppercase, k=3))  # Generates 3 uppercase letters
     return f"Audio_{random_letters}"
 
-class syncAudios(models.Model):
-    collaboration = models.ForeignKey(Collab_Information, on_delete=models.CASCADE)
+class syncAudios_table(models.Model):
+    collaboration = models.ForeignKey(Collab_Information_tabledb, on_delete=models.CASCADE)
     syncId = models.UUIDField(primary_key=True, default=uuid.uuid4)
     syncMedia = models.FileField(upload_to='media/syncAudios')
     timestamp = models.DateTimeField(auto_now_add=True)
