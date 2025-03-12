@@ -279,7 +279,7 @@ def upload(request):
         media_type = request.POST.get('media_type')
         lan = request.POST.get('language')
         loc = request.POST.get('location')
-        is_private = request.POST.get('media_visibility_control') == 'on'
+        is_private = request.POST.get('media_visibility_private') == 'on'
         form = Uploadform(request.POST, request.GET)
 
         if form.is_valid(): 
@@ -334,10 +334,10 @@ def editprofile(request):
                    user.user_bio = request.POST.get('bio')
                 if request.POST.get('insta'):   
                    user.insta = request.POST.get('insta') 
-                if request.POST.get('yout'):   
-                   user.yout = request.POST.get('yout')
-                if request.POST.get('twit'):   
-                   user.twit = request.POST.get('twit')        
+                if request.POST.get('youtube'):   
+                   user.yout = request.POST.get('youtube')
+                if request.POST.get('xcom'):   
+                   user.twit = request.POST.get('xcom')        
                 user.save()
                 userauth.save()
                 

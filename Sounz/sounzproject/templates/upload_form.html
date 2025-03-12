@@ -36,16 +36,26 @@
             <input required type="text" id="post_description" name="post_description" placeholder="Description"></input>
             <select id="media_type" name="media_type">
                 <option selected value="Audio">Audio</option>
-                <option value="Video">Video</option>
+                <option value="Video">Video (collaboration not supported)</option>
             </select>
             <input required type="text" id="tags" name="tags" placeholder="Media type ('vocals' 'guitar' 'piano' etc..)">
-            <label for="">
-                <input type="checkbox" id="media_visibility_control">
-                Make media private?
-            </label>
+            <div class="visibility-control">
+                <p id="visibilityOpt">Media visibility:</p>
+                <div class="vPublic">
+                    <input type="checkbox" id="media_visibility_public" class="visibility_checkbox" style="margin: 0;" checked>
+                    <label for="media_visibility_public">Public</label>
+                </div>
+                <div class="vPrivate">
+                    <input type="checkbox" id="media_visibility_private" class="visibility_checkbox" style="margin: 0;">
+                    <label for="media_visibility_private">Private</label>
+                </div>
+            </div>
             <input type="text" id="language" name="language" placeholder="Language (optional)">
             <input type="text" name="location" id="location" placeholder="Location (optional)">
-            <button type="submit" class="btn" id="upload-publishBtn">Publish</button>
+            <div class="uploadControls" id="upload-btns">
+                <a href="{% url 'home' %}" class="upload-cancel"><center class="cancel-btn-upload">Cancel</center></a>
+                <button type="submit" class="btn" id="upload-publishBtn">Publish</button>
+            </div>
         </div>
     </form>
     
@@ -84,6 +94,15 @@
                 thumbnailMessage.innerText = 'File Error!';
             }
         });
+    document.querySelectorAll('.visibility_checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelectorAll('.visibility_checkbox').forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+            }
+        });
+    });
 </script>
 {% endif %}
 {% endblock %}
