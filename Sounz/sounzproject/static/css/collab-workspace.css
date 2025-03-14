@@ -318,8 +318,11 @@ button:disabled{
     color: #ffffff;
 }
 .collab-images > img{
-    width: 27px;
+    width: 31px;
     border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    margin-left: -10px;
+    border: 2px solid;
 }
 button.option-3-dots{
     background: none;
@@ -338,7 +341,7 @@ button.option-3-dots{
     flex-direction: row;
     align-items: center;
     border-left: 3px solid red;
-    padding: 15px 30px;
+    padding: 15px 30px 15px 35px;
     justify-content: space-between;
     min-height: 65px;
 }
@@ -357,7 +360,7 @@ button.option-3-dots{
     width: 20px;
 }
 .collab-images{
-    display: flex;
+    display: block;
 }
 #approval-button{
     border: none;
@@ -365,6 +368,7 @@ button.option-3-dots{
     border-radius: 2px;
     color: #fff;
     min-width: 75px;
+    /* background-color: #0093ff; */
 }
 .revoke{
     background-color: #424242;
