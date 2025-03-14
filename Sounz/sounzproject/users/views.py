@@ -527,6 +527,7 @@ def media(request):
     post = postdb.objects.get(pid=pid)
     post_list = list(postdb.objects.filter(flagged=0).order_by('-timestamp'))
     post_index = next((i for i, p in enumerate(post_list) if p.pid == post.pid), None)
+    allCollabMembers=[]
     if(post.isCollaborated):
         each_member = collaborators_table.objects.filter(post_id=pid).values_list('collab_members', flat=True)
         allCollabMembers = profiledatadb.objects.filter(username__in=User.objects.filter(id__in=each_member).values_list('username', flat=True))
