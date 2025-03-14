@@ -496,6 +496,10 @@ function submitCollabForm() {
     {% if user %}
         {% if user.username == puser.username or not post.is_private %}
             {% if puser %}
+            <div class="master-div">
+                    <a href="?pid={% if previous_post %}{{ previous_post.pid }}{% endif %}" class="media-move-button {% if not previous_post %}button-disabled{% endif %}">
+                            <img src="{% static 'images/previous-post.svg' %}" alt="previous post button" class="previous_post media-change-button">
+                        </a>
                 <div class="media">
                     <div class="media-header">
                         
@@ -651,47 +655,56 @@ function submitCollabForm() {
                         
                     <p class="media-desc">{{post.descr}}</p>
                     <p class="media-date">{{ post.timestamp|date }}</p>
+                    {% if collab_members %}
+                    <h3 class="collab-heading">Collaborators:</h3>
                     <div class="show_collaborators">
-                        {% if collab_members %}
-                            <h3>Collaborators:</h3>
                             {% for each_member in collab_members %}
-                            {% if each_member.username != puser.username %}
-                                <ul><span><img src="{{each_member.profile_picture.url}}" alt=""></span>
-                                    <span>{{each_member.firstname}}
-                                    {% if each_member.lastname %}<span>{{each_member.lastname}}</span>{% endif %}</span>    
-                                    <span>@{{ each_member.username }}</span>
-                                </ul>
-                                {% endif %}
+                                {% if each_member.username != puser.username %}
+                                    <a class="collab-main-link" href="{% url 'watch-profile' %}?uname={{each_member.username}}"><ul class="collab-each-div"><span class="collab-img-span"><img src="{{each_member.profile_picture.url}}" class="collaborator-image"></span>
+                                            <div class="collab-nameAndUsername">
+                                                <span class="collaborator-name">{{each_member.firstname}}
+                                                {% if each_member.lastname %}<span>{{each_member.lastname}}</span>{% endif %}</span>    
+                                                <span class="collaborator-username">@{{ each_member.username }}</span>
+                                            </div>
+                                        </ul>
+                                    </a>
+                                {% endif %}   
                             {% endfor %}
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                 </div>
                 
-                <div style="text-align: center; margin-top: 20px;">
-                    {% if previous_post %}
-                        <a href="?pid={{ previous_post.pid }}" 
-                           style="background: rgba(248, 73, 27, 1); color: white; padding: 10px 15px;
-                                  text-decoration: none; border-radius: 5px; font-weight: bold; margin-right: 10px;">
-                            Previous Post
-                        </a>
-                    {% endif %}
                     
-                    {% if next_post %}
-                        <a href="?pid={{ next_post.pid }}" 
-                           style="background: rgba(248, 73, 27, 1); color: white; padding: 10px 15px;
-                                  text-decoration: none; border-radius: 5px; font-weight: bold;">
-                            Next Post
+                    
+                        <a href="?pid={% if next_post %}{{ next_post.pid }}{% endif %}" class="media-move-button {% if not next_post %}button-disabled{% endif %}">
+                            <img src="{% static 'images/next-post.svg' %}" alt="next post button" class="next_post  media-change-button">
                         </a>
-                    {% endif %}
                 </div>
-<script>
-    
-</script>
             {% endif %}
         {% else %}
         <div style="text-align: center; color: red; font-weight: bold;">
             🚫 This post is private.
         </div>
         {% endif %}
+    {% endif %}
+    {% if random_post %}
+    <h1 class="random-post-heading">Related posts</h1>
+    <div class="random-post-container">
+        {% for post in random_post %}
+            <a href="?pid={{ post.pid }}" class="random-each-post-container">
+                {% if post.media_thumbnail %}
+                <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail">
+                {% else %}
+                    {% if post.media_format == "Audio" %}
+                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
+                    {% elif post.media_format == "Video" %}
+                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
+                    {% endif %}
+                {% endif %}
+                <p class="post-caption">{{ post.caption }}</p>
+                <p class="post-description">{{ post.descr }}</p>
+            </a>
+        {% endfor %}
+    </div>
     {% endif %}
 {% endblock %}

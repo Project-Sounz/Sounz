@@ -3,7 +3,24 @@
     margin: auto;
     padding: 20px 0;
 }
-
+.master-div{
+    display: flex;
+    align-items: center;
+}
+.media-move-button{
+    margin-left: auto;
+    margin-right: auto;
+    display: flex
+;
+}
+.media-change-button{
+    width: 55px;
+}
+.button-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.3;
+}
 .media-owner-pp{
     width: 55px;
     /* aspect-ratio: 1 / 1; */
@@ -323,4 +340,104 @@ button.e-d-button{
     border: 0;
     border-bottom: 1px solid;
     font-style: italic;
+}
+.collab-heading{
+    font-size: 24px;
+    font-weight: 300;
+    background: linear-gradient(to right, rgba(248, 73, 27, 1), rgba(241, 47, 63, 1), rgba(220, 24, 96, 1));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    width: max-content;
+    letter-spacing: -1px;
+    margin: 20px 0px;
+}
+.show_collaborators{
+    display: flex
+    ;
+        gap: 30px;
+}
+.collaborator-image{
+    width: 50px;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+}
+.collab-img-span{
+    display: flex;
+}
+.collab-each-div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #f6f6f6;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 9px;
+    min-width: 190px;
+    height: 100%;
+}
+.collab-nameAndUsername{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+    color: #000000;
+}
+.collaborator-name{
+    font-size: 16px;
+    font-weight: 300;
+}
+.collaborator-username{
+    font-size: 14px;
+    color: #a6a6a6;
+}
+.collab-main-link{
+    text-decoration: none;
+}
+.post-thumbnail{
+    width: 235px;
+    aspect-ratio: 16 / 10;
+    border-radius: 5px;
+    object-fit: cover;
+}
+.random-post-container{
+    display: flex;
+    justify-content: center;
+}
+.random-each-post-container{
+    border: 0.5px solid #e2e2e2f5;
+    text-decoration: none;
+    background: #efefef61;
+    max-width: min-content;
+    margin: 10px;
+    padding: 10px;
+    /* width: 300px; */
+    height: 235px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+.post-caption{
+    font-size: 16px;
+    color: #000;
+    margin: 8px 0px;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.post-description{
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    font-size: 14px;
+    color: #a2a2a2;
+}
+.random-post-heading{
+    font-weight: 200;
+    letter-spacing: -1px;
+    color: #8d8d8d;
+    margin: 50px 0px 25px 10px;
 }
