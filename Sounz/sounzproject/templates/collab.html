@@ -5,10 +5,12 @@
 <link rel="stylesheet" href="{% static 'css/collab-workspace.css' %}">
 <link rel="stylesheet" href="{% static 'css/media.css' %}">
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        loadChatHistory(); // Load messages on page load
-        setInterval(loadChatHistory, 1000);
-    });
+   document.addEventListener("DOMContentLoaded", function () {
+    loadChatHistory(); // Load messages on page load
+    setInterval(fetchLatestMessage, 1000);
+});
+
+    let lastMessageTimestamp = null; // Track the latest message timestamp
 
     function loadChatHistory() {
         fetch("{% url 'get_chat_history' collab_id=collab_id %}")
@@ -18,21 +20,48 @@
                 chatBox.innerHTML = ""; // Clear previous messages
 
                 data.chat_history.forEach(chat => {
-                    let newMessage = document.createElement("div");
-                    let isUser = chat.username === "{{ request.user.username }}";
-
-                    newMessage.className = isUser ? "message user" : "message other";
-                    newMessage.innerHTML = `
-                        <span class="username">${chat.username}</span> <span class="message-content">${chat.message}</span>
-                    `;
-
-                    chatBox.appendChild(newMessage);
-                    // autoScroll()
+                    appendMessage(chat);
                 });
 
+                if (data.chat_history.length > 0) {
+                    lastMessageTimestamp = data.chat_history[data.chat_history.length - 1].timestamp; // Store last timestamp
+                }
                 chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
             })
             .catch(error => console.error("Error fetching chat history:", error));
+    }
+
+    function fetchLatestMessage() {
+        fetch("{% url 'get_latest_message' collab_id=collab_id %}?since=" + encodeURIComponent(lastMessageTimestamp || ""))
+            .then(response => response.json())
+            .then(data => {
+                let chatBox = document.getElementById("allMessages");
+
+                data.new_messages.forEach(chat => {
+                    appendMessage(chat);
+                    lastMessageTimestamp = chat.timestamp; // Update latest timestamp
+                });
+
+                autoScroll();
+            })
+            .catch(error => console.error("Error fetching latest messages:", error));
+    }
+
+    function appendMessage(chat) {
+        let chatBox = document.getElementById("allMessages");
+        let isUser = chat.username === "{{ request.user.username }}";
+
+        let newMessage = document.createElement("div");
+        newMessage.className = isUser ? "message user" : "message other";
+        newMessage.innerHTML = `
+            <img src="${chat.profile_picture}" alt="${chat.username}" class="profile-pic">
+            <div class="message-content">
+                <span class="username">${chat.username}</span> 
+                <span>${chat.message}</span>
+            </div>
+        `;
+
+        chatBox.appendChild(newMessage);
     }
 
     function sendMessage() {
@@ -49,7 +78,7 @@
             body: JSON.stringify({ message: messageText }),
         })
         .then(() => {
-            loadChatHistory(); // Reload messages after sending
+            fetchLatestMessage(); // Fetch only new message after sending
         })
         .catch(error => console.error("Error sending message:", error));
 
@@ -59,16 +88,15 @@
     function getCSRFToken() {
         return document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];
     }
+
     function autoScroll() {
-    let chatMessages = document.getElementById("allMessages");
-
-    // Check if user is near the bottom
-    let isNearBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 10;
-
-    if (isNearBottom) {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        let chatMessages = document.getElementById("allMessages");
+        let isNearBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 10;
+        if (isNearBottom) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     }
-}
+
 function updateProfilePicture(event) {
     const input = event.target;
     const imgElement = document.getElementById('upload-tn-img');
