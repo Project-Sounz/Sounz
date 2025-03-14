@@ -35,7 +35,7 @@ class postdb(models.Model):
     caption=models.CharField(max_length=30)
     descr=models.TextField()
     langu=models.CharField(max_length=15,default="English")
-    mediatype=models.CharField(max_length=15)
+    mediatype=models.CharField(max_length=15,blank=True)
     location=models.CharField(max_length=15)
     likes=models.IntegerField(default=0)
     media_format=models.CharField(max_length=20, blank=True)

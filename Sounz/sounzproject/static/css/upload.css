@@ -42,6 +42,16 @@ form{
     border-radius: 10px;
     cursor: pointer;
 }
+#upload-btns{
+    padding: 0;
+    border: 0;
+    width: 100%;
+    display: flex
+;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
 form > .upload-postDetails{
     display: grid;
     margin: 20px 0;
@@ -58,12 +68,35 @@ form > .upload-postDetails{
         color: rgb(153, 153, 153);
     } 
     button#upload-publishBtn{
-        width: 50%;
+        width: 48%;
         color: white;
         cursor: pointer;
         margin: 20px 0;
-        margin-left: auto;
-        margin-right: auto;
         background: linear-gradient(90deg, rgba(248, 73, 27, 1) 0%, rgba(241, 47, 63, 1) 50%, rgba(220, 24, 96, 1) 100%);
+        border: 1px solid transparent;
+    }
+    .upload-cancel{
+        width: 48%;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        text-decoration: none;
+    }
+    .cancel-btn-upload{
+        margin: 0;
+        background: #fff;
+        color: #636262;
+        border-color: #484848;
+    }
+    .visibility-control{
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .visibility-control > *, .visibility-control > * > label{
+        border: none;
     }
 }

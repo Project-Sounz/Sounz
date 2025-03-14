@@ -647,11 +647,26 @@ function submitCollabForm() {
                             <button onclick="showPopUp()" class="collab" style="border: none; background: transparent; cursor: pointer;"><img style="width: 160px;" src="{% static 'images/Collab-long-logo.svg' %}" alt=""></button>
                         {% endif %}
                         </div>
-                    <h3 class="m-h3">{{post.caption}}<a href="" class="media-type">{{post.mediatype}}</a> </h3>
+                    <h3 class="m-h3">{{post.caption}} {% if post.mediatype %}<a href="" class="media-type">{{post.mediatype}}</a> {% endif %}</h3>
                         
                     <p class="media-desc">{{post.descr}}</p>
                     <p class="media-date">{{ post.timestamp|date }}</p>
+                    <div class="show_collaborators">
+                        {% if collab_members %}
+                            <h3>Collaborators:</h3>
+                            {% for each_member in collab_members %}
+                            {% if each_member.username != puser.username %}
+                                <ul><span><img src="{{each_member.profile_picture.url}}" alt=""></span>
+                                    <span>{{each_member.firstname}}
+                                    {% if each_member.lastname %}<span>{{each_member.lastname}}</span>{% endif %}</span>    
+                                    <span>@{{ each_member.username }}</span>
+                                </ul>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
+                
                 <div style="text-align: center; margin-top: 20px;">
                     {% if previous_post %}
                         <a href="?pid={{ previous_post.pid }}" 

@@ -76,7 +76,9 @@
                                     <div class="padding-controll">
                                         <h2 class="video-caption">{{ media.caption}}</h2>
                                         <p class="video-description">{{ media.descr }}</p>
+                                        {% if media.mediatype %}
                                         <p class="instrument-used">{{ media.mediatype }}</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

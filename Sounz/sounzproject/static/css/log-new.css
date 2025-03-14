@@ -107,15 +107,18 @@ form > label{
 }
 .login-submit-button{
     margin-top: 50px;
-    font-size: 16px;
-    padding: 10px 20px;
+    font-size: 15px;
+    padding: 15px 20px;
     text-transform: uppercase;
     border: none;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px #dcdcdc;
-    width: 100%;
-    border-radius: 10px;
+    background-color: #000000;
+    box-shadow: 0px 8px 20px #dcdcdc;
+    width: 50%;
+    border-radius: 5px;
     cursor: pointer;
+    color: #fff;
+    margin-right: auto;
+    margin-left: auto;
 }
 .show-hide-label{
     font-weight: 500;
@@ -194,6 +197,7 @@ button.close-ua{
 }
 button.login-submit-button:disabled{
     cursor: not-allowed;
+    opacity: 0.2;
 }
 #profile_picture_preview {
     display: none;
@@ -230,11 +234,8 @@ button.login-submit-button:disabled{
         width: 100%;
     }
     .login-submit-button{
-        color: #000;
+        color: #ffffff;
         font-weight: 300;
-    }
-    .login-submit-button:disabled{
-        color: #dadada;
     }
 }
 @media screen and (max-width: 768px){
@@ -278,4 +279,27 @@ button.login-submit-button:disabled{
 }
 form > input, form > textarea {
     font-size: 16px;
+}
+.button-controls{
+    display: flex
+;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+.cancel-button{
+    width: 48%;
+}
+#cancel-button{
+    width: 100%;
+    color: #000000;
+    box-shadow: none;
+    background-color: #fff;
+    border: 1px solid;
+    border-color: #9a9a9a;
+}
+.update-profile-btn{
+    width: 48%;
 }

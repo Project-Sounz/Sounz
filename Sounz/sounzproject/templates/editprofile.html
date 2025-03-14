@@ -90,8 +90,10 @@
                     <label for="user-bio">USER BIO</label>
                     <textarea id="user-bio" name="bio" rows="5" cols="20" placeholder="{{ user.user_bio }}"></textarea>
                 {% endif %}
-                    <button type="submit" class="login-submit-button" id="register-button">Update Profile</button>
-                    <!-- <a href="{% url 'my-profile' %}"><button type="button" class="login-submit-button" id="register-button">Cancel</button></a> -->
+                    <div class="button-controls">
+                        <a href="{% url 'my-profile' %}" class="cancel-button"><button class="login-submit-button" id="cancel-button">Cancel</button></a>
+                        <button type="submit" class="login-submit-button update-profile-btn" id="register-button">Update Profile</button>
+                    </div>
                 </form>
             {% endif %}
         </div>
