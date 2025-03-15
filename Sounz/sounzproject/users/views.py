@@ -527,6 +527,8 @@ def media(request):
     post = postdb.objects.get(pid=pid)
     post_list = list(postdb.objects.filter(flagged=0).order_by('-timestamp'))
     post_index = next((i for i, p in enumerate(post_list) if p.pid == post.pid), None)
+    randomPost=postdb.objects.exclude(pid=pid).exclude(username=username)
+    random_post = random.sample(list(randomPost), min(len(randomPost), 5))
     allCollabMembers=[]
     if(post.isCollaborated):
         each_member = collaborators_table.objects.filter(post_id=pid).values_list('collab_members', flat=True)
@@ -558,6 +560,7 @@ def media(request):
         "previous_post": previous_post,
         'collab_list': combined_collab_list,
         'collab_members': allCollabMembers,
+        "random_post": random_post,
     }
 
     return render(request, 'media.html', context)
