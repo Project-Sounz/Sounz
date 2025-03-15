@@ -6,34 +6,82 @@
 <link rel="stylesheet" href="{% static 'css/media.css' %}">
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        loadChatHistory(); // Load messages on page load
-        setInterval(loadChatHistory, 1000);
-    });
+    loadChatHistory(); // Load full chat history on page load
+    setInterval(loadNewMessages, 1000); // Fetch only new messages periodically
+});
 
-    function loadChatHistory() {
-        fetch("{% url 'get_chat_history' collab_id=collab_id %}")
-            .then(response => response.json())
-            .then(data => {
-                let chatBox = document.getElementById("allMessages");
-                chatBox.innerHTML = ""; // Clear previous messages
+let lastMessageId = null; // Track the last loaded message ID
 
-                data.chat_history.forEach(chat => {
-                    let newMessage = document.createElement("div");
-                    let isUser = chat.username === "{{ request.user.username }}";
+function loadChatHistory() {
+    fetch("{% url 'get_chat_history' collab_id=collab_id %}")
+        .then(response => response.json())
+        .then(data => {
+            let chatBox = document.getElementById("allMessages");
+            chatBox.innerHTML = ""; // Clear previous messages
 
-                    newMessage.className = isUser ? "message user" : "message other";
-                    newMessage.innerHTML = `
-                        <span class="username">${chat.username}</span> <span class="message-content">${chat.message}</span>
-                    `;
+            data.chat_history.forEach(chat => {
+                appendMessage(chat);
+            });
 
-                    chatBox.appendChild(newMessage);
-                    // autoScroll()
-                });
+            if (data.chat_history.length > 0) {
+                lastMessageId = data.chat_history[data.chat_history.length - 1].id;
+                 // Track the last message
+            }
+        })
+        .catch(error => console.error("Error fetching chat history:", error));
+}
 
-                chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
-            })
-            .catch(error => console.error("Error fetching chat history:", error));
+function loadNewMessages() {
+    fetch("{% url 'get_chat_history' collab_id=collab_id %}?last_id=" + (lastMessageId || 0))
+        .then(response => response.json())
+        .then(data => {
+            let chatBox = document.getElementById("allMessages");
+
+            data.chat_history.forEach(chat => {
+                appendMessage(chat);
+                lastMessageId = chat.id; // Update last message ID
+            });
+
+            if (data.chat_history.length > 0) {
+                chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll for new messages
+            }
+        })
+        .catch(error => console.error("Error fetching new messages:", error));
+}
+
+function appendMessage(chat) {
+    let chatBox = document.getElementById("allMessages");
+
+    // Check if the last message is already added to prevent duplicates
+    let lastMessage = chatBox.lastElementChild;
+    if (lastMessage && lastMessage.getAttribute("data-username") === chat.username && lastMessage.getAttribute("data-message") === chat.message) {
+        return; // Prevent duplicate messages
     }
+
+    let newMessage = document.createElement("div");
+    let isUser = chat.username === "{{ request.user.username }}";
+
+    newMessage.className = isUser ? "message user" : "message other";
+    newMessage.setAttribute("data-username", chat.username); // Store username to prevent duplicates
+    newMessage.setAttribute("data-message", chat.message); // Store message to prevent duplicates
+
+    newMessage.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 8px; justify-content: flex-end;">
+        <span class="message-content">${chat.message}</span>
+        <img src="${chat.profile_pic}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+    </div>
+    `;
+
+
+    chatBox.appendChild(newMessage);
+
+// Ensure scrolling to the latest message
+    setTimeout(() => {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 100);// Auto-scroll to the latest message
+}
+
+
 
     function sendMessage() {
         let messageInput = document.getElementById("messageInput");

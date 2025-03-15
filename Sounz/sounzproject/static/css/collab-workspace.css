@@ -4,6 +4,16 @@
     flex-direction: column;
     overflow: hidden;
 }
+.profile-pic {
+    width: 32px; /* Adjust size as needed */
+    height: 32px;
+    border-radius: 50%; /* Makes it circular */
+    object-fit: cover; /* Ensures the image fills the circle properly */
+    margin-right: 8px; /* Space between pic and message */
+    vertical-align: middle; /* Aligns with text */
+    border: 2px solid #ddd; /* Optional: adds a light border */
+}
+
 .collab-and-chat{
     display: flex;
     flex: 1;

@@ -1091,31 +1091,41 @@ def send_chat_message(request, collab_id):
 
     return JsonResponse({"status": "error"}, status=400)
 
+from django.http import JsonResponse
+
 def get_chat_history(request, collab_id):
-    """Fetch chat history along with user profile details"""
+    """Fetch chat history along with user profile details, supporting incremental loading."""
     collab = Collab_Information_tabledb.objects.get(collaboration_Id=collab_id)
     chat_history = collab.chat_history
 
+    # Get last loaded message ID from the request
+    last_id = int(request.GET.get("last_id", 0))
+
     chat_data = []
     
-    for chat in chat_history:
-        username = chat.get("username", "")
-        message = chat.get("message", "")
-        
-        # Fetch user profile details
-        try:
-            user_profile = profiledatadb.objects.get(username=username)
-            profile_pic = user_profile.profile_picture.url if user_profile.profile_picture else "/static/default_profile.png"
-        except profiledatadb.DoesNotExist:
-            profile_pic = "/static/default_profile.png"  # Default pic if profile not found
+    for i, chat in enumerate(chat_history):
+        chat_id = i + 1  # Assign a unique ID based on index (since JSONField lacks DB IDs)
 
-        chat_data.append({
-            "username": username,
-            "message": message,
-            "profile_pic": profile_pic
-        })
+        if chat_id > last_id:  # Fetch only messages that are newly added
+            username = chat.get("username", "")
+            message = chat.get("message", "")
+
+            # Fetch user profile details
+            try:
+                user_profile = profiledatadb.objects.get(username=username)
+                profile_pic = user_profile.profile_picture.url if user_profile.profile_picture else "/static/default_profile.png"
+            except profiledatadb.DoesNotExist:
+                profile_pic = "/static/default_profile.png"  # Default pic if profile not found
+
+            chat_data.append({
+                "id": chat_id,  # Attach a unique ID for tracking
+                "username": username,
+                "message": message,
+                "profile_pic": profile_pic
+            })
 
     return JsonResponse({"chat_history": chat_data})
+
 
 
 @require_http_methods(["PATCH"])
