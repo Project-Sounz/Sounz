@@ -39,9 +39,21 @@ p#user-name-id{
     font-weight: 300;
 }
 
+.follow-btn{
+    background-color: rgba(248, 73, 27, 1);
+    color: white;
+    padding: 3px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
 .socials{
-    margin-left: auto;
-    padding: 15px 0 10px;
+    margin-left: 90%;
 }
 .socials > *{
     padding: 5px;

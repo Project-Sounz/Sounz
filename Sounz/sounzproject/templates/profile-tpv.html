@@ -51,7 +51,7 @@
     <img src= '{{pname.profile_picture.url}}' alt="{{.firstname}}'s profile picture" class="imgcenter"/>
     <p id="profile-name">{{ pname.firstname }}<span>  </span>{{ pname.lastname }}</p>
     <p id="user-name-id"><span class="username"></span>{{pname.username}}</p>
-    <button id="follow-btn" data-username="{{ pname.username }}" 
+    <button class="follow-btn" id="follow-btn" data-username="{{ pname.username }}" 
     class="{% if is_following %}unfollow{% else %}follow{% endif %}">
     {% if is_following %}Unfollow{% else %}Follow{% endif %}
 </button>
