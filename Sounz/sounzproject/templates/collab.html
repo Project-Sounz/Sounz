@@ -316,7 +316,7 @@ function updateProfilePicture(event) {
                 </div>
             </div>
             <div class="message-type">
-                <input id="messageInput" placeholder="Type a message...">
+                <input id="messageInput" placeholder="Drop a message…">
                 <button onclick="sendMessage()" class="sent-button" id="sendButton">
                     <img class="message-sent-arrow" src="{% static 'images/mSent.svg' %}" alt="message send button">
                 </button>
@@ -351,6 +351,18 @@ function updateProfilePicture(event) {
             
         </div>
     </div>
+    <div class="pop-up-container" id="popup-collab-terminated">
+        <div class="pop-up">
+            <h2 class="pop-up-collab-request" style="color: #f32d2d;">
+                Collaboration terminated!
+            </h2>
+            <p class="pop-up-collab-request-expl">
+                This collaboration has been terminated. You can no longer participate in this session.
+            </p>
+            <p class="pop-up-collab-request-expl">You will be redirected shortly.</p>
+            
+        </div>
+    </div>
     <div class="footer-control">
         <div id="s-gapSet">
             <div class="collab-images">
@@ -359,7 +371,7 @@ function updateProfilePicture(event) {
                 {% endfor %}
             </div>
             <div class="c-title">
-                <p class="collab-title">{{collab.collaboration_title}}</p>
+                <p class="collab-title" id="collab-title">{{collab.collaboration_title}}</p>
                 <button id="post-edits" onclick="showEditpopup()"><img class="edit_post_details" src="{% static 'images/collab-post-edits.svg' %}" alt="post details edit button"></button>
             </div>
         </div>
@@ -380,34 +392,7 @@ function updateProfilePicture(event) {
             </div>
         </div>
     </div>
-    <div class="pop-up-container" id="popup">
-        <div class="pop-up">
-            <h2 class="pop-up-collab-request">
-                Confirm Upload?
-            </h2>
-            <p class="pop-up-collab-request-expl">
-                Upon uploading, all audio files will be merged into a single track. This collaboration will conclude after the upload, and there will be no further access to it.
-                <br>Please ensure to review and edit the final post details from the edit option available in the page footer.
-
-            </p>
-            <button class="collab-pop-up-button" onclick="showPopUp()" id="collab-cancelled">Cancel</button>
-            <button type="submit" class="collab-pop-up-button mixAndUpload-button" onclick="submitCollabForm()" id="collab-confirmed">Mix & Upload</button>
-            
-        </div>
-    </div>
-    <div class="pop-up-container" id="popup-end">
-        <div class="pop-up">
-            <h2 class="pop-up-collab-request">
-                End Collaboration?
-            </h2>
-            <p class="pop-up-collab-request-expl">
-                Ending this collaboration will permanently revoke access to it for all collaborators of this collaboration. This action is irreversible. Are you certain you want to terminate this collaboration?
-            </p>
-            <button class="collab-pop-up-button" onclick="showEndpopup()" id="collab-cancelled">Cancel</button>
-            <button type="submit" class="collab-pop-up-button" onclick="end_collab()" id="end-collab">End Collaboration</button>
-            
-        </div>
-    </div>
+    
     <div class="pop-up-container" id="popup-edit">
         <div class="pop-up">
             <h2 class="pop-up-collab-request">
@@ -445,10 +430,10 @@ function updateProfilePicture(event) {
                     {% endif %} 
 
                     <label for="caption">Caption</label>
-                    <input id="caption" type="text"  placeholder="{% if collab.temp_caption %}{{ collab.temp_caption }}{% else %}{{ collab.collaboration_title }} {% endif %}" name="caption">
+                    <input id="caption" type="text" placeholder="{% if collab.temp_caption %}{{ collab.temp_caption }}{% else %}{{ collab.collaboration_title }} {% endif %}" name="caption">
                     
                     <label for="mType">Media Type</label>
-                    <input id="mType" type="text"  placeholder="{% if collab.temp_mediaType %}{{ collab.temp_mediaType }}{% else %}Violin, Piano, Guitar etc.{% endif %}" name="mType">
+                    <input id="mType" type="text" placeholder="{% if collab.temp_mediaType %}{{ collab.temp_mediaType }}{% else %}Violin, Piano, Guitar etc.{% endif %}" name="mType">
 
                     <label for="description">Description</label>
                     <textarea id="description" name="description" rows="1" cols="20" placeholder="{% if collab.temp_descr %}{{ collab.temp_descr }}{% else %}Post description{% endif %}"></textarea>

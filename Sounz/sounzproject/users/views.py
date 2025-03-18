@@ -8,7 +8,6 @@ from .forms import RegistrationForm,EditProfileForm,Uploadform
 from django.core.exceptions import ValidationError
 from users.models import profiledatadb,postdb,Collab_Information_tabledb, Member_Information
 from django.contrib.auth import authenticate,login,logout
-from django.contrib import messages
 from django.core.mail import EmailMessage
 from email.mime.image import MIMEImage
 import random
@@ -18,7 +17,6 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import json
-import os
 from .utils import compare_audio
 from django.utils.timezone import now
 import threading
@@ -677,7 +675,7 @@ def editpost(request):
     return render(request, 'edit-post.html', {'user': userobj, 'post': pos, 'form': form})
 
 def save_collab(request):
-    owners_count=2
+    owners_count=1
     if request.method == "POST":
         post_id = request.POST.get("post_id_pass")
         post=postdb.objects.get(pid=post_id)
@@ -698,6 +696,8 @@ def save_collab(request):
             collab_owners_mails = profiledatadb.objects.filter(username__in=collab_members_list)
             print("Response: collab owner mails:", collab_owners_mails)
             owners_count += len(collab_owners_user)
+        else:
+            owners_count += 1
         print("Post collaborated: ",post.isCollaborated)
         print("owner_count:",owners_count)
         print("Response:everything fetched")
@@ -1091,8 +1091,6 @@ def send_chat_message(request, collab_id):
 
     return JsonResponse({"status": "error"}, status=400)
 
-from django.http import JsonResponse
-
 def get_chat_history(request, collab_id):
     """Fetch chat history along with user profile details, supporting incremental loading."""
     collab = Collab_Information_tabledb.objects.get(collaboration_Id=collab_id)
@@ -1134,9 +1132,8 @@ def approve_button(request):
     collab_id = request.GET.get('cId')
     if not collab_id or not status:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
-
     try:
-        collab = Collab_Information_tabledb.objects.get(collaboration_Id=collab_id)
+        collab = Collab_Information_tabledb.objects.get(collaboration_Id=collab_id) 
     except Collab_Information_tabledb.DoesNotExist:
         return JsonResponse({"error": "Invalid collaboration ID"}, status=404)
 
@@ -1166,6 +1163,10 @@ def get_approval_status(request):
     collab_id = request.GET.get("cId")
     print("Collab id: ",collab_id)
     collab = Collab_Information_tabledb.objects.get(collaboration_Id=collab_id)
+    print("collab end?:",collab.collab_end)
+    if (collab.request_status=="terminated"):
+        print("collab terminated!")
+        return JsonResponse({"redirect": "/home"})
     if (collab.collab_end==True):
         return redirect(f"/media?pid={collab.endPost.pid}")
     try:
@@ -1292,7 +1293,7 @@ def end_collab(request):
         collabId = request.GET.get('collabId')
         print(collabId)
         theCollab = Collab_Information_tabledb.objects.get(collaboration_Id=collabId)
-        theCollab.collab_end=True
+        theCollab.request_status="terminated"
         theCollab.save()
         return JsonResponse({"redirect_url": reverse('home')})
     
@@ -1466,3 +1467,14 @@ def toggle_follow(request):
         profile.save()
 
         return JsonResponse({"followed": followed, "follower_count": profile.followers.count()})
+    
+def fetch_temp_data(request):
+    collab_Id = request.GET.get('collabId')
+    temp_data = Collab_Information_tabledb.objects.get(collaboration_Id=collab_Id)
+    data = {
+        'temp_thumbnail': temp_data.temp_thumbnail.url if temp_data.temp_thumbnail else None,
+        'temp_caption': temp_data.temp_caption,
+        'temp_descr': temp_data.temp_descr,
+        'temp_mediaType': temp_data.temp_mediaType,
+    }
+    return JsonResponse(data)

@@ -22,3 +22,31 @@ function toggleLike(postId) {
         likeImage.classList.remove("liked");
     }, { once: true });
 }
+let touchStartX = 0;
+let touchEndX = 0;
+
+// Select the post container
+const postContainer = document.querySelector(".master-div"); // Adjust based on your structure
+
+if (postContainer) {
+    postContainer.addEventListener("touchstart", function (event) {
+        touchStartX = event.touches[0].clientX;
+    });
+
+    postContainer.addEventListener("touchend", function (event) {
+        touchEndX = event.changedTouches[0].clientX;
+        handleSwipe();
+    });
+}
+
+function handleSwipe() {
+    const swipeThreshold = 50; // Minimum distance for swipe detection
+
+    if (touchStartX - touchEndX > swipeThreshold) {
+        console.log("Swiped Left - Next Post");
+
+    } else if (touchEndX - touchStartX > swipeThreshold) {
+        console.log("Swiped Right - Previous Post");
+
+    }
+}

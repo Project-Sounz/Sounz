@@ -333,6 +333,7 @@ button:disabled{
     aspect-ratio: 1 / 1;
     margin-left: -10px;
     border: 2px solid;
+    object-fit: cover;
 }
 button.option-3-dots{
     background: none;

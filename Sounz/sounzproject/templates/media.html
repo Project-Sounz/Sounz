@@ -4,6 +4,7 @@
 {% block title %}Sounz{% endblock %}
 
 {% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/media-player.css' %}">
 <style>
 /* Report Modal Background */
 .post-navigation {
@@ -258,6 +259,7 @@
 {% endblock %}
 
 {% block additional_js %}
+<script src="{% static 'js/media-player.js' %}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ Page fully loaded. JavaScript is running.");
@@ -587,7 +589,7 @@ function submitCollabForm() {
     {% if user %}
         {% if user.username == puser.username or not post.is_private %}
             {% if puser %}
-            <div class="master-div">
+            <div class="master-div" id="master-div">
                     <a href="?pid={% if previous_post %}{{ previous_post.pid }}{% endif %}" class="media-move-button {% if not previous_post %}button-disabled{% endif %}">
                             <img src="{% static 'images/previous-post.svg' %}" alt="previous post button" class="previous_post media-change-button">
                         </a>
@@ -645,14 +647,38 @@ function submitCollabForm() {
                     </div>
                     <div class="actual-media">
                         
-                        <video class="media-container" width="640" height="360" controls autoplay controlsList="nodownload">
-                            <source src="{{post.media.url}}" type="video/mp4" >
-                            Your browser does not support the audio element
-                            <audio controls controlsList="nodownload">
-                                <source src="{{post.media.url}}" type="audio/mpeg" >
-                                Your browser does not support the audio element
-                            </audio>
-                        </video>
+                        <div class="media-player-container" data-media-url="{{ post.media.url }}" data-media-type="{{ post.media_format }}" data-thumbnail-url="{% if post.media_thumbnail %}{{ post.media_thumbnail.url }}{% endif %}">
+                        <div class="media-content">
+                            <!-- Video element -->
+                            <video id="media-video" class="media-element {% if post.media_format != 'Video' %}hidden{% endif %}" {% if post.media_format == 'Video' %}src="{{ post.media.url }}"{% endif %} autoplay></video>
+                            
+                            <!-- Audio with thumbnail -->
+                            <div id="audio-container" class="audio-container {% if post.media_format != 'Audio' %}hidden{% endif %}">
+                                <audio id="media-audio" class="media-element" {% if post.media_format == 'Audio' %}src="{{ post.media.url }}"{% endif %} crossorigin="anonymous" autoplay></audio>
+                                {% if post.media_format == 'Audio' and post.media_thumbnail %}
+                                    <img id="audio-thumbnail" class="audio-thumbnail" src="{{ post.media_thumbnail.url }}" alt="Audio thumbnail">
+                                {% elif post.media_format == 'Audio' %}
+                                    <img id="audio-thumbnail" class="audio-thumbnail" src="{% static 'images/16_9 Audio.png' %}" alt="Audio thumbnail">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="media-controls">
+                            <button id="play-pause-btn" class="control-btn">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="15" fill="#D4D4D4"/><rect x="10" y="9" width="2.77778" height="11" rx="1" fill="#3F3F3F"/><rect x="17.2222" y="9" width="2.77778" height="11" rx="1" fill="#3F3F3F"/></svg>
+                            </button>
+                            
+                            <div class="time-display">
+                                <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+                            </div>
+                            
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div id="progress-fill" class="progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     </div>
 
                     <div class="pop-up-container" id="popup">

@@ -56,5 +56,6 @@ urlpatterns = [
     path("upload-mixed-audio/", views.upload_mixed_audio, name="upload-mixed-audio"),
     path("end-collab", views.end_collab, name="end-collab"),
     path("update-collab-post/", views.update_collab_post, name="update-collab-post"),
+    path("fetch-temp-data", views.fetch_temp_data, name="fetch-temp-data"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

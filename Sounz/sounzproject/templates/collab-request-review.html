@@ -35,7 +35,7 @@
             <div class="part3">
                 <h2>Decision Matters</h2>
                 {% if status != "pending" %}
-                    <p id="request-done">No further action required. This request has been marked as <strong>{{ status }}</strong>.</p>
+                    <p id="request-done">No further action required. This request has been marked as <strong>{% if status == "accepted" %}{{ status }}{% else %}declined{% endif %}</strong>.</p>
                 {% else %}
                     <div class="d-buttons"><center>
                         <button class="btn btn-primary" id="accept-btn" onclick="decided('accepted')">Accept Collaboration</button>
@@ -51,7 +51,7 @@
             <p class="cnf-msg">
                 Your response has been successfully recorded. {{ requestor }} will be notified about your decision
             </p>
-            <a href="{% url 'log-in' %}"><button class="btn btn-secondary goto-btn" id="goto-btn" onclick="">Continue to Sounz</button></a>
+            <a href="{% url 'home' %}"><button class="btn btn-secondary goto-btn" id="goto-btn" onclick="">Continue to Sounz</button></a>
         </center>
         </div>
         <footer>

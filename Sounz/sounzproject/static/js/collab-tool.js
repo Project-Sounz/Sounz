@@ -381,6 +381,14 @@ function updateApprovalStatus() {
     fetch(`/get-approval-status?cId=${collabId}`)
     .then(response => response.json())
     .then(data => {
+        if (data.redirect) {
+            document.getElementById("popup-collab-terminated").style.display = "flex";
+            
+            setTimeout(() => {
+                document.getElementById("popup-collab-terminated").style.display = "none";
+                window.location.href = data.redirect; 
+            }, 3000);
+        }
         document.getElementById("accept-count").innerText = data.accept_count;
         if (data.accept_count >= data.owner_count) {
             document.getElementById("upload-warning-button").style.display = "block";
@@ -465,3 +473,25 @@ document.getElementById("messageInput").addEventListener("keydown", function (ev
         }
     }
 });
+function fetchTempData() {
+    fetch(`/fetch-temp-data?collabId=${collabId}`) 
+        .then(response => response.json())
+        .then(data => {
+            if (data.temp_thumbnail) {
+                document.getElementById('upload-tn-img').src = data.temp_thumbnail;
+            }
+            if (data.temp_caption) {
+                document.getElementById('caption').placeholder = data.temp_caption;
+                document.getElementById('collab-title').innerText = data.temp_caption;
+            }
+            if (data.temp_descr) {
+                document.getElementById('description').placeholder = data.temp_descr;
+            }
+            if (data.temp_mediaType) {
+                document.getElementById('mType').placeholder = data.temp_mediaType;
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+setInterval(fetchTempData, 5000);
