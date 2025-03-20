@@ -62,14 +62,14 @@ function appendMessage(chat) {
     let isUser = chat.username === "{{ request.user.username }}";
 
     newMessage.className = isUser ? "message user" : "message other";
-    newMessage.setAttribute("data-username", chat.username); // Store username to prevent duplicates
-    newMessage.setAttribute("data-message", chat.message); // Store message to prevent duplicates
+    newMessage.setAttribute("data-username", chat.username);
+    newMessage.setAttribute("data-message", chat.message);
 
     newMessage.innerHTML = `
-    <div style="display: flex; align-items: center; gap: 8px; justify-content: flex-end;">
+
         <span class="message-content">${chat.message}</span>
-        <img src="${chat.profile_pic}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
-    </div>
+        <img src="${chat.profile_pic}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+   
     `;
 
 
@@ -171,6 +171,11 @@ function updateProfilePicture(event) {
                                 <label for="base-volume" class="volume-icon"><img class="single-volume-icon control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button"></label>
                                 <input class="single-volume" data-container="base-audio-graph" type="range" id="base-volume" min="0" max="1" step="0.01" value="1">
                             </div>
+                            <div class="download-base" style="margin-left: 15px;">
+                               <a id="download-audio" class="download-btn " href="{{ post_base.media.url }}" download>
+                                    <img class="control-button-images" src="{% static 'images/download-button.svg' %}" alt="Download">
+                                </a>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -215,16 +220,16 @@ function updateProfilePicture(event) {
                                     <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
                             </button>
                             <div id="bars-recording">
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
+                                <div class="bar-r"></div>
                               </div>
                             <div class="rec-pause-stop">
                                 <button id="resume-rec" class="rec-sub" style="display: none;">

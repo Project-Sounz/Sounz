@@ -177,7 +177,7 @@
     height: 100%;
 }
 
-.bar {
+.bar-r {
     background: rgba(248, 73, 27, 1);
     bottom: 1px;
     height: 1px;
@@ -198,16 +198,16 @@
     }
 }
 
-.bar:nth-child(1)  { left: 1px; animation-duration: 474ms; }
-.bar:nth-child(2)  { left: 15px; animation-duration: 433ms; }
-.bar:nth-child(3)  { left: 29px; animation-duration: 407ms; }
-.bar:nth-child(4)  { left: 43px; animation-duration: 458ms; }
-.bar:nth-child(5)  { left: 57px; animation-duration: 400ms; }
-.bar:nth-child(6)  { left: 71px; animation-duration: 427ms; }
-.bar:nth-child(7)  { left: 85px; animation-duration: 441ms; }
-.bar:nth-child(8)  { left: 99px; animation-duration: 419ms; }
-.bar:nth-child(9)  { left: 113px; animation-duration: 487ms; }
-.bar:nth-child(10) { left: 127px; animation-duration: 442ms; }
+.bar-r:nth-child(1)  { left: 1px; animation-duration: 474ms; }
+.bar-r:nth-child(2)  { left: 15px; animation-duration: 433ms; }
+.bar-r:nth-child(3)  { left: 29px; animation-duration: 407ms; }
+.bar-r:nth-child(4)  { left: 43px; animation-duration: 458ms; }
+.bar-r:nth-child(5)  { left: 57px; animation-duration: 400ms; }
+.bar-r:nth-child(6)  { left: 71px; animation-duration: 427ms; }
+.bar-r:nth-child(7)  { left: 85px; animation-duration: 441ms; }
+.bar-r:nth-child(8)  { left: 99px; animation-duration: 419ms; }
+.bar-r:nth-child(9)  { left: 113px; animation-duration: 487ms; }
+.bar-r:nth-child(10) { left: 127px; animation-duration: 442ms; }
 .audio-contents-text{
     display: flex
 ;
@@ -505,16 +505,17 @@ button.option-3-dots{
 }
 .message{
     display: flex;
+    padding-bottom: 10px;
 }
 .user{
-    flex-direction: row-reverse;
-    justify-content: flex-start;
+    flex-direction: row;
     align-items: flex-end;
+    justify-content: flex-end;
 }
 .other{
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: flex-start;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    justify-content: flex-end;
 }
 .message-content{
     padding: 7px 10px;
@@ -528,7 +529,7 @@ button.option-3-dots{
 .user .message-content{
     background-color: #f8f8f8;
     box-shadow: 1px 3px 5px 0px #00000026;
-    margin: 24px 10px 0 15px;
+    margin: 14px 10px 0 15px;
 }
 .other .message-content{
     background-color: #ffffff;
@@ -682,7 +683,7 @@ form > label{
 .master-controls{
     display: flex;
 }
-@media screen and (max-width: 480px){
+@media screen and (max-width: 780px){
     #chatContainer{
         display: none;
         width: 0;

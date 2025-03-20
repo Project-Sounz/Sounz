@@ -142,7 +142,13 @@ async function uploadMixedAudio(audioBlob) {
             method: "POST",
             body: formData,
             headers: { "X-CSRFToken": getCSRFToken() }
-        });
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.redirect) {
+            window.location.href = data.redirect;
+        }
+        })
         console.log("test2");
         const result = await response.json();
         console.log("Upload successful:", result);

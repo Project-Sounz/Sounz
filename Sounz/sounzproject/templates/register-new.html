@@ -58,6 +58,8 @@
 
                 <label for="password">PASSWORD <span class="show-hide-label password-toggle" onclick="togglePassword('password', this)">:: show</span></label>
                 <input name="password" type="password" required placeholder="Password" id="password">
+
+                <p id="password-error"></p>
                 
                 <label for="confirmPassword">CONFIRM PASSWORD <span class="show-hide-label password-toggle" onclick="togglePassword('confirmPassword', this)">:: show</span></label>
                 <input name="confirmPassword" type="password" required placeholder="Confirm Password" id="confirmPassword">
@@ -97,6 +99,26 @@
 
 </body>
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const passwordInput = document.getElementById("password");
+
+    function validatePassword() {
+        const password = passwordInput.value;
+        const passwordError = document.getElementById("password-error");
+
+        const passwordPattern =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (!passwordPattern.test(password)) {
+            passwordError.innerHTML =
+                "Password must be at least 8 characters long and include:<br>- 1 uppercase letter<br>- 1 lowercase letter<br>- 1 number<br>- 1 special character (@, #, $, etc.)";
+        } else {
+            passwordError.innerHTML = "";
+        }
+    }
+
+    passwordInput.addEventListener("input", validatePassword);
+
     document.getElementById('profile_picture_input').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -155,5 +177,6 @@ function validateForm() {
 
             return isValid;
         }
+    });
 </script>
 </html>

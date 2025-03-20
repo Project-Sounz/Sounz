@@ -67,8 +67,7 @@ function initWaveSurfer(containerId, audioFile, color) {
     waveSurfers[containerId] = waveSurfer;
 
     return waveSurfer;
-}
-
+} 
 document.addEventListener("click", function(event) {
     if (event.target.classList.contains("single-audio-play")) {
         let containerId = event.target.getAttribute("data-container");
@@ -294,6 +293,11 @@ function refreshContent() {
                                 <div class="volume-sync volume">
                                     <label for="volume" class="volume-icon"><img class="single-volume-icon control-button-images" src="/static/images/audio-volume.svg" alt="volume-button"></label>
                                     <input type="range" data-container="sync-audio-graph-${audioDT.syncId}" class="single-volume" id="volume" min="0" max="1" step="0.01" value="1">
+                                </div>
+                                <div class="download-base" style="margin-left: 15px;">
+                                    <a id="download-audio-${audioDT.syncId}" class="download-btn" href="/media/${audioDT.syncMedia}" download>
+                                        <img class="control-button-images" src="/static/images/download-button.svg" alt="Download">
+                                    </a>
                                 </div>
                                 <button class="audio-delete" id="audio-delete" data-container="sync-audio-graph-${audioDT.syncId}" onclick=deleteAudio("${audioDT.syncId}") data-value="${audioDT.syncId}"><img class="single-audio-delete control-button-images" src="/static/images/audio-delete.svg" alt="delete-button"></button>
                             </div>

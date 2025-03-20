@@ -45,20 +45,36 @@
 {% endblock %}
 
 {% block content %}
-<div class="header" style="height: 270px;">
+<div class="profile-details-container">
+    
+   
+    
+</div>
+<div class="header" style="height: 270px;" id="centralize">
     {% if user %}
     {% if pname %}
-    <img src= '{{pname.profile_picture.url}}' alt="{{.firstname}}'s profile picture" class="imgcenter"/>
-    <p id="profile-name">{{ pname.firstname }}<span>  </span>{{ pname.lastname }}</p>
-    <p id="user-name-id"><span class="username"></span>{{pname.username}}</p>
-    <button class="follow-btn" id="follow-btn" data-username="{{ pname.username }}" 
-    class="{% if is_following %}unfollow{% else %}follow{% endif %}">
+    <div class="profile-details-container">
+        <div class="profile-picture">
+            <img src= '{{pname.profile_picture.url}}' alt="{{.firstname}}'s profile picture" class="imgcenter"/>
+        </div>
+        <div class="vertical-line"></div>
+        <div class="details">
+            <p id="profile-name">{{ pname.firstname }}<span>  </span>{{ pname.lastname }}</p>
+            <p id="user-name-id"><span class="username"></span>@{{pname.username}}</p>
+            <a href="mailto:{{ user.email }}" class="mailbio">{{ pname.email }}</a>
+            <div class="followers">
+                <div class="follow-count">
+                    <span id="follower-count">{{ pname.followers.count }}</span>
+                    <span id="follower-text">followers</span>
+                </div>
+                <button class="{% if is_following %}unfollow{% else %}follow{% endif %} follow-btn" id="follow-btn" data-username="{{ pname.username }}">
     {% if is_following %}Unfollow{% else %}Follow{% endif %}
 </button>
-
-<span id="follower-count">{{ pname.followers.count }}</span>
-
-
+            </div>
+            
+        </div>
+    </div>
+    
     <div class="socials">
         <a href="{{ pname.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="" ></a>
         <a href="{{ pname.twit }}"><img src="{% static 'images/x 64.png' %}" alt="" ></a>
@@ -68,10 +84,8 @@
 <div class="body">
     <div class="profile-info">
         <p id="desc">{{ pname.user_bio }}</p>
-        <a href="mailto:{{ pname.email }}" class="mailbio">{{ pname.email }}</a>
         
     </div>
-    <hr style="border: 0.5px solid; margin: 30px; border-color: #e2e2e2;">
 
 
     <div class="posts">

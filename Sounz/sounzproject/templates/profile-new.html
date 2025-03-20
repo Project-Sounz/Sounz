@@ -22,25 +22,39 @@
             </div>
         </div>
     </div>
-   
-    <img src= '{{user.profile_picture.url}}' alt="{{user.firstname}}'s profile picture" class="imgcenter"/> 
-    <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
-    <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
+    <div class="profile-details-container">
+        <div class="profile-picture">
+            <img src= '{{user.profile_picture.url}}' alt="{{user.firstname}}'s profile picture" class="imgcenter"/> 
+        </div>
+        <div class="vertical-line"></div>
+        <div class="details">
+            <p id="profile-name">{{ user.firstname }}<span>  </span>{{ user.lastname }}</p>
+            <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
+            <a href="mailto:{{ user.email }}" class="mailbio">{{ user.email }}</a>
+            <div class="followers">
+                <div class="follow-count">
+                    <span id="follower-count">{{ user.followers.count }}</span>
+                    <span id="follower-text">followers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
     <div class="socials">
-        <a href="{{ user.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="" ></a>
-        <a href="{{ user.twit }}"><img src="{% static 'images/x 64.png' %}" alt="" ></a>
-        <a href="{{ user.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="" ></a>
+        <a href="{{ user.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="Instagram link" ></a>
+        <a href="{{ user.twit }}"><img src="{% static 'images/x 64.png' %}" alt="X.com link" ></a>
+        <a href="{{ user.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="youtube link" ></a>
     </div>
 </div>
 <div class="body">
     
     <div class="profile-info">
         <p id="desc">{{ user.user_bio }}</p>
-        <a href="mailto:{{ user.email }}" class="mailbio">{{ user.email }}</a>
+        
         
     </div>
 {% endif %}
-    <hr style="border: 0.5px solid; margin: 30px; border-color: #e2e2e2;">
 
     <!-- post-saved buttons -->
 

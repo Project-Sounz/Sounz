@@ -141,7 +141,7 @@
     text-decoration: none;
 }
 .suggestions{
-    width: 35%;
+    width: 32%;
     height: fit-content;
     position: sticky;
     top: 0;
@@ -186,7 +186,7 @@
 }
 .sub-explore{
     min-width: 50%;
-    max-width: 65%;
+    max-width: 68%;
 }
 .post-buttons > img{
     padding-right: 8px;
@@ -228,18 +228,16 @@
 .mvpost-overview{
     display: flex;
 }
-
-
 .artists{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    padding: 10px;
+    justify-items: center;
+    gap: 16px;
+    margin-top: 30px;
 }
 
 .artists > a{
-    margin-top: 20px;
     padding: 20px 10px;
     text-decoration: none;
     display: grid;
@@ -366,4 +364,61 @@
     outline: none;
     border: none;
     font-size: 18px;
+}
+#suggest-contents-heading{
+    margin: 32px 20px;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    background: linear-gradient(to right, rgba(248, 73, 27, 1), rgba(241, 47, 63, 1), rgba(220, 24, 96, 1));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    /* width: max-content; */
+    text-align: center;
+}
+.endofContent{
+    display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    margin: 75px 0px;
+}
+.each-user{
+    display: flex
+;
+    align-items: center;
+    flex-direction: row;
+    border: var(--setBorder-feed);
+    padding: 10px;
+    border-radius: 10px;
+    gap: 15px;
+    min-width: max-content;
+}
+.artist-details{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    gap: 8px;
+}
+.name-username{
+    display: flex
+;
+    flex-direction: column;
+    gap: 4px;
+}
+#suggest-username{
+    font-size: 14px;
+    color: #acacac;
+}
+#suggest-name{
+    font-size: 16px;
+    color: #606060;
+}
+.follow-btn{
+    border: none;
+    background: transparent;
+    color: #009cff;
+    font-weight: 500;
+    font-size: 15px;
 }

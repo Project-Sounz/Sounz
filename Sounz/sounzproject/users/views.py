@@ -184,7 +184,9 @@ def profile_new(request):
         post = postdb.objects.filter(username=user)
         saved = Save.objects.filter(user=request.user).values_list('post', flat=True)
         savedposts = postdb.objects.filter(pid__in=saved)
-    
+        collabedPostIds = collaborators_table.objects.filter(collab_members=request.user).values_list("post_id", flat=True)
+        collabedPosts = postdb.objects.filter(pid__in=collabedPostIds)
+        allPosts = post.union(collabedPosts).order_by('-timestamp')
         collab_member_list = Member_Information.objects.filter(post_member=request.user).select_related('collaboration').filter(
             collaboration__collab_end=False,
             collaboration__request_status="accepted"
@@ -192,7 +194,7 @@ def profile_new(request):
         combined_collab_list = [member.collaboration for member in collab_member_list]
         context = {
             'user': userBioCollect,
-            'post': post,
+            'post': allPosts,
             'saved': savedposts,
             'collab_list': combined_collab_list,
         }
@@ -232,30 +234,29 @@ def profile_tpv(request):
 
 @login_required
 def homepage(request):
-    print(request.user.id)
-    all_users = profiledatadb.objects.all()
-    username = request.user.username
-    user = profiledatadb.objects.get(username=username)
-    sliced= profiledatadb.objects.all()[:4]
-    topart=profiledatadb.objects.all()
-    random_profiles = random.sample(list(topart), min(len(topart), 4))
-    print(username)
-    collab_member_list = Member_Information.objects.filter(post_member=request.user).select_related('collaboration').filter(
-        collaboration__collab_end=False,
-        collaboration__request_status="accepted"
-    )
-    combined_collab_list = [member.collaboration for member in collab_member_list]
+    # Get current user profile
+    user_profile = profiledatadb.objects.get(username=request.user.username)
 
-    user_posts = postdb.objects.filter(flagged=0,is_private=0).order_by('-timestamp')
+    # Get the users that the current user follows (reverse ManyToMany lookup)
+    following_users = profiledatadb.objects.filter(followers=request.user)
+
+    # Fetch posts from the followed users
+    following_posts = postdb.objects.filter(username__in=following_users, flagged=0, is_private=0).order_by('-timestamp')
+
+    # Fill up to 15 posts with random posts if needed
+    num_needed = 15 - following_posts.count()
+    random_posts = postdb.objects.filter(flagged=0, is_private=0).exclude(username__in=following_users).order_by('?')[:num_needed]
+
+    # Suggested profiles (excluding the current user and followed users)
+    suggested_profiles = profiledatadb.objects.exclude(username=user_profile).exclude(username__in=following_users).order_by('?')[:6]
+
     context = {
-        'all_users': all_users,
-        'user': user,
-        'user_posts': user_posts,
-        'sliced':sliced,
-        'topart':random_profiles,
-        'collab_list': combined_collab_list,
+        'user': user_profile,
+        'following_posts': following_posts,  # Posts from followed users
+        'random_posts': random_posts,  # Filler random posts
+        'suggested_profiles': suggested_profiles,
     }
-    return render(request, 'home.html',context)
+    return render(request, 'home.html', context)
 
 def upload(request):
     username = request.user.username
@@ -293,7 +294,7 @@ def upload(request):
             pos.save()
 
             prompt_message = "Post successfully uploaded!"
-            return render(request, 'upload_form.html', {'user': userobj, 'prompt_message': prompt_message})
+            return redirect('my-profile')
 
     return render(request, 'upload_form.html', context)
 
@@ -578,7 +579,7 @@ def search(request):
             user = profiledatadb.objects.get(username=username)
             sliced= profiledatadb.objects.all()[:4]
             topart=profiledatadb.objects.all()
-            random_profiles = random.sample(list(topart), min(len(topart), 4))
+            random_profiles = profiledatadb.objects.exclude(username=request.user.username).order_by('?')[:6]
             context = {
             'all_users': all_users,
             'user': user,
@@ -594,7 +595,7 @@ def search(request):
     user = profiledatadb.objects.get(username=username)
     sliced= profiledatadb.objects.all()[:4]
     topart=profiledatadb.objects.all()
-    random_profiles = random.sample(list(topart), min(len(topart), 4))
+    random_profiles = profiledatadb.objects.exclude(username=request.user.username).order_by('?')[:6]
     # Fetch posts of the current user
     
     collab_member_list = Member_Information.objects.filter(post_member=request.user).select_related('collaboration').filter(
@@ -884,7 +885,7 @@ def update_collab_status(request, collab_id):
         print("collab status updated")
 
         reciever_data = profiledatadb.objects.get(username = collab.collab_requestor)
-        reciever_mail = "appus8403@gmail.com"                                                   #change_final
+        reciever_mail = reciever_data.email                                        
         print(reciever_data.email)
         reciever_name = reciever_data.firstname
         post_name = postdb.objects.get(pid=collab.base_post_id.pid).caption
@@ -1269,7 +1270,8 @@ def upload_mixed_audio(request):
             collab.save()
             print("collab ended")
             print(collab.collab_end)
-            return redirect(f"/media?pid={thePost.pid}")
+            print(f"location: /media?pid={thePost.pid}")
+            return JsonResponse({"redirect": f"/media?pid={thePost.pid}"})
 
         except Collab_Information_tabledb.DoesNotExist:
             return JsonResponse({"error": "Collaboration not found"}, status=404)
@@ -1354,10 +1356,10 @@ def report_copyright(request):
     if result:
         reported_timestamp = reported_post.timestamp
         user_timestamp = user_post.timestamp
-        print(f"🕒 User Post Timestamp: {user_timestamp}, Reported Post Timestamp: {reported_timestamp}")
+        print(f"User Post Timestamp: {user_timestamp}, Reported Post Timestamp: {reported_timestamp}")
 
         if reported_timestamp > user_timestamp:
-            print(f"🚩 Flagging Reported Post ID: {reported_post_id}")
+            print(f"Flagging Reported Post ID: {reported_post_id}")
             reported_post.flagged = 1  # Set flagged bit to 1
             reported_post.save()
 
@@ -1374,7 +1376,7 @@ def report_copyright(request):
                 )
                 print("✅ Notification created successfully.")
             except Exception as e:
-                print(f"⚠️ Error creating notification: {e}")
+                print(f"Error creating notification: {e}")
 
             return JsonResponse({
                 "match": True,

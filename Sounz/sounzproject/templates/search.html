@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="header-for-home">{% include 'header-base-sub.html' %}</div>
-<!--<div class="header-for-home">{% include 'header_base.html' %}</div>-->
+
+<div class="header-for-home">{% include 'header_base.html' %}</div>
 <div class="search-expl1" style="margin-top: 30px;"">
     
     <center>
@@ -40,6 +40,7 @@
             
             {% for post in user_posts %}
                {% if not post.flagged %}
+               {% if not post.is_private %}
                 <div class="homefeed"><!-- media each-main container -->
 
                         
@@ -95,6 +96,7 @@
 
                 </div>
                {% endif %}
+               {% endif %}
             {% endfor %}
             
             
@@ -109,6 +111,7 @@
             <h4 class="mv-h4">Top Hits</h4>
 
             {% for post in user_posts|slice:":3"  %}
+                {% if not post.is_private %}
                     <a href="{% url 'media' %}?pid={{post.pid}}" class="suggestion-feed"> 
                         <span class="suggestion-post-details">      <!--  media deatails and thumbnail container -->
                             <h3 class="suggestion-post-caption">{{ post.caption }}</h3>
@@ -128,6 +131,7 @@
                                 {% endif %}
                         <!-- <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="post-thumbnail" style="border-radius: 8px;">       -->
                     </a>
+                {% endif %}
             {% endfor %}
 
             <!-- {% for post in sliced %}

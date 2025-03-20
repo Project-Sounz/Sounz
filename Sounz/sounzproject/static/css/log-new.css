@@ -303,3 +303,8 @@ form > input, form > textarea {
 .update-profile-btn{
     width: 48%;
 }
+#password-error{
+    font-size: 12px;
+    color: #fb6666;
+    margin-top: 5px;
+}

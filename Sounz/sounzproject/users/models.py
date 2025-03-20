@@ -136,7 +136,7 @@ class Collab_Information_tabledb(models.Model):
     base_post_id = models.ForeignKey(postdb, on_delete=models.CASCADE, related_name="collab_base_posts")
     request_status = models.CharField(max_length=20, default="pending")
     timestamp = models.DateTimeField(auto_now_add=True)
-    collaboration_title = models.CharField(max_length=50, default="Untitled collaboration test")
+    collaboration_title = models.CharField(max_length=50, default="Untitled collaboration")
     collaborated_members = models.ManyToManyField(User, through="Member_Information")
     base_plan = models.CharField(max_length=200,default=None)
     collab_requestor = models.CharField(max_length=25,default=None)

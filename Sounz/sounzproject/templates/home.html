@@ -7,37 +7,14 @@
 
 {% block content %}
 
-<div class="header-for-home">{% include 'header_base.html' %}</div>
-<div class="search-expl">
-    <center>
-        <h1 id="explr-or-comnty" class="explr-or-comnty">Explore our community</h1>
-    </center>
-    <center>
-       <!-- <div class="search-container" id="search-container">
-            <img id="search-logo" src="{% static 'images/search-icon.svg' %}" alt="">
-            <input type="text" name="search-input" class="search-input" placeholder="Search...">
-        </div>-->
-    </center>
-</div>
+<div class="header-for-home">{% include 'header-base-sub.html' %}</div>
+
 
 <div class="main-explore">
     <div class="sub-explore">
-            
-            {% for post in user_posts %}
-                <div class="homefeed"><!-- media each-main container -->
-
-                        
-
-
-                        <!-- {% if post.mediatype == 'video' %}
-                            <video controls>
-                                <source src="{{ post.media.url }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        {% endif %} -->
-
-
-                                <!--  media deatails and thumbnail container -->
+            {% if following_posts %}
+            {% for post in following_posts %}
+                <div class="homefeed">
                             <div class="each-container">
                                 <div class="post-overview">
                                     <div class="home-post-header"> <!--  username and date-time container -->
@@ -54,11 +31,14 @@
 
                                     <a href="{% url 'media' %}?pid={{post.pid}}" class="post-details" id="post-details">
                                         <h3 class="post-caption">{{ post.caption }}</h3>
+                                       
                                         <p class="post-description">{{ post.descr }}</p>
                                     </a>
                                     
-                                     <div class="home-post-footer">  <!--like,save,share,collab button container -->
+                                     <div class="home-post-footer">
+                                        {% if post.mediatype %}
                                        <p class="post-inst">{{ post.mediatype }}</p>
+                                       {% endif %}
                                         
                                     </div>
                                 </div>
@@ -79,80 +59,121 @@
 
                 </div>
             {% endfor %}
-            
-    </div>
+            {% endif %}
+            <div class="endofContent">
+                <img src="{% static 'images/endofContent.svg' %}" alt="End of Contents" class="eoc-image" style="width: 55px;">
+                <h1 id="suggest-contents-heading">You’ve reached the end of your followings’ posts</h1>
+            </div>
+            {% if random_posts %}
+            {% for post in random_posts %}
+            {% if not post.is_private %}
+                <div class="homefeed">
+                            <div class="each-container">
+                                <div class="post-overview">
+                                    <div class="home-post-header"> <!--  username and date-time container -->
+                                      <a href="{% url 'watch-profile' %}?uname={{post.username}}">
+                                            {% for profile in all_users %}
+                                                {% if profile.user.username == post.username %}
+                                                    <img src="{{ profile.image.url }}" alt="{{ post.username }}'s Profile Image">
+                                                {% endif %}
+                                            {% endfor %}
+                                            <p class="post-owner-username username-specific">@{{ post.username }}</p>
+                                        </a>
+                                        <p class="home-post-date post-date-specific"> • {{ post.timestamp|date }} <span class="post-media-format-display">• {{ post.media_format }}</span></p>
+                                    </div>
 
-    <!-- suggestion main-container -->
-
-    <div class="suggestions">
-
-        <!-- most-viewed container -->
-        <div class="mostviewed">
-            <h4 class="mv-h4">Top Hits</h4>
-
-            {% for post in user_posts|slice:":3"  %}
-                    <a href="{% url 'media' %}?pid={{post.pid}}" class="suggestion-feed"> 
-                        <span class="suggestion-post-details">      <!--  media deatails and thumbnail container -->
-                            <h3 class="suggestion-post-caption">{{ post.caption }}</h3>
-                            <span class="suggestion-content-username">&nbsp;by&nbsp;</span>
-                            <p class="suggestion-content-postuser">{{ post.username }}</p>
-                        </span> 
-                        {% if post.media_thumbnail %}
+                                    <a href="{% url 'media' %}?pid={{post.pid}}" class="post-details" id="post-details">
+                                        <h3 class="post-caption">{{ post.caption }}</h3>
+                                        <p class="post-description">{{ post.descr }}</p>
+                                    </a>
                                     
-                                    <img src="{{ post.media_thumbnail.url }}" alt="" class="post-thumbnail" style="border-radius: 8px;">
+                                     <div class="home-post-footer">
+                                        {% if post.mediatype %}
+                                       <p class="post-inst">{{ post.mediatype }}</p>
+                                       {% endif %}  
+                                    </div>
+                                </div>
+                                {% if post.media_thumbnail %}
+                                    
+                                    <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail">
                                 
                                 {% else %}
                                     {% if post.media_format == "Audio" %}
-                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="" class="post-thumbnail" style="border-radius: 8px;">
+                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
                                     {% elif post.media_format == "Video" %}
-                                        <img src="{% static 'images/16_9 Video.png' %}" alt="" class="post-thumbnail" style="border-radius: 8px;">
+                                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
                                     {% endif %}
                                 {% endif %}
-                        <!-- <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="post-thumbnail" style="border-radius: 8px;">       -->
-                    </a>
-            {% endfor %}
-
-            <!-- {% for post in sliced %}
-                <div class="mv-post">
-                    <div class="mv-post-header">
-                        <a href="#">
-                            <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
-                            <p class="post-owner-username">{{post.username}}</p>
-                        </a>
-
-                    </div>
-                    <a href="#">
-                        <div class="mvpost-overview">
-                            <div class="mvpost-details">
-                                <h3>{{post.caption}}</h3>
-                                <p>{{post.descr}}</p>
                             </div>
-                            <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="mvpost-thumbnail" style="border-radius: 8px;">
+                        
+
+
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+            
+    </div>
+
+
+    <div class="suggestions">
+
+
+        <div class="top-artists -ta-margin-specific">
+            <h4 class="mv-h4">Suggested for You</h4>
+            <div class="artists">
+                {% for suggested in suggested_profiles %}
+                <div class="each-user">
+                    <a href="{% url 'watch-profile' %}?uname={{suggested.username}}" class="artist-details">
+                        <img src="{{ suggested.profile_picture.url }}" alt="suggested profile" width="60px" height="60px" style="border-radius: 50%;border-radius: 50%;
+    object-fit: cover;">
+                        <div class="name-username">
+                            <p id="suggest-name">{{suggested.firstname}} {% if suggested.lastname %}{{suggested.lastname}}{% endif %}</p>
+                            <p id="suggest-username">{{suggested.username}}</p>
                         </div>
                     </a>
+                    <button class="{% if is_following %}unfollow{% else %}follow{% endif %} follow-btn" id="follow-btn" data-username="{{ suggested.username }}">
+                        {% if is_following %}Unfollow{% else %}Follow{% endif %}
+                    </button>
                 </div>
-            {% endfor %} -->
-        </div>
-
-        <!--  top-artist container -->
-        <div class="top-artists -ta-margin-specific">
-            <h4 class="mv-h4">Top Artists</h4>
-            <div class="artists">
-                {% for art in topart %}
-                    <a href="{% url 'watch-profile' %}?uname={{art.username}}" class="artist-details">
-                        <img src="{{ art.profile_picture.url }}" alt="" width="60px" height="60px" style="border-radius: 50%;">
-                        <figcaption>{{art.username}}</figcaption>
-                    </a>
                 {% endfor %}
             </div>
         </div>
-        
-        <!--  More" button -->
-        <div class="morebutton">
-            
-        </div>
-
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const followBtn = document.getElementById("follow-btn");
+        
+            if (followBtn) {
+                followBtn.addEventListener("click", function () {
+                    const username = this.getAttribute("data-username");
+        
+                    fetch("{% url 'toggle-follow' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: new URLSearchParams({ "username": username })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.followed) {
+                            followBtn.textContent = "Unfollow";
+                            followBtn.classList.remove("follow");
+                            followBtn.classList.add("unfollow");
+                        } else {
+                            followBtn.textContent = "Follow";
+                            followBtn.classList.remove("unfollow");
+                            followBtn.classList.add("follow");
+                        }
+                        document.getElementById("follower-count").textContent = data.follower_count;
+                    })
+                    .catch(error => console.error("Error:", error));
+                });
+            }
+        });
+        </script>
 </div>
  
 {% endblock %}
