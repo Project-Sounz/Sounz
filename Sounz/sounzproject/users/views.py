@@ -245,6 +245,7 @@ def homepage(request):
 
     # Fill up to 15 posts with random posts if needed
     num_needed = 15 - following_posts.count()
+    num_needed = max(0, num_needed)
     random_posts = postdb.objects.filter(flagged=0, is_private=0).exclude(username__in=following_users).order_by('?')[:num_needed]
 
     # Suggested profiles (excluding the current user and followed users)
