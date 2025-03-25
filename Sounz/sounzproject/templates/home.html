@@ -43,14 +43,12 @@
                                     </div>
                                 </div>
                                 {% if post.media_thumbnail %}
-                                    
-                                    <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail">
-                                
+                                    <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail" onclick="window.location.href=`{% url 'media' %}?pid={{post.pid}}`;">
                                 {% else %}
                                     {% if post.media_format == "Audio" %}
-                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
+                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail" onclick="window.location.href=`{% url 'media' %}?pid={{post.pid}}`;">
                                     {% elif post.media_format == "Video" %}
-                                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
+                                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail" onclick="window.location.href=`{% url 'media' %}?pid={{post.pid}}`;">
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -60,11 +58,11 @@
                 </div>
             {% endfor %}
             {% endif %}
+            {% if random_posts %}
             <div class="endofContent">
                 <img src="{% static 'images/endofContent.svg' %}" alt="End of Contents" class="eoc-image" style="width: 55px;">
                 <h1 id="suggest-contents-heading">You’ve reached the end of your followings’ posts</h1>
             </div>
-            {% if random_posts %}
             {% for post in random_posts %}
             {% if not post.is_private %}
                 <div class="homefeed">
@@ -95,13 +93,13 @@
                                 </div>
                                 {% if post.media_thumbnail %}
                                     
-                                    <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail">
+                                    <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail" onclick="window.location.href=`{% url 'media' %}?pid={{post.pid}}`;">
                                 
                                 {% else %}
                                     {% if post.media_format == "Audio" %}
-                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
+                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail" onclick="window.location.href=`{% url 'media' %}?pid={{post.pid}}`;">
                                     {% elif post.media_format == "Video" %}
-                                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
+                                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail" onclick="window.location.href=`{% url 'media' %}?pid={{post.pid}}`;">
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -142,37 +140,37 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const followBtn = document.getElementById("follow-btn");
-        
-            if (followBtn) {
-                followBtn.addEventListener("click", function () {
-                    const username = this.getAttribute("data-username");
-        
-                    fetch("{% url 'toggle-follow' %}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRFToken": "{{ csrf_token }}",
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        body: new URLSearchParams({ "username": username })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.followed) {
-                            followBtn.textContent = "Unfollow";
-                            followBtn.classList.remove("follow");
-                            followBtn.classList.add("unfollow");
-                        } else {
-                            followBtn.textContent = "Follow";
-                            followBtn.classList.remove("unfollow");
-                            followBtn.classList.add("follow");
-                        }
-                        document.getElementById("follower-count").textContent = data.follower_count;
-                    })
-                    .catch(error => console.error("Error:", error));
-                });
-            }
+    const followBtns = document.querySelectorAll(".follow-btn"); // Select all follow buttons
+
+    followBtns.forEach((btn) => {
+        btn.addEventListener("click", function () {
+            const username = this.getAttribute("data-username");
+
+            fetch("{% url 'toggle-follow' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({ "username": username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.followed) {
+                    this.textContent = "Unfollow";  // Use `this` to update the clicked button
+                    this.classList.remove("follow");
+                    this.classList.add("unfollow");
+                } else {
+                    this.textContent = "Follow";
+                    this.classList.remove("unfollow");
+                    this.classList.add("follow");
+                }
+                document.getElementById("follower-count").textContent = data.follower_count;
+            })
+            .catch(error => console.error("Error:", error));
         });
+    });
+});
         </script>
 </div>
  

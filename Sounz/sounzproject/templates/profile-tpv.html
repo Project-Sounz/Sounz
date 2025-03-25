@@ -74,12 +74,19 @@
             
         </div>
     </div>
-    
+    {% if pname.insta or pname.yout or pname.twit %}
     <div class="socials">
-        <a href="{{ pname.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="" ></a>
-        <a href="{{ pname.twit }}"><img src="{% static 'images/x 64.png' %}" alt="" ></a>
-        <a href="{{ pname.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="" ></a>
+        {% if pname.insta %}
+        <a href="{{ pname.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="{{ pname.firstname }}'s instagram profile" ></a>
+        {% endif %}
+        {% if pname.twit %}
+        <a href="{{ pname.twit }}"><img src="{% static 'images/x 64.png' %}" alt="{{ pname.firstname }}'s X profile" ></a>
+        {% endif %}
+        {% if pname.yout %}
+        <a href="{{ pname.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="{{ pname.firstname }}'s youtube" ></a>
+        {% endif %}
     </div>
+    {% endif %}
 </div>
 <div class="body">
     <div class="profile-info">
@@ -104,6 +111,9 @@
                             {% elif media.media_format == "Video" %}
                                 <img loading="lazy" src="{% static 'images/9_16 Video.png' %}" alt="" class="post-thumbnail">
                             {% endif %}
+                            {% if media.isCollaborated %}
+                                <img id="iscollab" src="{% static 'images/collab-small-icon.svg' %}" alt="is collaborated icon">
+                                {% endif %}
                         {% endif %}
                         <div class="gradient-overlay">
                             <div class="padding-controll">

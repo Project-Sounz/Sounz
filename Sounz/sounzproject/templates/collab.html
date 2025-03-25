@@ -376,8 +376,8 @@ function updateProfilePicture(event) {
                 {% endfor %}
             </div>
             <div class="c-title">
-                <p class="collab-title" id="collab-title">{{collab.collaboration_title}}</p>
-                <button id="post-edits" onclick="showEditpopup()"><img class="edit_post_details" src="{% static 'images/collab-post-edits.svg' %}" alt="post details edit button"></button>
+                
+                <button id="post-edits" onclick="showEditpopup()"><p class="collab-title" id="collab-title">{{collab.collaboration_title}}&nbsp;</p><img class="edit_post_details" src="{% static 'images/collab-post-edits.svg' %}" alt="post details edit button"></button>
             </div>
         </div>
         <div>

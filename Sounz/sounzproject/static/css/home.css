@@ -384,15 +384,16 @@
     margin: 75px 0px;
 }
 .each-user{
-    display: flex
-;
+    display: flex;
     align-items: center;
     flex-direction: row;
     border: var(--setBorder-feed);
-    padding: 10px;
+    padding: 10px 20px;
     border-radius: 10px;
     gap: 15px;
     min-width: max-content;
+    width: 80%;
+    justify-content: space-between;
 }
 .artist-details{
     display: flex;
@@ -421,4 +422,5 @@
     color: #009cff;
     font-weight: 500;
     font-size: 15px;
+    cursor: pointer;
 }

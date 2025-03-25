@@ -40,12 +40,19 @@
         </div>
     </div>
     
-    
+    {% if user.insta or user.yout or user.twit %}
     <div class="socials">
-        <a href="{{ user.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="Instagram link" ></a>
-        <a href="{{ user.twit }}"><img src="{% static 'images/x 64.png' %}" alt="X.com link" ></a>
-        <a href="{{ user.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="youtube link" ></a>
+        {% if user.insta %}
+            <a href="{{ user.insta }}"><img src="{% static 'images/instagram 64.png' %}" alt="Instagram link" ></a>
+        {% endif %}
+        {% if user.twit %}
+            <a href="{{ user.twit }}"><img src="{% static 'images/x 64.png' %}" alt="X.com link" ></a>
+        {% endif %}
+        {% if user.yout %}
+            <a href="{{ user.yout }}"><img src="{% static 'images/youtube 64.png' %}" alt="youtube link" ></a>
+        {% endif %}
     </div>
+    {% endif %}
 </div>
 <div class="body">
     

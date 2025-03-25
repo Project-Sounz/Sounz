@@ -334,6 +334,7 @@ button:disabled{
     margin-left: -10px;
     border: 2px solid;
     object-fit: cover;
+    background-color: #000;
 }
 button.option-3-dots{
     background: none;

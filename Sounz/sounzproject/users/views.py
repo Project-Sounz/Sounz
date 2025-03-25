@@ -216,15 +216,17 @@ def profile_tpv(request):
         pname = profiledatadb.objects.get(username=uname)
         userBioCollect = profiledatadb.objects.get(username=current_user)
         post = postdb.objects.filter(username=pname,is_private=0,flagged=0)
+        collab_pid = collaborators_table.objects.filter(collab_members = User.objects.get(username=pname)).values_list("post_id",flat=True)
+        collab_list = postdb.objects.filter(pid__in = collab_pid)
+        allPosts = post.union(collab_list).order_by('-timestamp')
 
-        # Correct way to check if the user is a follower
         is_following = pname.followers.filter(id=request.user.id).exists()
 
         context = {
             'pname': pname,
             'user': userBioCollect,
-            'posters': post,
-            'is_following': is_following,  # Pass this correctly
+            'posters': allPosts,
+            'is_following': is_following,
         }
         return render(request, 'profile-tpv.html', context)
 
@@ -249,12 +251,17 @@ def homepage(request):
 
     # Suggested profiles (excluding the current user and followed users)
     suggested_profiles = profiledatadb.objects.exclude(username=user_profile).exclude(username__in=following_users).order_by('?')[:6]
-
+    collab_member_list = Member_Information.objects.filter(post_member=request.user).select_related('collaboration').filter(
+            collaboration__collab_end=False,
+            collaboration__request_status="accepted"
+    )
+    combined_collab_list = [member.collaboration for member in collab_member_list]
     context = {
         'user': user_profile,
         'following_posts': following_posts,  # Posts from followed users
         'random_posts': random_posts,  # Filler random posts
         'suggested_profiles': suggested_profiles,
+        'collab_list': combined_collab_list,
     }
     return render(request, 'home.html', context)
 
