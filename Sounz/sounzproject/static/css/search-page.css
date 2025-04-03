@@ -1,6 +1,3 @@
-/* From Uiverse.io by satyamchaudharydev */ 
-/* From uiverse.io by @satyamchaudharydev */
-/* removing default style of button */
 
 #search-form  #form-buttons {
     border: none;
@@ -26,6 +23,16 @@
     border-radius: var(--border-radius);
     transition: border-radius 0.5s ease;
     background: var(--input-bg, #fff);
+}
+@media screen and (max-width: 768px) {
+  #search-form{
+    --width-of-input: 50%;
+  }
+}
+@media screen and (max-width: 480px) {
+  #search-form{
+    --width-of-input: 75%;
+  }
 }
 
   /* styling of Input */
@@ -64,8 +71,6 @@
   #search-form:focus-within:before {
     transform: scale(1);
   }
-  /* styling of close button */
-  /* == you can click the close button to remove text == */
   .reset-search-form {
     border: none;
     background: none;
@@ -93,4 +98,208 @@
 
 #search-input-field.placeholder-fade-in::placeholder {
     opacity: 1;
+}
+.profile-card{
+  display: flex
+;
+    width: max-content;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px;
+    padding: 15px 20px;
+    background: #f1f1f1;
+    border-radius: 10px;
+    gap: 10px;
+}
+.profile-image{
+  width: 90px;
+    display: flex
+;
+    border-radius: 50%;
+    height: 90px;
+    overflow: hidden;
+}
+.image-link{
+  aspect-ratio: 1;
+    object-fit: cover;
+}
+.profile-info > h2{
+  font-size: 24px;
+  font-weight: 400;
+  color: #585858;
+}
+.profile-info > p{
+  color: grey;
+    font-size: 14px;
+    font-weight: 300;
+    margin-top: 5px;
+}
+.search-profiles{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.search-posts{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.search-value{
+  font-weight: 200;
+    letter-spacing: -1px;
+    margin: 20px;
+}
+.no-search-results{
+  text-align: center;
+    margin: 40px;
+}
+.hr-line{
+  background: #d7d7d7;
+    height: 2px;
+    width: 20%;
+}
+.srDivider{
+  display: flex
+;
+    gap: 22px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 70px 0px;
+}
+.EOS{
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+.post-row{
+  gap: 22px;
+}
+.post-username{
+  font-size: 13px;
+    font-weight: 200;
+    margin-top: 5px;
+}
+#post-caption{
+  font-size: 16px;
+    color: #f8f8f8;
+    font-weight: 300;
+}
+#post-thumbnails{
+  border-radius: 10px;
+    margin-left: auto;
+    width: 35%;
+    object-fit: cover;
+    height: 100%;
+    cursor: pointer;
+}
+.post-wrapper{
+  height: max-content;
+}
+.masonry-grid {
+  width: 60%;
+}
+.masonry-image{
+  width: 250px;
+  max-height: 340px;
+    aspect-ratio: auto;
+    object-fit: cover;
+}
+.masonry-thumbnail{
+  max-width: fit-content;
+}
+.masonry-item {
+  width: calc(33.333% - 15px);
+    margin: 20px 5px;
+    margin-top: 0px;
+    border-radius: 10px;
+    max-width: fit-content;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .masonry-item {
+    width: calc(50% - 15px); /* 2 columns on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .masonry-item {
+    width: calc(100% - 15px); /* 1 column on mobile */
+  }
+}
+.rpost-caption{
+  font-size: 16px;
+  font-weight: 300;
+}
+.rpost-owner{
+  font-size: 13px;
+    margin-top: 7px;
+    color: #979797;
+}
+.main-explore{
+  justify-content: space-evenly;
+}
+.likedBy{
+  font-size: 13px;
+    font-weight: 500;
+    color: #009cff;
+    margin-top: 10px;
+}
+.suggestion-post-details {
+  max-width: 100%;
+}
+.suggestion-feed{
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 25px;
+}
+.top-users{
+  display: grid
+  ;
+      grid-template-columns: repeat(2, 1fr);
+      margin: 10px auto;
+      justify-items: center;
+}
+.top-user-details{
+  display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    width: 165px;
+    padding: 15px;
+    margin: 20px 0px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.top-user-details > img {
+  border-radius: 50%;
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+}
+.topArt-details{
+  display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    margin: 10px 0px;
+}
+.artist-name{
+  color: #585858;
+    font-weight: 400;
+    letter-spacing: 0px;
+    font-size: 16px;
+}
+.followers-count{
+  color: #acacac;
+    font-size: 13px;
+    font-weight: 500;
+}
+#profile-info{
+  align-items: flex-start;
 }

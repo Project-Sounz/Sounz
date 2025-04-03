@@ -107,8 +107,8 @@ img#navbar-user-profile-pic{
     height: 100vh;
     position: absolute;
     z-index: 998;
-    min-width: 40%;
-    left: -40%;
+    min-width: 30%;
+    left: -30%;
     transition: transform 0.5s ease, left 0.5s ease;
     justify-content: center;
 
@@ -231,7 +231,8 @@ img#navbar-user-profile-pic{
     .nav-section-mobile.active{
         position: fixed;
         left: 0;
-        
+        width: 30%;
+        min-width: 20%;
     }
     .nav-section-web{
         display: none;
@@ -270,13 +271,14 @@ img#navbar-user-profile-pic{
     }
     .web-collab-list{
         margin-left: 0;
-        width: 50%;
+        width: fit-content;
         z-index: 1000;
         padding-top: 25px;
         left: -50%;
     }
     .web-collab-list.active{
         left: 0;
+        width: fit-content;
     }
     .back-arrow{
         display: block;
@@ -284,5 +286,23 @@ img#navbar-user-profile-pic{
     }
     .your-collab-hr{
         width: 100%;
+    }
+}
+@media screen and (max-width: 480px){
+    .nav-section-mobile{
+        min-width: 40%;
+        left: -40%;
+    }
+    .nav-section-mobile.active{
+        left: 0;
+        width: 40%;
+    }
+    .web-collab-list{
+        margin-left: 0;
+        width: 50%;
+        left: -50%;
+    }
+    .web-collab-list.active{
+        left: 0;
     }
 }

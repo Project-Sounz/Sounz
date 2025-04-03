@@ -65,24 +65,6 @@
             </div>
                 
         </div>
-
-    <div class="web-collab-list" id="collabMenu">
-        <div class="back-arrow">
-            <button id="back-arrow" onclick="toggleCollabMenu('mob')"><img src="{% static 'images/back_arrow.svg' %}" alt="back-arrow"></button>
-        </div>
-        <h1 class="your-collab-head">Your Collaborations</h1>
-        <hr class="your-collab-hr">
-        <div class="w-main-container">
-            {% if collab_list %}
-                {% for collabs in collab_list %}
-                    <a class="collab-list-element" href="{% url 'collab-workspace' %}?collab-id={{collabs.collaboration_Id}}">{{ collabs.collaboration_title }}</a>
-                    <hr class="collab-list-hr">
-                {% endfor %}
-            {% else %}
-                <a class="collab-list-element">No Collaborations</a>
-            {% endif %}
-        </div>
-        </div>
         <!-- mobile navigation -->
          
         <div class="menu-toggle" onclick="toggleMenu()">

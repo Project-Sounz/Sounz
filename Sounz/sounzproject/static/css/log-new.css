@@ -236,6 +236,7 @@ button.login-submit-button:disabled{
     .login-submit-button{
         color: #ffffff;
         font-weight: 300;
+        min-width: fit-content;
     }
 }
 @media screen and (max-width: 768px){

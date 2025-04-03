@@ -58,8 +58,8 @@
     margin: 0;
 }
 .username-specific{
-    font-size: 16px;
-    color: #000;
+    font-size: 13px;
+    color: #585858;
     font-weight: 300;
     /* text-decoration: none; */
     text-transform: lowercase;
@@ -67,13 +67,13 @@
 .post-date-specific{
     color: #969696;
     font-weight: 200;
-    font-size: medium;
+    font-size: 12px;
 }
 
 .home-post-header{
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: baseline;
 }
 
 .homefeed{
@@ -81,7 +81,7 @@
         font-size: medium;
         border: var(--setBorder-feed);
         border-radius: 8px;
-        padding: 18px;
+        padding: 16px;
         margin-bottom: 20px;
         margin: 20px;
 }
@@ -119,6 +119,7 @@
     line-height: 1.5;
     text-align: start;
     font-weight: 400;
+    padding-top: 7px;
 }
 
 .post-overview{
@@ -131,7 +132,7 @@
 .post-thumbnail{
     border-radius: 10px;
     margin-left: auto;
-    width: 35%;
+    width: 26%;
     object-fit: cover;
     height: 100%;
     cursor: pointer;
@@ -186,7 +187,7 @@
 }
 .sub-explore{
     min-width: 50%;
-    max-width: 68%;
+    max-width: 60%;
 }
 .post-buttons > img{
     padding-right: 8px;
@@ -292,7 +293,7 @@
     max-width: 60%;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: baseline;
     color: #969696;
     text-transform: lowercase;
     font-weight: 300;
@@ -327,7 +328,20 @@
         max-width: 100%;
     }
 }
-
+@media screen and (max-width: 480px){
+    .post-caption{
+        font-size: 18px;
+    }
+    .post-thumbnail{
+        width: 40%;
+    }
+    .post-overview{
+        margin-right: 10px;
+    }
+    .post-inst{
+        font-size: 14px;
+    }
+}
 
 .search-container1{
     width: 30%;

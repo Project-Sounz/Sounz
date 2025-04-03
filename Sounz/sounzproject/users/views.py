@@ -21,6 +21,7 @@ from .utils import compare_audio
 from django.utils.timezone import now
 import threading
 from django.urls import reverse
+from django.db.models import Count
 
 # Create your views here.
 def log(request):
@@ -479,7 +480,6 @@ def toggle_like(request):
 def notifications(request):
     """ Display all notifications for the logged-in user """
     user_notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')
-
     reported_posts = {notif.post for notif in user_notifications if notif.post}
 
     if hasattr(Notification, 'status'):
@@ -583,28 +583,34 @@ def search(request):
             posts = postdb.objects.filter(
             Q(mediatype__icontains=input_value) | Q(username=input_value) | Q(caption__icontains=input_value)
             ).filter(flagged=0,is_private=0)   
+            search_profiles = profiledatadb.objects.filter(
+                Q(username=input_value) | Q(firstname__icontains=input_value) | Q(lastname__icontains=input_value)
+            )
+
+            random_posts = postdb.objects.all().exclude(username=request.user.username).order_by('-timestamp')   
             all_users = profiledatadb.objects.all()
             username = request.user.username
             user = profiledatadb.objects.get(username=username)
-            sliced= profiledatadb.objects.all()[:4]
-            topart=profiledatadb.objects.all()
-            random_profiles = profiledatadb.objects.exclude(username=request.user.username).order_by('?')[:6]
+            top_posts = postdb.objects.filter(is_private=False).order_by('-likes')[:4]
+            top_profiles = profiledatadb.objects.annotate(follower_count=Count('followers')).order_by('-follower_count')[:4]
+
             context = {
             'all_users': all_users,
             'user': user,
-            'user_posts': posts,
-            'sliced':sliced,
-            'topart':random_profiles
+            'top_posts':top_posts,
+            'result_posts': posts,
+            'topart':top_profiles,
+            'search_profiles': search_profiles,
+            'search_value': input_value,
+            'random_posts': random_posts,
             }
             return render(request,'search.html',context)
 
-
+    random_posts = postdb.objects.all().exclude(username=request.user.username).order_by('-timestamp')
     all_users = profiledatadb.objects.all()
     username = request.user.username
     user = profiledatadb.objects.get(username=username)
-    sliced= profiledatadb.objects.all()[:4]
-    topart=profiledatadb.objects.all()
-    random_profiles = profiledatadb.objects.exclude(username=request.user.username).order_by('?')[:6]
+    top_profiles = profiledatadb.objects.annotate(follower_count=Count('followers')).order_by('-follower_count')[:4]
     # Fetch posts of the current user
     
     collab_member_list = Member_Information.objects.filter(post_member=request.user).select_related('collaboration').filter(
@@ -612,14 +618,14 @@ def search(request):
         collaboration__request_status="accepted"
     )
     combined_collab_list = [member.collaboration for member in collab_member_list]    
-    user_posts = postdb.objects.all().order_by('-timestamp')
+    user_posts = postdb.objects.filter(is_private=False).order_by('-likes')[:4]
     context = {
         'all_users': all_users,
         'user': user,
-        'user_posts': user_posts,
-        'sliced':sliced,
-        'topart':random_profiles,
+        'top_posts': user_posts,
+        'topart':top_profiles,
         'collab_list': combined_collab_list,
+        'random_posts': random_posts,
     }
 
     return render(request,'search.html',context)
@@ -1357,7 +1363,7 @@ def report_copyright(request):
     reported_post = get_object_or_404(postdb, pid=reported_post_id)
     user_post = get_object_or_404(postdb, pid=user_post_id)
 
-    print(f"🔍 Comparing User Post {user_post_id} with Reported Post {reported_post_id}")
+    print(f"Comparing User Post {user_post_id} with Reported Post {reported_post_id}")
 
     # Compare the two posts
     result = compare_audio(user_post.media.path, reported_post.media.path)
@@ -1383,26 +1389,26 @@ def report_copyright(request):
                     notification_type="flagged",
                     timestamp=now()
                 )
-                print("✅ Notification created successfully.")
+                print("Notification created successfully.")
             except Exception as e:
                 print(f"Error creating notification: {e}")
 
             return JsonResponse({
                 "match": True,
                 "flagged": True,
-                "message": "✅ Copyright violation detected! The post has been flagged."
+                "message": "Copyright violation detected! The post will be flagged."
             })
 
         return JsonResponse({
             "match": True,
             "flagged": False,
-            "message": "⚠️ Match found, but original post is newer."
+            "message": "Match found, but original post is newer."
         })
 
     return JsonResponse({
         "match": False,
         "flagged": False,
-        "message": "❌ No copyright violation detected."
+        "message": "No copyright violation detected. No actions will be taken!"
     })
 
 
@@ -1412,8 +1418,8 @@ def get_user_posts(request):
     user_posts = postdb.objects.filter(username=request.user.username,flagged=0).values("pid", "caption", "timestamp")
 
     # Debugging log
-    print(f"📥 Fetching posts for user: {request.user.username}")
-    print(f"📋 User Posts: {list(user_posts)}")
+    print(f"Fetching posts for user: {request.user.username}")
+    print(f"User Posts: {list(user_posts)}")
 
     return JsonResponse({"posts": list(user_posts)})
 

@@ -22,3 +22,17 @@ function toggleCollabMenu(device) {
         menu2.classList.toggle("active");
     }
 }
+function toggleNotificationMenu(device) {
+    if (device == "web"){
+        const menu = document.getElementById("notificationMenu");
+        menu.classList.toggle("active");
+    }
+    else {
+        const menu1 = document.querySelector('.nav-section-mobile');
+        const menuToggle = document.querySelector('.menu-toggle');
+        menu1.classList.toggle('active');
+        menuToggle.classList.toggle('close');
+        const menu2 = document.getElementById("collabMenu");
+        menu2.classList.toggle("active");
+    }
+}

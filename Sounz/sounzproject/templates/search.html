@@ -4,6 +4,10 @@
 {% block additional_css %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <link rel="stylesheet" href="{% static 'css/search-page.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile-page-style.css' %}">
+<script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
 {% endblock %}
 
 {% block content %}
@@ -32,74 +36,110 @@
     </center>
 </div>
 
+    {% if search_value %}
+        <div class="search-result-container">
+            <h1 class="search-value">Search results for: <b>{{ search_value }}</b></h1>
+            {% if not search_profiles and not user_posts %}
+                <p class="no-search-results">No search results found.</p>
+            {% else %}
+                <div class="search-profiles">
+                    {% if search_profiles %}
+                    {% for profile in search_profiles %}
+                    <a href="{% url 'watch-profile' %}?uname={{profile.username}}" style="text-decoration: none;">
+                        <div class="profile-card">
+                            <div class="profile-image">
+                                <img class="image-link" src="{{ profile.profile_picture.url }}" alt="{{ profile.firstname }}'s profile image">
+                            </div>
+                            <div class="profile-info" id="profile-info">
+                                <h2>{{ profile.firstname }} {% if profile.lastname %}{{ profile.lastname }}{% endif %}</h2>
+                                <p>@{{ profile.username }}</p>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="search-posts">
 
-<div class="main-explore">
-    
-    <div class="sub-explore">
-        
-            
-            {% for post in user_posts %}
-               {% if not post.flagged %}
-               {% if not post.is_private %}
-                <div class="homefeed"><!-- media each-main container -->
-
-                        
-
-
-                        <!-- {% if post.mediatype == 'video' %}
-                            <video controls>
-                                <source src="{{ post.media.url }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        {% endif %} -->
-
-
-                                <!--  media deatails and thumbnail container -->
-                            <div class="each-container">
-                                <div class="post-overview">
-                                    <div class="home-post-header"> <!--  username and date-time container -->
-                                      <a href="{% url 'watch-profile' %}?uname={{post.username}}">
-                                            {% for profile in all_users %}
-                                                {% if profile.user.username == post.username %}
-                                                    <img src="{{ profile.image.url }}" alt="{{ post.username }}'s Profile Image">
-                                                {% endif %}
-                                            {% endfor %}
-                                            <p class="post-owner-username username-specific">@{{ post.username }}</p>
-                                        </a>
-                                        <p class="home-post-date post-date-specific"> • {{ post.timestamp|date }} <span class="post-media-format-display">• {{ post.media_format }}</span></p>
-                                    </div>
-
-                                    <a href="{% url 'media' %}?pid={{post.pid}}" class="post-details" id="post-details">
-                                        <h3 class="post-caption">{{ post.caption }}</h3>
-                                        <p class="post-description">{{ post.descr }}</p>
+                    {% for post in result_posts %}
+                    {% if not post.flagged %}
+                    {% if not post.is_private %}
+                    <div class="homefeed">
+                        <div class="each-container">
+                            <div class="post-overview">
+                                <div class="home-post-header"> <!--  username and date-time container -->
+                                    <a href="{% url 'watch-profile' %}?uname={{post.username}}">
+                                        {% for profile in all_users %}
+                                            {% if profile.user.username == post.username %}
+                                                <img src="{{ profile.image.url }}" alt="{{ post.username }}'s Profile Image">
+                                            {% endif %}
+                                        {% endfor %}
+                                        <p class="post-owner-username username-specific">@{{ post.username }}</p>
                                     </a>
-                                    
-                                     <div class="home-post-footer">  <!--like,save,share,collab button container -->
-                                       <p class="post-inst">{{ post.mediatype }}</p>
-                                        
+                                    <p class="home-post-date post-date-specific"> • {{ post.timestamp|date }} <span class="post-media-format-display">• {{ post.media_format }}</span></p>
+                                </div>
+
+                                <a href="{% url 'media' %}?pid={{post.pid}}" class="post-details" id="post-details">
+                                    <h3 class="post-caption">{{ post.caption }}</h3>
+                                    <p class="post-description">{{ post.descr }}</p>
+                                </a>
+                                
+                                    <div class="home-post-footer">  <!--like,save,share,collab button container -->
+                                    {% if post.mediatype %}
+                                    <p class="post-inst">{{ post.mediatype }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if post.media_thumbnail %}
+                                
+                                <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" id="post-thumbnails">
+                            
+                            {% else %}
+                                {% if post.media_format == "Audio" %}
+                                    <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" id="post-thumbnails">
+                                {% elif post.media_format == "Video" %}
+                                    <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" id="post-thumbnails">
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+        </div>
+        <div class="srDivider"><span class="hr-line"></span><div class="EOS">explore more</div><span class="hr-line"></span></div>
+{% endif %}
+
+<div class="main-explore" id="main-explore" style="display: none;">
+    <div class="masonry-grid">   
+        {% for media in random_posts %}
+            <div class="masonry-item">
+                <a href="{% url 'media' %}?pid={{media.pid}}" class="item-link">
+                    <div class="masonry-thumbnail">
+                        {% if media.media_thumbnail %}
+                            <img loading="lazy" src="{{ media.media_thumbnail.url }}" alt="{{ media.caption }}" class="masonry-image">
+                        {% else %}
+                            {% if media.media_format == "Audio" %}
+                                <img loading="lazy" src="{% static 'images/9_16 Audio.png' %}" alt="Audio" class="masonry-image">
+                            {% elif media.media_format == "Video" %}
+                                <img loading="lazy" src="{% static 'images/9_16 Video.png' %}" alt="Video" class="masonry-image">
+                            {% endif %}
+                        {% endif %}
+                        {% if media.isCollaborated %}
+                                <img id="iscollab" src="{% static 'images/collab-small-icon.svg' %}" alt="is collaborated icon">
+                                {% endif %}
+                                <div class="gradient-overlay">
+                                    <div class="padding-controll">
+                                        <h2 class="rpost-caption">{{ media.caption}}</h2>
+                                        <p class="rpost-owner">{{ media.username }}</p>
                                     </div>
                                 </div>
-                                {% if post.media_thumbnail %}
-                                    
-                                    <img src="{{ post.media_thumbnail.url }}" alt="{{ post.caption }}" class="post-thumbnail">
-                                
-                                {% else %}
-                                    {% if post.media_format == "Audio" %}
-                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
-                                    {% elif post.media_format == "Video" %}
-                                        <img src="{% static 'images/16_9 Video.png' %}" alt="{{ post.caption }}" class="post-thumbnail">
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        
-
-
-                </div>
-               {% endif %}
-               {% endif %}
-            {% endfor %}
-            
-            
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
     </div>
 
     <!-- suggestion main-container -->
@@ -110,60 +150,44 @@
         <div class="mostviewed">
             <h4 class="mv-h4">Top Hits</h4>
 
-            {% for post in user_posts|slice:":3"  %}
+            {% for post in top_posts %}
                 {% if not post.is_private %}
                     <a href="{% url 'media' %}?pid={{post.pid}}" class="suggestion-feed"> 
-                        <span class="suggestion-post-details">      <!--  media deatails and thumbnail container -->
-                            <h3 class="suggestion-post-caption">{{ post.caption }}</h3>
-                            <span class="suggestion-content-username">&nbsp;by&nbsp;</span>
-                            <p class="suggestion-content-postuser">{{ post.username }}</p>
-                        </span> 
+                        <div class="top-post-details">
+                            <span class="suggestion-post-details"> 
+                                <h3 class="suggestion-post-caption">{{ post.caption }}&nbsp;</h3>
+                                <p class="suggestion-content-postuser">by&nbsp;{{ post.username }}</p>
+                            </span> 
+                            <p class="likedBy">Liked by {{ post.likes }} listeners</p>
+                        </div>
                         {% if post.media_thumbnail %}
                                     
-                                    <img src="{{ post.media_thumbnail.url }}" alt="" class="post-thumbnail" style="border-radius: 8px;">
+                                    <img src="{{ post.media_thumbnail.url }}" alt="" id="post-thumbnails" style="border-radius: 8px;">
                                 
                                 {% else %}
                                     {% if post.media_format == "Audio" %}
-                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="" class="post-thumbnail" style="border-radius: 8px;">
+                                        <img src="{% static 'images/16_9 Audio.png' %}" alt="" id="post-thumbnails" style="border-radius: 8px;">
                                     {% elif post.media_format == "Video" %}
-                                        <img src="{% static 'images/16_9 Video.png' %}" alt="" class="post-thumbnail" style="border-radius: 8px;">
+                                        <img src="{% static 'images/16_9 Video.png' %}" alt="" id="post-thumbnails" style="border-radius: 8px;">
                                     {% endif %}
                                 {% endif %}
                         <!-- <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="post-thumbnail" style="border-radius: 8px;">       -->
                     </a>
                 {% endif %}
             {% endfor %}
-
-            <!-- {% for post in sliced %}
-                <div class="mv-post">
-                    <div class="mv-post-header">
-                        <a href="#">
-                            <img src="{% static 'images/profile-picture-specimen.png' %}" class="post-owner-profilepic" alt="" width="25px" height="25px" style="border-radius: 50%;">
-                            <p class="post-owner-username">{{post.username}}</p>
-                        </a>
-
-                    </div>
-                    <a href="#">
-                        <div class="mvpost-overview">
-                            <div class="mvpost-details">
-                                <h3>{{post.caption}}</h3>
-                                <p>{{post.descr}}</p>
-                            </div>
-                            <img src="{% static 'images/post-thumbnail.png' %}" alt="" class="mvpost-thumbnail" style="border-radius: 8px;">
-                        </div>
-                    </a>
-                </div>
-            {% endfor %} -->
         </div>
 
         <!--  top-artist container -->
         <div class="top-artists -ta-margin-specific">
             <h4 class="mv-h4">Top Artists</h4>
-            <div class="artists">
+            <div class="top-users">
                 {% for art in topart %}
-                    <a href="{% url 'watch-profile' %}?uname={{art.username}}" class="artist-details">
-                        <img src="{{ art.profile_picture.url }}" alt="" width="60px" height="60px" style="border-radius: 50%;">
-                        <figcaption>{{art.username}}</figcaption>
+                    <a href="{% url 'watch-profile' %}?uname={{art.username}}" class="top-user-details">
+                        <img src="{{ art.profile_picture.url }}" alt="{{art.username}}'s profile">
+                        <div class="topArt-details">
+                            <h3 class="artist-name">{{ art.firstname }} {% if art.lastname %}{{ art.lastname }}{% endif %}</h3>
+                            <p class="followers-count">{{ art.follower_count}} followers</p>
+                        </div>
                     </a>
                 {% endfor %}
             </div>
@@ -176,5 +200,85 @@
 
     </div>
 </div>
+<script>    
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the grid element
+  var grid = document.querySelector('.masonry-grid');
+  var masonryInstance = null;
+  
+  // Initialize Masonry function with forced relayout
+  function initMasonry(forceNew = false) {
+    if (!grid) return;
+    
+    // If forcing a new instance, destroy the old one first
+    if (masonryInstance && forceNew) {
+      masonryInstance.destroy();
+      masonryInstance = null;
+    }
+    
+    // Wait a moment to ensure images are loaded
+    setTimeout(function() {
+      imagesLoaded(grid, function() {
+        // Create a new instance or just relayout
+        if (!masonryInstance || forceNew) {
+          masonryInstance = new Masonry(grid, {
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-item',
+            percentPosition: true,
+            gutter: 15
+          });
+        } else {
+          masonryInstance.layout();
+        }
+      });
+    }, 100);
+  }
+  
+  // Initial load
+  initMasonry();
+  
+  // Store a timestamp when leaving the page
+  var lastExit = 0;
+  window.addEventListener('beforeunload', function() {
+    lastExit = Date.now();
+  });
+  
+  // Check if we're returning to the page
+  function checkReturn() {
+    // If we've navigated away and back within a reasonable timeframe
+    if (lastExit > 0 && (Date.now() - lastExit < 10000)) {
+      initMasonry(true); // Force reinitialize
+      lastExit = 0;
+    }
+  }
+  
+  // Try multiple events to catch the return navigation
+  window.addEventListener('pageshow', checkReturn);
+  window.addEventListener('focus', checkReturn);
+  
+  // Add periodic check for the first few seconds after page load
+  var checkInterval = setInterval(function() {
+    initMasonry();
+    if (Date.now() - performance.timing.navigationStart > 5000) {
+      clearInterval(checkInterval);
+    }
+  }, 1000);
+  
+  // Manual refresh via scroll detection
+  var scrollTimeout;
+  window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      // Only reinitialize on real scrolls, not just tiny movements
+      if (window.scrollY > 10) {
+        initMasonry();
+      }
+    }, 200);
+  }, { passive: true });
+});
+setTimeout(function() {
+        document.getElementById("main-explore").style.display = "flex";
+    }, 800);
+ </script>
 <script src="{% static 'js/search-box.js' %}"></script>
 {% endblock %}
