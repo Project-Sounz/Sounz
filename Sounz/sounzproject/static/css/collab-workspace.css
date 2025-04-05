@@ -230,12 +230,12 @@
     flex-direction: column;
 }
 .master-controls{
-    display: flex
-    ;
-        flex-direction: row;
-        justify-content: space-evenly;
-        align-items: center;
-        gap: 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 30px;
 }
 #masterPlayRecord{
     display: flex;
@@ -372,7 +372,7 @@ button.option-3-dots{
     width: 20px;
 }
 .collab-images{
-    display: block;
+    display: flex;
 }
 #approval-button{
     border: none;
@@ -435,7 +435,7 @@ button.option-3-dots{
 #upload-warning-button.hide {
     animation: fadeOutScale 0.3s ease forwards;
 }
-#chatContainer{
+.chatContainer{
     width: 30%;
     display: flex
 ;
@@ -678,17 +678,59 @@ form > label{
 .edit_post_details{
     width: 20px;
 }
-.master-control-mobile{
-    display: none;
-}
 .master-controls{
     display: flex;
 }
-@media screen and (max-width: 780px){
-    #chatContainer{
+#dropdownMenu{
+    top: 707px;
+    right: 10px;
+}
+.chat-icon-image, .chat-icon-image-close{
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 43px;
+    cursor: pointer;
+    z-index: 1000;
+}
+.section{
+    display: flex
+;
+    align-items: center;
+    gap: 30px;
+}
+@media screen and (max-width: 1040px){
+    .chatContainer{
         display: none;
-        width: 0;
+        width: 62%;
+        position: relative;
+        background: #fff;
+        z-index: 999;
+        right: 0;
+        height: 100%;
     }
+    .collab-tool{
+        width: 100%;
+    }
+    .chat-icon-image{
+        display: block;
+    }
+    .unfocus{
+        filter: opacity(0.2);
+    }
+    .focus{
+        display: flex;
+    }
+    .off{
+        display: none;
+    }
+    .on{
+        display: block;
+    }
+}
+@media screen and (max-width: 768px){
+    
     .collab-tool{
         width: 100%;
         padding-left: 10px;
@@ -697,17 +739,8 @@ form > label{
         margin: 15px 10px
     }
     .master-control-container{
-        width: 100%;
         padding: 20px;
         max-width: none;
-    }
-    .master-control-mobile{
-        display: flex !important; 
-        flex-direction: column;
-        gap: 20px;
-    }
-    .master-controls{
-        display: none;
     }
     .upper-control, .bottom-control{
         display: flex;
@@ -715,5 +748,62 @@ form > label{
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        gap: 10px;
+    }
+    .chatContainer{
+        display: none;
+        width: 100%;
+    }
+    .unfocus{
+        display: none;
+    }
+    .focus{
+        display: flex;
+    }
+    .menu-toggle{
+        background: #5c5c5c;
+        padding: 5px;
+        border-radius: 5px;
+    }
+    .upper{
+        justify-content: space-between;
+        width: 100%;
+    }
+    #post-edits{
+        display: none;
+    }
+    #audio-title{
+        display: none;
+    }
+    #divider{
+        display: none;
+    }
+}
+@media screen and (max-width: 480px){
+    .master-control-container{
+        width: 100%;
+        padding: 20px;
+        max-width: none;
+    }
+    .base-audio-contents{
+        display: none;
+    }
+    .volume-sync{
+        display: none;
+    }
+    #t-dot-menu{
+        width: 20px;
+    }
+    #s-gapSet{
+        display: none;
+    }
+    #upload-warning-button{
+        padding: 8px;
+    }
+    #dropdownMenu{
+        top: 802px;
+    }
+    .footer-control{
+        justify-content: flex-end;
     }
 }

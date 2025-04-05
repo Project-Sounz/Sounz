@@ -39,8 +39,8 @@
     {% if search_value %}
         <div class="search-result-container">
             <h1 class="search-value">Search results for: <b>{{ search_value }}</b></h1>
-            {% if not search_profiles and not user_posts %}
-                <p class="no-search-results">No search results found.</p>
+            {% if not search_profiles and not result_posts %}
+                <p class="no-search-results">No search results found.</p>  
             {% else %}
                 <div class="search-profiles">
                     {% if search_profiles %}

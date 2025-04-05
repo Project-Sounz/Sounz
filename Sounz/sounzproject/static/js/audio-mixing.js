@@ -177,11 +177,6 @@ function toggleDropdown(event) {
         dropdown.style.display = "none";
     } else {
         dropdown.style.display = "block";
-
-        // Position dropdown near the button
-        let rect = event.target.getBoundingClientRect();
-        dropdown.style.top = 707 + "px";
-        dropdown.style.right = 10 + "px";
     }
 }
 document.addEventListener("click", function () {

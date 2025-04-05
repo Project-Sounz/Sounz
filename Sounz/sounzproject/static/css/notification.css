@@ -3,19 +3,32 @@
     margin: auto;
     padding: 20px;
     height: 90%;
+    max-height: 90%;
     background: #ffffff;
-    border: 1px solid #e5e5e5;
+    box-shadow: 0px 4px 24px #00000021;
     border-radius: 10px;
+    overflow: auto;
 }
 .notification-list {
     list-style: none;
     padding: 0;
+    display: flex
+;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
 }
 .notification {
     background: #f4f4f4;
+    /* padding: 10px; */
+    /* margin-bottom: 10px; */
+    border-radius: 10px;
+    overflow: hidden;
+}
+.flagged, .like{
     padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    border-left: 3px solid;
+    line-height: 26px;
 }
 .timestamp {
     display: block;
@@ -24,23 +37,29 @@
 }
 .view-post-btn {
     display: inline-block;
-    background-color: rgba(248, 73, 27, 1); /* Orange color */
+    background-color: rgba(248, 73, 27, 1);
     color: white;
-    padding: 8px 15px;
+    padding: 5px 15px;
     text-decoration: none;
-    font-weight: bold;
+    /* font-weight: bold; */
     border-radius: 5px;
     transition: background-color 0.3s;
+    margin: 12px 0px;
 }
-
-.view-post-btn:hover {
-    background-color: rgb(232, 143, 8); /* Darker orange on hover */
+.flagged{
+    background-color: #fff3f3;
+    border-color: #fb3030;
+}
+.like{
+    background-color: #eaf8ff;
+    border-color: #7dd1ff;
 }
 .notification-window{
     height: 85%;
     /* background: grey; */
-    display: flex
-;
+    display: flex;
+    background: rgb(255,255,255);
+    background: linear-gradient(22deg, rgba(255,255,255,1) 48%, rgba(246,254,255,1) 65%, rgba(230,248,252,1) 75%, rgba(219,242,252,1) 83%, rgba(217,233,252,1) 90%);
 }
 .notification-header{
     margin-bottom: 30px;
@@ -55,4 +74,14 @@ h2{
     font-size: 14px;
     color: grey;
     padding: 12px 0px;
+}
+@media screen  and (max-width: 480px) {
+    .container{
+        margin: 0;
+        height: 100%;
+        min-height: 100%;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+    }
 }

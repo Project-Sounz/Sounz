@@ -227,6 +227,16 @@
   .masonry-item {
     width: calc(100% - 15px); /* 1 column on mobile */
   }
+  .masonry-grid{
+    width: 100%;
+  }
+  .masonry-image{
+    width: 183px;
+  }
+  .search-value,.no-search-results{
+    font-size: 14px;
+    letter-spacing: 0px;
+  }
 }
 .rpost-caption{
   font-size: 16px;

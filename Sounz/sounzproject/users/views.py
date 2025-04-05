@@ -193,11 +193,14 @@ def profile_new(request):
             collaboration__request_status="accepted"
         )
         combined_collab_list = [member.collaboration for member in collab_member_list]
+        follower_users = userBioCollect.followers.all()
+        follower_profiles = profiledatadb.objects.filter(username__in=[user.username for user in follower_users])
         context = {
             'user': userBioCollect,
             'post': allPosts,
             'saved': savedposts,
             'collab_list': combined_collab_list,
+            'follower_profiles': follower_profiles
         }
 
     except profiledatadb.DoesNotExist:
@@ -479,13 +482,26 @@ def toggle_like(request):
 @login_required
 def notifications(request):
     """ Display all notifications for the logged-in user """
+    username = request.user.username
+    userobj = profiledatadb.objects.get(username=username)
+
+    collab_member_list = Member_Information.objects.filter(post_member=request.user).select_related('collaboration').filter(
+    collaboration__collab_end=False,
+    collaboration__request_status="accepted"
+    )
+    combined_collab_list = [member.collaboration for member in collab_member_list]   
     user_notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')
     reported_posts = {notif.post for notif in user_notifications if notif.post}
 
     if hasattr(Notification, 'status'):
         user_notifications.update(status="read")
-
-    return render(request, 'notifications.html', {'notifications': user_notifications,'reported_posts': reported_posts})
+    context = {
+            "user": userobj,
+            'collab_list': combined_collab_list,
+            'notifications': user_notifications,
+            'reported_posts': reported_posts
+        }
+    return render(request, 'notifications.html', context)
 
 
 

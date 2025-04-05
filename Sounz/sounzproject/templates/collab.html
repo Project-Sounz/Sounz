@@ -144,9 +144,14 @@ function updateProfilePicture(event) {
 <input type="hidden" id="collabId" value="{{ collab.collaboration_Id }}">
 <input type="hidden" id="userId" value="{{ user_id }}">
 <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+<div class="chat-icon">
+    <img class="chat-icon-image" id="chatOpen" onclick="chattoggle()" src="{% static 'images/chatIcon.svg' %}">
+    <img class="chat-icon-image-close"  id="chatClose" onclick="chattoggle()" src="{% static 'images/chatClose.svg' %}">
+</div>
 <div class="main-collab-container">
     <div class="collab-and-chat">
-        <div class="collab-tool">
+       
+        <div class="collab-tool" id="collabTool">
             <div class="audio-lists">
                 <div class="base-audio-container main-each-container">
                     <div class="base-audio-graph b-s-Allaudio" id="base-audio-graph"><input type="hidden" id="base-audio-storage" value="{{ post_base.media.url }}"></div>
@@ -203,116 +208,72 @@ function updateProfilePicture(event) {
                     </div>
                 </div>
                 <div class="master-control-container">
-                    <div class="master-controls">
-                        <button id="refresh">Refresh</button>
+                    <div class="master-controls" id="master-controls">
+                        <div class="section upper">
+                            <button id="refresh">Refresh</button>
                         <!-- <label>Mic Volume:</label>
                         <input type="range" class="mic-volume" id="mic-volume" min="0" max="1" step="0.01" value="1"> -->
-                        <div class="master-vol-div">
-                            <label for="master-volume" class="master-volume-label">
-                                <img class="master-volume-image control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button">
-                            </label>
-                            <input type="range" class="master-volume" id="master-volume" min="0" max="1" step="0.01" value="1">
-                        </div>
-                        <div class="master-rec-div">
-                            <button id="masterPlayRecord">
-                                    <img class="record-n-play-p control-button-images" src="{% static 'images/recordnPlay-play.svg' %}" alt="record and play button">
-                                    <p class="and">&</p>
-                                    <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
-                            </button>
-                            <div id="bars-recording">
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                                <div class="bar-r"></div>
-                              </div>
-                            <div class="rec-pause-stop">
-                                <button id="resume-rec" class="rec-sub" style="display: none;">
-                                    <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
-                                </button>
-                                <button id="pauseRecording" class="rec-sub" disabled>
-                                    <img class="pause-recording-master" src="{% static 'images/record-pause.svg' %}" alt="pause recording">
-                                </button>
-                                <button id="masterStopRecord" class="rec-sub" disabled>
-                                    <img class="stop-recording-master" src="{% static 'images/record-stop.svg' %}" alt="pause recording">
-                                </button>
-                            </div>
-                        </div>
-                        <div class="master-pps-div">
-                            <button id="masterPlay" class="pps-button">
-                                <img class="master-play control-button-images" src="{% static 'images/audio-play.svg' %}" alt=" master play button">
-                            </button>
-                            <button id="masterPause" class="pps-button">
-                                <img class="master-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" alt=" master pause button">
-                            </button>
-                            <button id="masterStop" class="pps-button">
-                                <img class="master-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" alt=" master stop button">
-                            </button>
-                        </div>
-                        <label id="uploadLabel" for="audioUpload">
-                            <img class="master-upload control-button-images" src="{% static 'images/file-upload-collab.svg' %}" alt="upload button">
-                        </label>
-                        <input type="file" id="audioUpload" accept="audio/*" hidden>
-                    </div>
-                    <div class="master-control-mobile" style="display: none;">
-                            <div class="upper-control">
-                                <div>
-                                    <button id="refresh">Refresh</button>
-                                    <div class="master-vol-div">
-                                        <label for="master-volume" class="master-volume-label">
-                                            <img class="master-volume-image control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button">
-                                        </label>
-                                        <input type="range" class="master-volume" id="master-volume" min="0" max="1" step="0.01" value="1">
-                                    </div>
-                                </div>
-                                <label id="uploadLabel" for="audioUpload">
-                                    <img class="master-upload control-button-images" src="{% static 'images/file-upload-collab.svg' %}" alt="upload button">
+                            <div class="master-vol-div">
+                                <label for="master-volume" class="master-volume-label">
+                                    <img class="master-volume-image control-button-images" src="{% static 'images/audio-volume.svg' %}" alt="volume-button">
                                 </label>
-                                <input type="file" id="audioUpload" accept="audio/*" hidden>
+                                <input type="range" class="master-volume" id="master-volume" min="0" max="1" step="0.01" value="1">
                             </div>
-                            <div class="bottom-control">
-                                <div class="master-rec-div">
-                                    <button id="masterPlayRecord">
-                                            <img class="record-n-play-p control-button-images" src="{% static 'images/recordnPlay-play.svg' %}" alt="record and play button">
-                                            <p class="and">&</p>
-                                            <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
-                                    </button>
-                                    <div class="rec-pause-stop">
-                                        <button id="resume-rec" class="rec-sub" style="display: none;">
-                                            <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
-                                        </button>
-                                        <button id="pauseRecording" class="rec-sub" disabled>
-                                            <img class="pause-recording-master" src="{% static 'images/record-pause.svg' %}" alt="pause recording">
-                                        </button>
-                                        <button id="masterStopRecord" class="rec-sub" disabled>
-                                            <img class="stop-recording-master" src="{% static 'images/record-stop.svg' %}" alt="pause recording">
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="master-pps-div">
-                                    <button id="masterPlay" class="pps-button">
-                                        <img class="master-play control-button-images" src="{% static 'images/audio-play.svg' %}" alt=" master play button">
-                                    </button>
-                                    <button id="masterPause" class="pps-button">
-                                        <img class="master-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" alt=" master pause button">
-                                    </button>
-                                    <button id="masterStop" class="pps-button">
-                                        <img class="master-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" alt=" master stop button">
-                                    </button>
-                                </div>
-                            </div>
- 
                         </div>
-                    
+                        <div class="section">
+                            <div class="master-rec-div">
+                                <button id="masterPlayRecord">
+                                        <img class="record-n-play-p control-button-images" src="{% static 'images/recordnPlay-play.svg' %}" alt="record and play button">
+                                        <p class="and">&</p>
+                                        <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                                </button>
+                                <div id="bars-recording">
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                    <div class="bar-r"></div>
+                                  </div>
+                                <div class="rec-pause-stop">
+                                    <button id="resume-rec" class="rec-sub" style="display: none;">
+                                        <img class="record-n-play-r control-button-images" src="{% static 'images/recordnPlay-rec.svg' %}" alt="record and play button">
+                                    </button>
+                                    <button id="pauseRecording" class="rec-sub" disabled>
+                                        <img class="pause-recording-master" src="{% static 'images/record-pause.svg' %}" alt="pause recording">
+                                    </button>
+                                    <button id="masterStopRecord" class="rec-sub" disabled>
+                                        <img class="stop-recording-master" src="{% static 'images/record-stop.svg' %}" alt="pause recording">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="master-pps-div">
+                                <button id="masterPlay" class="pps-button">
+                                    <img class="master-play control-button-images" src="{% static 'images/audio-play.svg' %}" alt=" master play button">
+                                </button>
+                                <button id="masterPause" class="pps-button">
+                                    <img class="master-pause control-button-images" src="{% static 'images/audio-pause.svg' %}" alt=" master pause button">
+                                </button>
+                                <button id="masterStop" class="pps-button">
+                                    <img class="master-stop control-button-images" src="{% static 'images/audio-stop.svg' %}" alt=" master stop button">
+                                </button>
+                            </div>
+                            <label id="uploadLabel" for="audioUpload">
+                                <img class="master-upload control-button-images" src="{% static 'images/file-upload-collab.svg' %}" alt="upload button">
+                            </label>
+                            <input type="file" id="audioUpload" accept="audio/*" hidden>
+                        </div>
+                        
+                    </div>
                 </div>
         </div>
         </div>
-        <div id="chatContainer">
+        
+        <div id="chatContainer" class="chatContainer">
             <div class="chat-heading-div">
                 <h1 class="chat-heading">Chat</h1>
             </div>
@@ -387,7 +348,7 @@ function updateProfilePicture(event) {
                 <p id="approval-status"><span id="accept-count">{{collab.accept_count}}</span> / {{collab.owner_count}} Approved</p>
             </div>
             <button class="option-3-dots" onclick="toggleDropdown(event)">
-                <img class="t-dot-menu" src="{% static 'images/options-tDots.svg' %}" alt="3 dot menue">
+                <img class="t-dot-menu" id="t-dot-menu" src="{% static 'images/options-tDots.svg' %}" alt="3 dot menue">
             </button>
             <div class="dropdown-menu" id="dropdownMenu">
                 <ul>
@@ -455,5 +416,6 @@ function updateProfilePicture(event) {
 <script src="https://unpkg.com/wavesurfer.js"></script>
 <script src="{% static 'js/collab-tool.js' %}"></script>
 <script src="{% static 'js/audio-mixing.js' %}"></script>
+<script src="{% static 'js/collab-responsive.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.0/lame.min.js"></script>
 {% endblock %}

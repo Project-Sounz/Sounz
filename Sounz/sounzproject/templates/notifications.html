@@ -17,19 +17,21 @@
         {% if notifications %}
             <ul class="notification-list">
                 {% for notification in notifications %}
-                    <li class="notification">
-                        
-                        
+                <li class="notification">
                         {% if notification.notification_type == "like" %}
-                        <strong>{{ notification.sender.username }}</strong>
+                            <div class="like">
+                            <strong>{{ notification.sender.username }}</strong>
                             liked your post: <strong>{{ notification.post.caption }}</strong>
+                            <span class="timestamp">{{ notification.timestamp|date:"F j Y, g:i a" }}</span>
+                        </div>
                         {% elif notification.notification_type == "flagged" %}
+                            <div class="flagged">
                             Your post <strong>{{ notification.post.caption }}</strong> has been flagged.
-                            <p>Reason: {{ notification.message }}</p>
-                            <p><a class="view-post-btn" href="{% url 'media' %}?pid={{ notification.post.pid }}">View Post</a></p>
-                        {% endif %}
-
-                        <span class="timestamp">{{ notification.timestamp|date:"F j, Y, g:i a" }}</span>
+                            <p><strong>Reason:</strong> {{ notification.message }}</p>
+                            <a class="view-post-btn" href="{% url 'media' %}?pid={{ notification.post.pid }}">View Post</a>
+                            <span class="timestamp">{{ notification.timestamp|date:"F j Y, g:i a" }}</span>
+                        </div>
+                        {% endif %}  
                     </li>
                 {% endfor %}
             </ul>
