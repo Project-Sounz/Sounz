@@ -32,10 +32,23 @@
             <p id="user-name-id"><span class="username">@{{ user.username }}</span></p>
             <a href="mailto:{{ user.email }}" class="mailbio">{{ user.email }}</a>
             <div class="followers">
-                <div class="follow-count">
+                <button class="follow-count" onclick="togglelist()">
                     <span id="follower-count">{{ user.followers.count }}</span>
                     <span id="follower-text">followers</span>
-                </div>
+                    <span id="follower-text"><svg class="downarrowHead" fill="#b8b8b8" width="64px" height="64px" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg" stroke="#b8b8b8" stroke-width="192"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="m.153 526.146 92.168-92.299 867.767 867.636 867.636-867.636 92.429 92.299-960.065 959.935z" fill-rule="evenodd"></path> </g></svg></span>
+                </button>
+                <ul class="followers-list" id="followersList">
+                    {% for followerAcc in follower_profiles %}
+                      
+                        <a class="follower-item" href="{% url 'watch-profile' %}?uname={{followerAcc.username}}">
+                        <img src="{{ followerAcc.profile_picture.url }}" alt="Profile Pic" class="follower-pic">
+                        <span>{{ followerAcc.firstname }} {% if followerAcc.lastname %}{{ followerAcc.lastname }}{% endif %}</span>
+                        </a>
+                    
+                    {% empty %}
+                      <li>No followers yet.</li>
+                    {% endfor %}
+                  </ul>
             </div>
         </div>
     </div>
@@ -178,6 +191,7 @@
 <script>// Select the menu button and menu options
     const menuButton = document.getElementById('three-dot-menu');
     const menuOptions = document.querySelector('.menu-options');
+    const listitem = document.getElementById('followersList');
     
     // Toggle the menu visibility on button click
     menuButton.addEventListener('click', () => {
@@ -189,6 +203,10 @@
         if (!menuButton.contains(event.target) && !menuOptions.contains(event.target)) {
             menuOptions.parentElement.classList.remove('active');
         }
-    });</script>
+    });
+    function togglelist(){
+        listitem.classList.toggle('showfollowlist');
+    }
+    </script>
 {% endblock %}
 

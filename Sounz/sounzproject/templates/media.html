@@ -163,7 +163,7 @@ if (dropdown.style.display === "block") {
     // Position dropdown near the button
     let rect = event.target.getBoundingClientRect();
     dropdown.style.top = 170 + "px";
-    dropdown.style.right = 64 + "px";
+    dropdown.style.right = 23 + "px";
 }
 }
 function reportDropdown(event) {
@@ -425,7 +425,7 @@ fetch("{% url 'save-collab' %}", {
                             </div>
                             <div class="editdelete-tDot">
                                 <button class="option-3-dots" onclick="toggleDropdown(event)">
-                                    <img class="t-dot-menu" src="{% static 'images/options-tDots-grey.svg' %}" alt="3 dot menue">
+                                    <img class="t-dot-menu-media" src="{% static 'images/options-tDots-grey.svg' %}" alt="3 dot menue">
                                 </button>
                                 <div class="dropdown-menu" id="dropdownMenu">
                                     <ul>
